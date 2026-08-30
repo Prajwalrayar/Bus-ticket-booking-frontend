@@ -1,0 +1,150 @@
+<div class="operator-layout">
+  
+  <!-- Sidebar -->
+  <aside class="operator-sidebar bg-primary text-white">
+    <div class="sidebar-header p-4 border-bottom border-light border-opacity-25">
+      <h4 class="fw-bold mb-0">BusTicket <span class="fs-6 fw-normal">Operator</span></h4>
+      <small class="text-white-50">{{ operatorName }}</small>
+    </div>
+    <div class="list-group list-group-flush mt-3">
+      <button class="list-group-item list-group-item-action text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'DASHBOARD'" (click)="setTab('DASHBOARD')">
+        <i class="bi bi-graph-up me-2"></i> Performance
+      </button>
+      <button class="list-group-item list-group-item-action text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'TRIPS'" (click)="setTab('TRIPS')">
+        <i class="bi bi-calendar-check me-2"></i> Active Trips
+      </button>
+      <button class="list-group-item list-group-item-action text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'FLEET'" (click)="setTab('FLEET')">
+        <i class="bi bi-bus-front me-2"></i> Manage Fleet
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="operator-main bg-light">
+    <!-- Topbar -->
+    <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+      <h4 class="mb-0 fw-bold">{{ activeTab | titlecase }}</h4>
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-plus me-1"></i> New Trip</button>
+        <div class="dropdown">
+          <button class="btn btn-light rounded-circle p-2" type="button">
+            <i class="bi bi-building fs-5 text-primary"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-4">
+      @if (activeTab === 'DASHBOARD') {
+        
+        <!-- KPI Cards -->
+        <div class="row g-4 mb-4">
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Today's Revenue</div>
+                <h3 class="fw-bold text-success mb-0">₹{{ kpis.todayRevenue }}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Fleet Utilization</div>
+                <h3 class="fw-bold mb-0">{{ kpis.activeBuses }} / {{ kpis.totalBuses }}</h3>
+                <small class="text-secondary">Buses on road</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Avg Occupancy</div>
+                <h3 class="fw-bold text-primary mb-0">{{ kpis.avgOccupancy }}%</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white kpi-card">
+              <div class="card-body d-flex flex-column justify-content-center">
+                <h6 class="mb-1"><i class="bi bi-robot me-2"></i> AI Insight</h6>
+                <small>Demand for weekend routes is spiking. Consider deploying reserve buses.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Trips Table -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4">Today's Scheduled Trips</h5>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Trip ID</th>
+                    <th>Route</th>
+                    <th>Departure</th>
+                    <th>Occupancy</th>
+                    <th>AI Demand</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (trip of activeTrips; track trip.id) {
+                    <tr>
+                      <td class="fw-semibold">{{ trip.id }}</td>
+                      <td>
+                        {{ trip.route }}<br>
+                        <small class="text-secondary">{{ trip.busType }}</small>
+                      </td>
+                      <td>{{ trip.time }}</td>
+                      <td>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="progress flex-grow-1" style="height: 6px;">
+                            <div class="progress-bar" 
+                                 [style.width.%]="(trip.bookedSeats / trip.totalSeats) * 100"
+                                 [ngClass]="{'bg-success': (trip.bookedSeats / trip.totalSeats) > 0.8, 'bg-warning': (trip.bookedSeats / trip.totalSeats) <= 0.8}">
+                            </div>
+                          </div>
+                          <small class="text-secondary">{{ trip.bookedSeats }}/{{ trip.totalSeats }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge" 
+                              [ngClass]="{
+                                'bg-danger': trip.aiDemand === 'HIGH',
+                                'bg-warning text-dark': trip.aiDemand === 'MEDIUM',
+                                'bg-info text-dark': trip.aiDemand === 'LOW'
+                              }">
+                          {{ trip.aiDemand }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (trip.status === 'ON_TIME') {
+                          <span class="text-success fw-semibold"><i class="bi bi-check-circle me-1"></i> On Time</span>
+                        } @else {
+                          <span class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i> Delayed</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      } @else {
+        <div class="text-center py-5 text-secondary">
+          <i class="bi bi-cone-striped fs-1 mb-3 d-block"></i>
+          <h4>{{ activeTab | titlecase }} Management</h4>
+          <p>Add buses, configure seat layouts, or manage schedules here.</p>
+        </div>
+      }
+    </div>
+  </main>
+</div>

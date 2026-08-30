@@ -1,0 +1,105 @@
+<div class="ticket-page print-container">
+  <div class="container py-5">
+    
+    <!-- Action Buttons (Hidden when printing) -->
+    <div class="d-flex justify-content-between mb-4 no-print">
+      <button class="btn btn-outline-secondary" (click)="goHome()">
+        <i class="bi bi-house me-2"></i> Back to Home
+      </button>
+      <button class="btn btn-danger" (click)="printTicket()">
+        <i class="bi bi-printer me-2"></i> Download / Print Ticket
+      </button>
+    </div>
+
+    <!-- Ticket Card -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="ticket-wrapper shadow-lg">
+          
+          <!-- Ticket Header -->
+          <div class="ticket-header bg-danger text-white p-4 d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="fw-bold mb-0">BusTicket</h3>
+              <small>Booking ID: {{ bookingId }}</small>
+            </div>
+            <div class="text-end">
+              <h5 class="mb-0">Confirmed</h5>
+              <small>Booked on {{ currentDate | date:'medium' }}</small>
+            </div>
+          </div>
+
+          <div class="ticket-body bg-white p-4">
+            <!-- Route Details -->
+            <div class="route-details d-flex justify-content-between align-items-center mb-4">
+              <div class="text-center">
+                <h2 class="fw-bold mb-0 text-primary">BLR</h2>
+                <small class="text-secondary">Bangalore</small>
+              </div>
+              <div class="flex-grow-1 px-4 text-center">
+                <div class="fw-semibold">10:30 PM</div>
+                <div class="border-top border-2 border-dashed border-secondary my-2 position-relative">
+                  <i class="bi bi-bus-front position-absolute top-50 start-50 translate-middle bg-white px-2"></i>
+                </div>
+                <div class="fw-semibold">06:00 AM</div>
+              </div>
+              <div class="text-center">
+                <h2 class="fw-bold mb-0 text-primary">MAA</h2>
+                <small class="text-secondary">Chennai</small>
+              </div>
+            </div>
+
+            <!-- Bus Info -->
+            <div class="bg-light p-3 rounded mb-4 d-flex justify-content-between">
+              <div>
+                <small class="text-secondary d-block">Operator</small>
+                <span class="fw-bold">SRS Travels (AC Sleeper)</span>
+              </div>
+              <div class="text-end">
+                <small class="text-secondary d-block">Total Fare</small>
+                <span class="fw-bold text-success">₹{{ totalAmount }}</span>
+              </div>
+            </div>
+
+            <hr class="border-dashed mb-4">
+
+            <!-- Passenger Details & QR -->
+            <div class="row">
+              <div class="col-md-8 border-end border-dashed">
+                <h5 class="fw-bold mb-3">Passenger Details</h5>
+                <div class="table-responsive">
+                  <table class="table table-borderless table-sm">
+                    <thead>
+                      <tr class="text-secondary">
+                        <th>Name</th>
+                        <th>Age/Gender</th>
+                        <th>Seat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (passenger of passengers; track passenger.seatNumber) {
+                        <tr>
+                          <td class="fw-semibold">{{ passenger.name }}</td>
+                          <td>{{ passenger.age }} / {{ passenger.gender }}</td>
+                          <td><span class="badge bg-danger">{{ passenger.seatNumber }}</span></td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+              <!-- QR Code Section -->
+              <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
+                <div class="qr-placeholder bg-light border p-2 mb-2 d-flex align-items-center justify-content-center">
+                  <i class="bi bi-qr-code text-secondary" style="font-size: 5rem;"></i>
+                </div>
+                <small class="text-center text-secondary">Scan to board</small>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,212 @@
+/* ==========================================================
+   SEAT SELECTION
+========================================================== */
+
+.seat-selection-page {
+
+  min-height: 100vh;
+
+  background-color: var(--background-color);
+
+}
+
+
+.bus-summary {
+
+  padding: 18px;
+
+  background-color: #fff5f5;
+
+  border: 1px solid #f5c2c2;
+
+  border-radius: 10px;
+
+}
+
+
+/* ==========================================================
+   SEAT LEGEND
+========================================================== */
+
+.seat-legend {
+
+  display: flex;
+
+  gap: 25px;
+
+  flex-wrap: wrap;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+}
+
+
+.seat-legend > div {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+}
+
+
+.legend-seat {
+
+  width: 20px;
+
+  height: 20px;
+
+  border-radius: 5px;
+
+  border: 1px solid var(--border-color);
+
+}
+
+
+.legend-seat.available {
+
+  background-color: #ffffff;
+
+}
+
+
+.legend-seat.selected {
+
+  background-color: var(--primary-color);
+
+  border-color: var(--primary-color);
+
+}
+
+
+.legend-seat.occupied {
+
+  background-color: #d1d5db;
+
+  border-color: #d1d5db;
+
+}
+
+
+/* ==========================================================
+   SEAT LAYOUT
+========================================================== */
+
+.seat-layout {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 55px);
+
+  gap: 15px;
+
+  justify-content: center;
+
+  padding: 30px;
+
+  background-color: #f8f9fa;
+
+  border-radius: 12px;
+
+}
+
+
+.seat {
+
+  width: 55px;
+
+  height: 45px;
+
+  border-radius: 7px;
+
+  border: 1px solid var(--border-color);
+
+  background-color: #ffffff;
+
+  color: var(--text-primary);
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+}
+
+
+.seat.available:hover {
+
+  border-color: var(--primary-color);
+
+  color: var(--primary-color);
+
+  transform: translateY(-2px);
+
+}
+
+
+.seat.selected {
+
+  background-color: var(--primary-color);
+
+  color: #ffffff;
+
+  border-color: var(--primary-color);
+
+}
+
+
+.seat.occupied {
+
+  background-color: #d1d5db;
+
+  color: #6b7280;
+
+  border-color: #d1d5db;
+
+  cursor: not-allowed;
+
+}
+
+
+/* ==========================================================
+   SELECTED SEATS
+========================================================== */
+
+.selected-seat-list {
+
+  min-height: 35px;
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 576px) {
+
+  .seat-layout {
+
+    grid-template-columns:
+      repeat(2, 55px);
+
+    gap: 12px;
+
+    padding: 20px;
+
+  }
+
+
+  .seat-legend {
+
+    gap: 12px;
+
+  }
+
+}

@@ -1,0 +1,409 @@
+<div class="passenger-page">
+
+  <div class="container py-4">
+
+
+    <!-- ======================================================
+         BACK BUTTON
+    ======================================================= -->
+
+    <button
+      type="button"
+      class="btn btn-outline-danger mb-4"
+      (click)="goBack()">
+
+      ← Back to seats
+
+    </button>
+
+
+    <div class="row g-4">
+
+
+      <!-- ====================================================
+           PASSENGER DETAILS
+      ===================================================== -->
+
+      <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+          <div class="card-body p-4 p-md-5">
+
+
+            <!-- HEADER -->
+
+            <div class="mb-4">
+
+              <h2 class="fw-bold mb-2">
+                Passenger Details
+              </h2>
+
+              <p class="text-secondary mb-0">
+                Enter details for each passenger
+              </p>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            @if (errorMessage()) {
+
+              <div class="alert alert-danger">
+
+                {{ errorMessage() }}
+
+              </div>
+
+            }
+
+
+            <!-- PASSENGERS -->
+
+            @for (
+              passenger of passengers();
+              track passenger.seatNumber;
+              let i = $index
+            ) {
+
+              <div class="passenger-card mb-4">
+
+
+                <!-- PASSENGER HEADER -->
+
+                <div class="passenger-header">
+
+                  <div>
+
+                    <h5 class="fw-bold mb-1">
+                      Passenger {{ i + 1 }}
+                    </h5>
+
+                    <span class="text-secondary">
+                      Seat {{ passenger.seatNumber }}
+                    </span>
+
+                  </div>
+
+                  <span class="seat-badge">
+                    {{ passenger.seatNumber }}
+                  </span>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="mb-3">
+
+                  <label
+                    [for]="'name' + i"
+                    class="form-label">
+
+                    Full Name
+                    <span class="text-danger">*</span>
+
+                  </label>
+
+                  <input
+                    type="text"
+                    [id]="'name' + i"
+                    class="form-control"
+                    placeholder="Enter passenger name"
+                    [value]="passenger.name"
+                    (input)="updatePassenger(
+                      i,
+                      'name',
+                      $any($event.target).value
+                    )">
+
+                </div>
+
+
+                <!-- AGE -->
+
+                <div class="mb-3">
+
+                  <label
+                    [for]="'age' + i"
+                    class="form-label">
+
+                    Age
+                    <span class="text-danger">*</span>
+
+                  </label>
+
+                  <input
+                    type="number"
+                    [id]="'age' + i"
+                    class="form-control"
+                    placeholder="Enter age"
+                    min="1"
+                    max="100"
+                    [value]="passenger.age ?? ''"
+                    (input)="updatePassenger(
+                      i,
+                      'age',
+                      $any($event.target).value
+                        ? +$any($event.target).value
+                        : null
+                    )">
+
+                </div>
+
+
+                <!-- GENDER -->
+
+                <div class="mb-3">
+
+                  <label class="form-label">
+
+                    Gender
+                    <span class="text-danger">*</span>
+
+                  </label>
+
+
+                  <div class="row g-2">
+
+
+                    <!-- MALE -->
+
+                    <div class="col-12 col-md-6">
+
+                      <label
+                        class="gender-option"
+                        [class.selected]="
+                          passenger.gender === 'MALE'
+                        ">
+
+                        <span>
+                          Male
+                        </span>
+
+                        <input
+                          type="radio"
+                          [name]="'gender' + i"
+                          value="MALE"
+                          [checked]="
+                            passenger.gender === 'MALE'
+                          "
+                          (change)="updatePassenger(
+                            i,
+                            'gender',
+                            'MALE'
+                          )">
+
+                      </label>
+
+                    </div>
+
+
+                    <!-- FEMALE -->
+
+                    <div class="col-12 col-md-6">
+
+                      <label
+                        class="gender-option"
+                        [class.selected]="
+                          passenger.gender === 'FEMALE'
+                        ">
+
+                        <span>
+                          Female
+                        </span>
+
+                        <input
+                          type="radio"
+                          [name]="'gender' + i"
+                          value="FEMALE"
+                          [checked]="
+                            passenger.gender === 'FEMALE'
+                          "
+                          (change)="updatePassenger(
+                            i,
+                            'gender',
+                            'FEMALE'
+                          )">
+
+                      </label>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="mb-2">
+
+                  <label
+                    [for]="'phone' + i"
+                    class="form-label">
+
+                    Phone Number
+                    <span class="text-danger">*</span>
+
+                  </label>
+
+                  <input
+                    type="tel"
+                    [id]="'phone' + i"
+                    class="form-control"
+                    placeholder="Enter 10-digit phone number"
+                    maxlength="10"
+                    [value]="passenger.phone"
+                    (input)="updatePassenger(
+                      i,
+                      'phone',
+                      $any($event.target).value
+                    )">
+
+                </div>
+
+              </div>
+
+            }
+
+
+            <!-- CONTINUE -->
+
+            @if (passengers().length > 0) {
+
+              <button
+                type="button"
+                class="btn btn-danger w-100 py-3 fw-semibold"
+                (click)="continueBooking()">
+
+                Continue
+
+              </button>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ====================================================
+           BOOKING SUMMARY
+      ===================================================== -->
+
+      <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm summary-card">
+
+          <div class="card-body p-4">
+
+
+            <h4 class="fw-bold mb-4">
+              Booking Summary
+            </h4>
+
+
+            <!-- ROUTE -->
+
+            <div class="summary-item">
+
+              <span class="text-secondary">
+                Route
+              </span>
+
+              <strong>
+
+                {{ fromCity() }}
+
+                <span class="text-danger mx-1">
+                  →
+                </span>
+
+                {{ toCity() }}
+
+              </strong>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="summary-item">
+
+              <span class="text-secondary">
+                Journey Date
+              </span>
+
+              <strong>
+                {{ journeyDate() }}
+              </strong>
+
+            </div>
+
+
+            <!-- BUS -->
+
+            @if (busName()) {
+
+              <div class="summary-item">
+
+                <span class="text-secondary">
+                  Bus
+                </span>
+
+                <strong>
+                  {{ busName() }}
+                </strong>
+
+              </div>
+
+            }
+
+
+            <!-- SEATS -->
+
+            <div class="summary-item">
+
+              <span class="text-secondary">
+                Selected Seats
+              </span>
+
+              <strong>
+                {{ selectedSeatNumbers().length }}
+              </strong>
+
+            </div>
+
+
+            <!-- SEAT LIST -->
+
+            <div class="selected-seats">
+
+              @for (
+                seat of selectedSeatNumbers();
+                track seat
+              ) {
+
+                <span class="seat-badge">
+                  {{ seat }}
+                </span>
+
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

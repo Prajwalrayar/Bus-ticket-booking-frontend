@@ -1,0 +1,529 @@
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold logo" routerLink="/">
+
+      BusTicket
+
+    </a>
+
+
+    <!-- Navigation -->
+
+    <div class="d-flex align-items-center gap-4">
+
+      <a class="nav-link" routerLink="/bus-search">
+
+        Bus Tickets
+
+      </a>
+
+
+      <a class="nav-link" href="#">
+
+        Help
+
+      </a>
+
+
+      @if (currentUser()) {
+
+      <span class="fw-semibold">
+
+        Hi, {{ currentUser()!.name }}
+
+      </span>
+
+      <button type="button" class="btn btn-outline-primary" (click)="logout()">
+
+        Logout
+
+      </button>
+
+      } @else {
+
+      <a routerLink="/login" class="btn btn-outline-primary">
+
+        Login / Register
+
+      </a>
+
+      }
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<!-- =========================
+     HERO / SEARCH SECTION
+========================= -->
+
+<section class="hero-section">
+
+  <div class="container">
+
+    <div class="hero-content text-center">
+
+      <h1 class="hero-title">
+        Book Your Bus Journey
+      </h1>
+
+      <p class="hero-subtitle">
+        Search buses, compare fares and book your trip
+      </p>
+
+    </div>
+
+
+    <!-- SEARCH CARD -->
+
+    <div class="search-card">
+
+      <form (ngSubmit)="searchBuses()">
+
+        <div class="row g-3 align-items-end">
+
+
+          <!-- FROM -->
+
+          <div class="col-12 col-lg-3">
+
+            <label for="from" class="form-label">
+
+              From
+
+            </label>
+
+            <div class="input-group">
+
+              <span class="input-group-text">
+                <i class="bi bi-geo-alt"></i>
+              </span>
+
+              <input type="text" id="from" name="from" [(ngModel)]="fromCity" class="form-control"
+                placeholder="Source city">
+
+            </div>
+
+          </div>
+
+
+
+          <!-- SWAP -->
+
+          <div class="col-12 col-lg-1 swap-column">
+
+            <button type="button" class="swap-button" (click)="swapLocations()" title="Swap locations">
+
+              <i class="bi bi-arrow-left-right"></i>
+
+            </button>
+
+          </div>
+
+
+
+          <!-- TO -->
+
+          <div class="col-12 col-lg-3">
+
+            <label for="to" class="form-label">
+
+              To
+
+            </label>
+
+            <div class="input-group">
+
+              <span class="input-group-text">
+                <i class="bi bi-geo-alt"></i>
+              </span>
+
+              <input type="text" id="to" name="to" [(ngModel)]="toCity" class="form-control"
+                placeholder="Destination city">
+
+            </div>
+
+          </div>
+
+
+
+          <!-- DATE -->
+
+          <div class="col-12 col-lg-2">
+
+            <label for="journeyDate" class="form-label">
+
+              Journey Date
+
+            </label>
+
+            <div class="input-group">
+
+              <span class="input-group-text">
+                <i class="bi bi-calendar3"></i>
+              </span>
+
+              <input type="date" id="journeyDate" name="journeyDate" [(ngModel)]="journeyDate" [min]="minDate"
+                class="form-control">
+
+            </div>
+
+          </div>
+
+
+
+          <!-- SEARCH BUTTON -->
+
+          <div class="col-12 col-lg-3">
+
+            <button type="submit" class="btn btn-danger w-100 py-2 fw-semibold">
+
+              <i class="bi bi-search me-2"></i>
+
+              Search Buses
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- ERROR MESSAGE -->
+
+        @if (errorMessage) {
+
+        <div class="alert alert-danger mt-3 mb-0">
+
+          {{ errorMessage }}
+
+        </div>
+
+        }
+
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     OFFERS SECTION
+========================= -->
+
+<section class="offers-section">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <h2>
+        Offers & Deals
+      </h2>
+
+      <p>
+        Save more on your bus bookings
+      </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+      <!-- OFFER 1 -->
+
+      <div class="col-12 col-md-4">
+
+        <div class="offer-card">
+
+          <div class="offer-icon">
+            %
+          </div>
+
+          <div>
+
+            <h5>
+              First Booking Offer
+            </h5>
+
+            <p>
+              Get exciting discounts on your first bus booking.
+            </p>
+
+            <span class="offer-code">
+              FIRSTBUS
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- OFFER 2 -->
+
+      <div class="col-12 col-md-4">
+
+        <div class="offer-card">
+
+          <div class="offer-icon">
+            ₹
+          </div>
+
+          <div>
+
+            <h5>
+              Weekend Special
+            </h5>
+
+            <p>
+              Enjoy special fares on selected weekend journeys.
+            </p>
+
+            <span class="offer-code">
+              WEEKEND
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- OFFER 3 -->
+
+      <div class="col-12 col-md-4">
+
+        <div class="offer-card">
+
+          <div class="offer-icon">
+            ★
+          </div>
+
+          <div>
+
+            <h5>
+              Best Price Guarantee
+            </h5>
+
+            <p>
+              Find great buses at competitive prices.
+            </p>
+
+            <span class="offer-code">
+              BESTPRICE
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     POPULAR ROUTES
+========================= -->
+
+<section class="routes-section">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <h2>
+        Popular Bus Routes
+      </h2>
+
+      <p>
+        Explore popular destinations
+      </p>
+
+    </div>
+
+
+    <div class="row g-3">
+
+
+      <div class="col-12 col-md-4">
+
+        <div class="route-card">
+
+          <div>
+
+            <strong>Bangalore</strong>
+
+            <span>→</span>
+
+            <strong>Chennai</strong>
+
+          </div>
+
+          <small>
+            Popular route
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="col-12 col-md-4">
+
+        <div class="route-card">
+
+          <div>
+
+            <strong>Hyderabad</strong>
+
+            <span>→</span>
+
+            <strong>Bangalore</strong>
+
+          </div>
+
+          <small>
+            Popular route
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="col-12 col-md-4">
+
+        <div class="route-card">
+
+          <div>
+
+            <strong>Mumbai</strong>
+
+            <span>→</span>
+
+            <strong>Pune</strong>
+
+          </div>
+
+          <small>
+            Popular route
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <h5 class="footer-logo">
+          BusTicket
+        </h5>
+
+        <p>
+          Your simple and reliable bus ticket booking platform.
+        </p>
+
+      </div>
+
+
+      <div class="col-md-3">
+
+        <h6>
+          Quick Links
+        </h6>
+
+        <a routerLink="/">
+          Home
+        </a>
+
+        <a routerLink="/bus-search">
+          Bus Tickets
+        </a>
+
+        <a href="#">
+          Help
+        </a>
+
+      </div>
+
+
+      <div class="col-md-3">
+
+        <h6>
+          Support
+        </h6>
+
+        <p>
+          support@example.com
+        </p>
+
+        <p>
+          +91 98765 43210
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <hr>
+
+
+    <div class="text-center">
+
+      <small>
+        © 2026 Bus Ticket Booking System
+      </small>
+
+    </div>
+
+  </div>
+
+</footer>

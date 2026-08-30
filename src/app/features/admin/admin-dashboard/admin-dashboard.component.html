@@ -1,0 +1,137 @@
+<div class="admin-layout">
+  
+  <!-- Sidebar -->
+  <aside class="admin-sidebar bg-dark text-white">
+    <div class="sidebar-header p-4 border-bottom border-secondary">
+      <h4 class="fw-bold mb-0 text-danger">BusTicket <span class="text-white fs-6 fw-normal">Admin</span></h4>
+    </div>
+    <div class="list-group list-group-flush mt-3">
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'OVERVIEW'" (click)="setTab('OVERVIEW')">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'ROUTES'" (click)="setTab('ROUTES')">
+        <i class="bi bi-signpost-split me-2"></i> Route Management
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'OPERATORS'" (click)="setTab('OPERATORS')">
+        <i class="bi bi-building me-2"></i> Operators
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'REPORTS'" (click)="setTab('REPORTS')">
+        <i class="bi bi-bar-chart-line me-2"></i> Reports & Analytics
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main bg-light">
+    <!-- Topbar -->
+    <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+      <h4 class="mb-0 fw-bold">{{ activeTab | titlecase }}</h4>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-danger">AI Engine Active</span>
+        <div class="dropdown">
+          <button class="btn btn-light rounded-circle p-2" type="button">
+            <i class="bi bi-person-circle fs-5"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-4">
+      @if (activeTab === 'OVERVIEW') {
+        
+        <!-- KPI Cards -->
+        <div class="row g-4 mb-4">
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card border-bottom border-danger border-3">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Total Revenue</div>
+                <h3 class="fw-bold mb-0">₹{{ (kpis.totalRevenue / 100000).toFixed(2) }}L</h3>
+                <small class="text-success"><i class="bi bi-arrow-up-right"></i> 12% this month</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card border-bottom border-primary border-3">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Total Bookings</div>
+                <h3 class="fw-bold mb-0">{{ kpis.totalBookings }}</h3>
+                <small class="text-success"><i class="bi bi-arrow-up-right"></i> 8% this month</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card border-bottom border-warning border-3">
+              <div class="card-body">
+                <div class="text-secondary mb-1">Active Operators</div>
+                <h3 class="fw-bold mb-0">{{ kpis.activeOperators }}</h3>
+                <small class="text-secondary">Stable</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm kpi-card border-bottom border-info border-3">
+              <div class="card-body">
+                <div class="text-secondary mb-1">AI Avg. Occupancy</div>
+                <h3 class="fw-bold mb-0">{{ kpis.occupancyRate }}%</h3>
+                <small class="text-success">Optimal capacity</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions Table -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4">Recent Bookings</h5>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>User</th>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (booking of recentBookings; track booking.id) {
+                    <tr>
+                      <td class="fw-semibold text-primary">{{ booking.id }}</td>
+                      <td>{{ booking.user }}</td>
+                      <td>{{ booking.route }}</td>
+                      <td>{{ booking.date }}</td>
+                      <td class="fw-semibold">₹{{ booking.amount }}</td>
+                      <td>
+                        <span class="badge" 
+                              [ngClass]="{
+                                'bg-success': booking.status === 'CONFIRMED',
+                                'bg-warning text-dark': booking.status === 'PENDING',
+                                'bg-danger': booking.status === 'CANCELLED'
+                              }">
+                          {{ booking.status }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      } @else {
+        <div class="text-center py-5 text-secondary">
+          <i class="bi bi-tools fs-1 mb-3 d-block"></i>
+          <h4>{{ activeTab | titlecase }} Module</h4>
+          <p>This section is under construction.</p>
+        </div>
+      }
+    </div>
+  </main>
+</div>
