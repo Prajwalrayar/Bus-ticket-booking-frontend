@@ -1,58 +1,47 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Bus } from '../models/bus';
 import { Seat } from '../models/seat';
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BusService {
 
-  private  apiUrl = 'http://localhost:3000/buses';
-
-  private seatApiUrl = 'http://localhost:3000/seats';
+  private apiUrl = '/api/trips';
 
   constructor(private http: HttpClient) {}
 
-  searchBuses(fromCity: string,toCity: string): Observable<Bus[]> {
+  searchBuses(fromCity: string, toCity: string, travelDate?: string): Observable<Bus[]> {
 
-    const params = new HttpParams()
-      .set('fromCity', fromCity)
-      .set('toCity', toCity);
+    let params = new HttpParams()
+      .set('source', fromCity)
+      .set('destination', toCity);
 
-    return this.http.get<Bus[]>(this.apiUrl,{ params });
+    if (travelDate) {
+      params = params.set('travelDate', travelDate);
+    }
+
+    return this.http.get<ApiResponse<Bus[]>>(`${this.apiUrl}/search`, { params })
+      .pipe(map(res => res.data));
   }
 
 
-  // ==========================================================
-  // GET BUS BY ID
-  // ==========================================================
+  getTripById(id: string): Observable<Bus> {
 
-  getBusById(id: number): Observable<Bus> {
-
-    return this.http.get<Bus>(
-      `${this.apiUrl}/${id}`
-    );
-
+    return this.http.get<ApiResponse<Bus>>(`${this.apiUrl}/${id}`)
+      .pipe(map(res => res.data));
   }
 
 
-  // ==========================================================
-  // GET SEATS BY BUS ID
-  // ==========================================================
-
-  getSeatsByBusId(
-    busId: number
+  getSeatsByTripId(
+    tripId: string
   ): Observable<Seat[]> {
 
-    const params = new HttpParams()
-      .set('busId', busId);
-
-    return this.http.get<Seat[]>(
-      this.seatApiUrl,
-      { params }
-    );
-
+    return this.http.get<ApiResponse<Seat[]>>(`${this.apiUrl}/${tripId}/seats`)
+      .pipe(map(res => res.data));
   }
 }

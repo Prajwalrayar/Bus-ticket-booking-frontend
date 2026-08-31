@@ -4,15 +4,14 @@ import { BookingStateService } from '../../../core/services/booking-state.servic
 
 @Component({
   selector: 'app-payment',
-  standalone: false,
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css',
 })
 export class PaymentComponent implements OnInit {
   
   totalAmount: number = 0;
-  paymentMethod: 'UPI' | 'CARD' | 'NET_BANKING' = 'CARD';
-  paymentStatus: 'INITIATED' | 'PROCESSING' | 'SUCCESS' | 'FAILED' = 'INITIATED';
+  paymentMethod: string = 'CARD';
+  paymentStatus: string = 'INITIATED';
   errorMessage: string = '';
 
   // Mock form fields
@@ -34,7 +33,7 @@ export class PaymentComponent implements OnInit {
     }
   }
 
-  setPaymentMethod(method: 'UPI' | 'CARD' | 'NET_BANKING'): void {
+  setPaymentMethod(method: string): void {
     this.paymentMethod = method;
   }
 

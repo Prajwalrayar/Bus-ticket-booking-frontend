@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared-module';
 import { SeatSelectionComponent } from './seat-selection/seat-selection.component';
 
 @NgModule({
   declarations: [SeatSelectionComponent],
-  imports: [CommonModule],
+  imports: [SharedModule],
+  exports: [SeatSelectionComponent],
 })
 export class SeatSelectionModule {}

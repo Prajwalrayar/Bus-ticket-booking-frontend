@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
+import { TokenService } from './token-service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,10 @@ export class AuthStateService {
   currentUser = signal<User | null>(
     this.getStoredUser()
   );
+
+  constructor(
+    private tokenService: TokenService
+  ) {}
 
 
   // ==========================================================
@@ -91,6 +96,8 @@ export class AuthStateService {
     localStorage.removeItem(
       this.storageKey
     );
+
+    this.tokenService.removeToken();
 
   }
 

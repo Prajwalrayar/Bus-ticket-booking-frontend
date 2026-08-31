@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared-module';
 import { BusSearchComponent } from './bus-search.component';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [BusSearchComponent],
-  imports: [CommonModule,RouterModule],
+  imports: [SharedModule],
+  exports: [BusSearchComponent],
 })
 export class BusSearchModule {}

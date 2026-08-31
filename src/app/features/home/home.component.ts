@@ -5,7 +5,6 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 
 @Component({
   selector: 'app-home',
-  standalone: false,
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

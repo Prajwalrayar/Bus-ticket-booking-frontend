@@ -5,7 +5,6 @@ import { BusService } from '../../core/services/bus.service';
 
 @Component({
   selector: 'app-bus-search',
-  standalone: false,
   templateUrl: './bus-search.component.html',
   styleUrl: './bus-search.component.css',
 })
@@ -53,7 +52,8 @@ export class BusSearchComponent {
     this.busService
       .searchBuses(
         this.fromCity,
-        this.toCity
+        this.toCity,
+        this.journeyDate
       )
       .subscribe({
 
@@ -104,7 +104,7 @@ viewSeats(bus: Bus): void {
     ['/seat-selection'],
     {
       queryParams: {
-        busId: bus.id,
+        tripId: bus.tripId,
         from: this.fromCity,
         to: this.toCity,
         date: this.journeyDate

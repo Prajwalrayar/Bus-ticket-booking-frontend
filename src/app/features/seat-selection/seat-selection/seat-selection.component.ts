@@ -6,7 +6,6 @@ import { BusService } from '../../../core/services/bus.service';
 
 @Component({
   selector: 'app-seat-selection',
-  standalone: false,
   templateUrl: './seat-selection.component.html',
   styleUrl: './seat-selection.component.css',
 })
@@ -36,13 +35,13 @@ export class SeatSelectionComponent {
 
     this.route.queryParams.subscribe(params => {
 
-      const busId = Number(params['busId']);
+      const tripId = params['tripId'];
 
       this.fromCity.set(params['from'] || '');
       this.toCity.set(params['to'] || '');
       this.journeyDate.set(params['date'] || '');
 
-      if (!busId) {
+      if (!tripId) {
 
         this.errorMessage.set(
           'Bus information is missing.'
@@ -51,21 +50,21 @@ export class SeatSelectionComponent {
         return;
       }
 
-      this.loadBus(busId);
+      this.loadBus(tripId);
 
-      this.loadSeats(busId);
+      this.loadSeats(tripId);
 
     });
 
   }
 
 
-  loadBus(busId: number): void {
+  loadBus(tripId: string): void {
 
     this.loading.set(true);
 
     this.busService
-      .getBusById(busId)
+      .getTripById(tripId)
       .subscribe({
 
         next: (bus) => {
@@ -96,10 +95,10 @@ export class SeatSelectionComponent {
   }
 
 
-  loadSeats(busId: number): void {
+  loadSeats(tripId: string): void {
 
     this.busService
-      .getSeatsByBusId(busId)
+      .getSeatsByTripId(tripId)
       .subscribe({
 
         next: (seats) => {
@@ -138,7 +137,7 @@ export class SeatSelectionComponent {
     const alreadySelected =
       this.selectedSeats().some(
         selectedSeat =>
-          selectedSeat.id === seat.id
+          selectedSeat.tripSeatId === seat.tripSeatId
       );
 
 
@@ -147,7 +146,7 @@ export class SeatSelectionComponent {
       this.selectedSeats.update(seats =>
         seats.filter(
           selectedSeat =>
-            selectedSeat.id !== seat.id
+            selectedSeat.tripSeatId !== seat.tripSeatId
         )
       );
 
@@ -168,7 +167,7 @@ export class SeatSelectionComponent {
 
     return this.selectedSeats().some(
       selectedSeat =>
-        selectedSeat.id === seat.id
+        selectedSeat.tripSeatId === seat.tripSeatId
     );
 
   }
@@ -239,7 +238,7 @@ export class SeatSelectionComponent {
       {
         queryParams: {
 
-          busId: currentBus.id,
+          tripId: currentBus.tripId,
 
           busName: currentBus.operator,
 

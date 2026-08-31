@@ -1,21 +1,22 @@
 import { Component, signal } from '@angular/core';
-import { Register } from '../../core/models/register';
+import { Register, RegisterResponse } from '../../core/models/register';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { TokenService } from '../../core/services/token-service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { User } from '../../core/models/user';
 
 @Component({
   selector: 'app-register',
-  standalone: false,
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
 
   registerData: Register = {
-    name: '',
+    fullName: '',
     email: '',
-    phone: '',
+    mobileNumber: '',
     password: '',
     confirmPassword: ''
   };
@@ -26,7 +27,9 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService,
+    private authStateService: AuthStateService
   ) {}
 
   register(): void {
@@ -35,9 +38,9 @@ export class RegisterComponent {
     this.successMessage.set('');
 
     if (
-      !this.registerData.name ||
+      !this.registerData.fullName ||
       !this.registerData.email ||
-      !this.registerData.phone ||
+      !this.registerData.mobileNumber ||
       !this.registerData.password ||
       !this.registerData.confirmPassword
     ) {
@@ -70,11 +73,26 @@ export class RegisterComponent {
       .register(this.registerData)
       .subscribe({
 
-        next: (user: User) => {
+        next: (response: RegisterResponse) => {
 
-          console.log('Registered user:', user);
+          console.log('Registered user:', response);
 
           this.loading.set(false);
+
+          if (response && response.token) {
+            this.tokenService.setToken(response.token);
+
+            const user: User = {
+              userId: response.userId,
+              name: this.registerData.fullName,
+              email: this.registerData.email,
+              phone: this.registerData.mobileNumber,
+              password: '',
+              roles: response.roles,
+            };
+
+            this.authStateService.setUser(user);
+          }
 
           this.successMessage.set(
             'Registration successful. Redirecting to login...'
@@ -82,7 +100,7 @@ export class RegisterComponent {
 
           setTimeout(() => {
 
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
 
           }, 1000);
 

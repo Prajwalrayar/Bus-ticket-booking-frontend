@@ -13,7 +13,6 @@ import { Offer } from '../../../core/models/offer';
 
 @Component({
   selector: 'app-booking-confirmation',
-  standalone: false,
   templateUrl: './booking-confirmation.component.html',
   styleUrl: './booking-confirmation.component.css',
 })
@@ -126,8 +125,8 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe(params => {
 
-      const busId =
-        Number(params['busId']);
+      const tripId =
+        params['tripId'] || '';
 
       const date =
         params['date'] || '';
@@ -143,7 +142,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
       // VALIDATE BUS
       // ------------------------------------------------------
 
-      if (!busId) {
+      if (!tripId) {
 
         this.errorMessage.set(
           'Bus information is missing.'
@@ -157,7 +156,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
       // LOAD BUS
       // ------------------------------------------------------
 
-      this.loadBus(busId);
+      this.loadBus(tripId);
 
 
       // ------------------------------------------------------
@@ -171,7 +170,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
 
         this.loadSeats(
-          busId,
+          tripId,
           seatNumbers
         );
 
@@ -193,13 +192,13 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
   // LOAD BUS
   // ==========================================================
 
-  loadBus(busId: number): void {
+  loadBus(tripId: string): void {
 
     this.loading.set(true);
 
 
     this.busService
-      .getBusById(busId)
+      .getTripById(tripId)
       .subscribe({
 
         next: (bus) => {
@@ -236,13 +235,13 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
   // ==========================================================
 
   loadSeats(
-    busId: number,
+    tripId: string,
     seatNumbers: string[]
   ): void {
 
 
     this.busService
-      .getSeatsByBusId(busId)
+      .getSeatsByTripId(tripId)
       .subscribe({
 
         next: (seats) => {
@@ -675,8 +674,8 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
       {
         queryParams: {
 
-          busId:
-            currentBus.id,
+          tripId:
+            currentBus.tripId,
 
           date:
             this.journeyDate()
@@ -764,12 +763,8 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
     const booking = {
 
-      userId:
-        currentUser.id,
-
-
-      busId:
-        currentBus.id,
+      tripId:
+        currentBus.tripId,
 
 
       fromCity:
@@ -809,7 +804,10 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
 
       bookingDate:
-        new Date().toISOString()
+        new Date().toISOString(),
+
+      paymentMethod:
+        'CARD'
 
     };
 
@@ -846,7 +844,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
               queryParams: {
 
                 bookingId:
-                  savedBooking.id
+                  savedBooking.bookingId
 
               }
             }
@@ -899,8 +897,8 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
       {
         queryParams: {
 
-          busId:
-            currentBus.id,
+          tripId:
+            currentBus.tripId,
 
           from:
             currentBus.fromCity,

@@ -2,12 +2,12 @@ import { Component, signal } from '@angular/core';
 import { User } from '../../core/models/user';
 import { AuthService } from '../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Login } from '../../core/models/login';
+import { Login, LoginResponse } from '../../core/models/login';
 import { AuthStateService } from '../../core/services/auth-state.service';
+import { TokenService } from '../../core/services/token-service';
 
 @Component({
   selector: 'app-login',
-  standalone: false,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -27,7 +27,8 @@ export class LoginComponent {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private authStateService:AuthStateService
+    private authStateService:AuthStateService,
+    private tokenService: TokenService
   ) { }
 
   login(): void {
@@ -47,13 +48,11 @@ export class LoginComponent {
     this.authService.login(this.loginData)
       .subscribe({
 
-        next: (user: User | null) => {
-
-
+        next: (response: LoginResponse) => {
 
           this.loading.set(false);
 
-          if (!user) {
+          if (!response || !response.token) {
 
             this.errorMessage.set(
               'Invalid email or password.'
@@ -61,6 +60,17 @@ export class LoginComponent {
 
             return;
           }
+
+          this.tokenService.setToken(response.token);
+
+          const user: User = {
+            userId: response.userId,
+            name: '',
+            email: this.loginData.email,
+            phone: '',
+            password: '',
+            roles: response.roles,
+          };
 
           this.authStateService.setUser(user);
 

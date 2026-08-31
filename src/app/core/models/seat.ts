@@ -1,11 +1,8 @@
 export interface Seat {
-
-  id: number;
-
-  busId: number;
-
+  tripSeatId: string;
   seatNumber: string;
-
-  status: 'AVAILABLE' | 'OCCUPIED';
-
+  seatPosition: string;
+  seatStatus: 'AVAILABLE' | 'TEMPORARILY_LOCKED' | 'BOOKED';
+  seatFare: number;
+  lockExpiryTime?: string;
 }
