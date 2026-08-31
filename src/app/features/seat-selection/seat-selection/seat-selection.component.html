@@ -157,7 +157,7 @@
 
                             @for (
                             seat of seats();
-                            track seat.id
+                            track seat.tripSeatId
                             ) {
 
                             <button type="button" class="seat" [class.available]="
@@ -249,7 +249,7 @@
 
                             @for (
                             seat of selectedSeats();
-                            track seat.id
+                            track seat.tripSeatId
                             ) {
 
                             <span class="badge text-bg-light me-2 mb-2">

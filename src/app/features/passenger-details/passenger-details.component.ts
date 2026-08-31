@@ -6,11 +6,11 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 
 @Component({
   selector: 'app-passenger-details',
-  standalone: false,
   templateUrl: './passenger-details.component.html',
   styleUrl: './passenger-details.component.css',
 })
 export class PassengerDetailsComponent implements OnInit {
+
 
 
   // ==========================================================
@@ -28,7 +28,7 @@ export class PassengerDetailsComponent implements OnInit {
   // BUS INFORMATION
   // ==========================================================
 
-  busId = signal(0);
+  tripId = signal('');
 
   busName = signal('');
 
@@ -71,11 +71,11 @@ export class PassengerDetailsComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
 
-      const busId = Number(params['busId']);
+      const tripId = params['tripId'] || '';
 
       const seatsParam = params['seats'] || '';
 
-      this.busId.set(busId);
+      this.tripId.set(tripId);
 
       this.fromCity.set(params['from'] || '');
 
@@ -90,7 +90,7 @@ export class PassengerDetailsComponent implements OnInit {
       // Validate bus
       // ------------------------------------------------------
 
-      if (!busId) {
+      if (!tripId) {
 
         this.errorMessage.set(
           'Bus information is missing.'
@@ -157,6 +157,8 @@ export class PassengerDetailsComponent implements OnInit {
             age: null,
 
             gender: '',
+
+            idType: '',
 
             phone: currentUser?.phone || ''
 
@@ -298,7 +300,7 @@ export class PassengerDetailsComponent implements OnInit {
       {
         queryParams: {
 
-          busId: this.busId(),
+          tripId: this.tripId(),
 
           from: this.fromCity(),
 
@@ -325,7 +327,7 @@ export class PassengerDetailsComponent implements OnInit {
       ['/seat-selection'],
       {
         queryParams: {
-          busId: this.busId(),
+          tripId: this.tripId(),
 
           from: this.fromCity(),
 

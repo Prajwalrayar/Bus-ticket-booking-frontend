@@ -1,29 +1,35 @@
-import { Passenger } from "./passenger";
+import { BookingSeat } from './booking-seat';
 
 export interface Booking {
 
-  id: number;
+  bookingId: string;
 
-  userId: number | null;
+  bookingReference: string;
 
-  busId: number;
+  bookingStatus: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';
 
-  fromCity: string;
+  totalSeats: number;
 
-  toCity: string;
+  baseFareTotal: number;
 
-  journeyDate: string;
+  discountAmount: number;
 
-  busName: string;
+  taxAmount: number;
 
-  seatNumbers: string[];
-
-  passengers: Passenger[];
+  insuranceAmount: number;
 
   totalAmount: number;
 
-  status: 'CONFIRMED' | 'CANCELLED';
+  createdAt: string;
 
-  bookingDate: string;
+  boardingPointName: string;
+
+  droppingPointName: string;
+
+  userId: string;
+
+  tripId: string;
+
+  bookingSeats: BookingSeat[];
 
 }

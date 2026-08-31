@@ -1,30 +1,17 @@
 export interface Bus {
-
-  id: number;
-
-  registrationNumber: string;
-
-  operator: string;
-
-  fromCity: string;
-
-  toCity: string;
-
+  tripId: string;
+  travelDate: string;
   departureTime: string;
-
   arrivalTime: string;
-
-  duration: string;
-
+  baseFare: number;
+  isCancelled: boolean;
+  cancellationReason: string;
+  source: string;
+  destination: string;
+  busRegistrationNumber: string;
   busType: string;
-
-  price: number;
-
+  amenities: string[];
+  operatorName: string;
   totalSeats: number;
-
   availableSeats: number;
-
-  rating: number;
-
 }
-

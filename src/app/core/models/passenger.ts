@@ -1,13 +1,10 @@
 export interface Passenger {
-
-  seatNumber: string;
-
-  name: string;
-
+  passengerName: string;
   age: number | null;
-
-  gender: 'MALE' | 'FEMALE' | '';
-
-  phone: string;
-
+  gender: string;
+  idType: string;
+  idNumber: string;
+  contactNumber: string;
+  seatNumber: string;
+  isPrimary?: boolean;
 }

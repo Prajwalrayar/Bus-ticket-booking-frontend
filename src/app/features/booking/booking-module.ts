@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared-module';
 import { BookingConfirmationComponent } from './booking-confirmation/booking-confirmation.component';
-import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { PassengerDetailsModule } from '../passenger-details/passenger-details-module';
 
 @NgModule({
   declarations: [BookingConfirmationComponent],
-  imports: [CommonModule,RouterLink,FormsModule],
+  imports: [SharedModule, PassengerDetailsModule],
+  exports: [BookingConfirmationComponent, PassengerDetailsModule],
 })
 export class BookingModule {}
