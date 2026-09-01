@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Booking } from '../models/booking';
 import { ApiResponse } from '../models/api-response';
+import { CreateBookingRequest } from '../models/create-booking-request';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +14,20 @@ export class BookingService {
 
   constructor(private http: HttpClient) { }
 
-  createBooking(booking: Omit<Booking, 'bookingId'>): Observable<Booking> {
-    return this.http.post<ApiResponse<Booking>>(this.apiUrl, booking)
-      .pipe(map(res => res.data));
-  }
+  createBooking(
+  booking: CreateBookingRequest
+): Observable<Booking> {
+
+  return this.http
+    .post<ApiResponse<Booking>>(
+      this.apiUrl,
+      booking
+    )
+    .pipe(
+      map(res => res.data)
+    );
+
+}
 
   getBookingById(bookingId: string): Observable<Booking> {
     return this.http.get<ApiResponse<Booking>>(`${this.apiUrl}/${bookingId}`)

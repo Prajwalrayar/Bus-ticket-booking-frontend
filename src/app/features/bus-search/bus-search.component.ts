@@ -5,6 +5,7 @@ import { BusService } from '../../core/services/bus.service';
 
 @Component({
   selector: 'app-bus-search',
+  standalone:false,
   templateUrl: './bus-search.component.html',
   styleUrl: './bus-search.component.css',
 })

@@ -5,6 +5,6 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 @NgModule({
   declarations: [AdminDashboardComponent],
   imports: [SharedModule],
-  exports: [AdminDashboardComponent],
+  exports: [AdminDashboardComponent]
 })
 export class AdminModule {}

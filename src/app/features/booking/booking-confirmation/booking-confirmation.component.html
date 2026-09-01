@@ -95,7 +95,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                    {{ bus()!.operator }}
+                                    {{ bus()!.operatorName }}
                                 </div>
 
                             </div>
@@ -126,13 +126,13 @@
 
                                 <div class="fw-semibold">
 
-                                    {{ bus()!.fromCity }}
+                                    {{ bus()!.source }}
 
                                     <span class="text-danger mx-2">
                                         →
                                     </span>
 
-                                    {{ bus()!.toCity }}
+                                    {{ bus()!.destination }}
 
                                 </div>
 
@@ -304,7 +304,7 @@
                                     </div>
 
                                     <div class="fw-semibold">
-                                        {{ passenger.name }}
+                                        {{ passenger.passengerName }}
                                     </div>
 
                                 </div>
@@ -349,7 +349,7 @@
                                     </div>
 
                                     <div class="fw-semibold">
-                                        {{ passenger.phone }}
+                                        {{ passenger.contactNumber }}
                                     </div>
 
                                 </div>
@@ -775,7 +775,7 @@
                             </span>
 
                             <span class="fw-semibold">
-                                ₹{{ bus()!.price }}
+                                ₹{{ bus()!.baseFare }}
                             </span>
 
                         </div>

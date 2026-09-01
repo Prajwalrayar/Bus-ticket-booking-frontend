@@ -6,6 +6,6 @@ import { PassengerDetailsModule } from '../passenger-details/passenger-details-m
 @NgModule({
   declarations: [BookingConfirmationComponent],
   imports: [SharedModule, PassengerDetailsModule],
-  exports: [BookingConfirmationComponent, PassengerDetailsModule],
+  exports: [BookingConfirmationComponent, PassengerDetailsModule]
 })
 export class BookingModule {}

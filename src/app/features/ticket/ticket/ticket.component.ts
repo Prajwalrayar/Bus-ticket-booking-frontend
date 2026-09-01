@@ -5,6 +5,7 @@ import { BookingStateService } from '../../../core/services/booking-state.servic
 
 @Component({
   selector: 'app-ticket',
+  standalone:false,
   templateUrl: './ticket.component.html',
   styleUrl: './ticket.component.css',
 })

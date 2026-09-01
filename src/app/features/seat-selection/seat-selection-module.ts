@@ -5,6 +5,6 @@ import { SeatSelectionComponent } from './seat-selection/seat-selection.componen
 @NgModule({
   declarations: [SeatSelectionComponent],
   imports: [SharedModule],
-  exports: [SeatSelectionComponent],
+  exports: [SeatSelectionComponent]
 })
 export class SeatSelectionModule {}

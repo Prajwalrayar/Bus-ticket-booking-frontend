@@ -5,6 +5,6 @@ import { TicketComponent } from './ticket/ticket.component';
 @NgModule({
   declarations: [TicketComponent],
   imports: [SharedModule],
-  exports: [TicketComponent],
+  exports: [TicketComponent]
 })
 export class TicketModule {}

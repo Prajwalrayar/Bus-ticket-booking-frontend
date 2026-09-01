@@ -6,6 +6,7 @@ import { BusService } from '../../../core/services/bus.service';
 
 @Component({
   selector: 'app-seat-selection',
+  standalone: false,
   templateUrl: './seat-selection.component.html',
   styleUrl: './seat-selection.component.css',
 })
@@ -127,10 +128,11 @@ export class SeatSelectionComponent {
 
   selectSeat(seat: Seat): void {
 
-    if (seat.status === 'OCCUPIED') {
-
+    if (
+      seat.seatStatus === 'TEMPORARILY_LOCKED' ||
+      seat.seatStatus === 'BOOKED'
+    ) {
       return;
-
     }
 
 
@@ -185,7 +187,7 @@ export class SeatSelectionComponent {
 
     return (
       this.selectedSeats().length *
-      currentBus.price
+      currentBus.baseFare
     );
 
   }
@@ -209,55 +211,55 @@ export class SeatSelectionComponent {
 
   continueBooking(): void {
 
-  if (this.selectedSeats().length === 0) {
+    if (this.selectedSeats().length === 0) {
 
-    this.errorMessage.set(
-      'Please select at least one seat.'
-    );
+      this.errorMessage.set(
+        'Please select at least one seat.'
+      );
 
-    return;
-  }
-
-
-  const currentBus = this.bus();
-
-  if (!currentBus) {
-
-    this.errorMessage.set(
-      'Bus information is missing.'
-    );
-
-    return;
-  }
+      return;
+    }
 
 
-  this.route.queryParams.subscribe(params => {
+    const currentBus = this.bus();
 
-    this.router.navigate(
-      ['/passenger-details'],
-      {
-        queryParams: {
+    if (!currentBus) {
 
-          tripId: currentBus.tripId,
+      this.errorMessage.set(
+        'Bus information is missing.'
+      );
 
-          busName: currentBus.operator,
+      return;
+    }
 
-          from: params['from'] || currentBus.fromCity,
 
-          to: params['to'] || currentBus.toCity,
+    this.route.queryParams.subscribe(params => {
 
-          date: params['date'] || '',
+      this.router.navigate(
+        ['/passenger-details'],
+        {
+          queryParams: {
 
-          seats: this.selectedSeats()
-            .map(seat => seat.seatNumber)
-            .join(',')
+            tripId: currentBus.tripId,
 
+            busName: currentBus.operatorName,
+
+            from: params['from'] || currentBus.source,
+
+            to: params['to'] || currentBus.destination,
+
+            date: params['date'] || '',
+
+            seats: this.selectedSeats()
+              .map(seat => seat.seatNumber)
+              .join(',')
+
+          }
         }
-      }
-    );
+      );
 
-  });
+    });
 
-}
+  }
 
 }

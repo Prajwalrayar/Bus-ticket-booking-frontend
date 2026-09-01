@@ -6,6 +6,7 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 
 @Component({
   selector: 'app-passenger-details',
+  standalone:false,
   templateUrl: './passenger-details.component.html',
   styleUrl: './passenger-details.component.css',
 })
@@ -208,7 +209,7 @@ export class PassengerDetailsComponent implements OnInit {
 
     for (const passenger of this.passengers()) {
 
-      if (!passenger.name.trim()) {
+      if (!passenger.passengerName.trim()) {
 
         this.errorMessage.set(
           `Please enter name for seat ${passenger.seatNumber}.`
@@ -243,8 +244,8 @@ export class PassengerDetailsComponent implements OnInit {
 
 
       if (
-        !passenger.phone.trim() ||
-        !/^[6-9]\d{9}$/.test(passenger.phone)
+        !passenger.contactNumber.trim() ||
+        !/^[6-9]\d{9}$/.test(passenger.contactNumber)
       ) {
 
         this.errorMessage.set(

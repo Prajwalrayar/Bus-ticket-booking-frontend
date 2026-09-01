@@ -111,10 +111,10 @@
                     [id]="'name' + i"
                     class="form-control"
                     placeholder="Enter passenger name"
-                    [value]="passenger.name"
+                    [value]="passenger.passengerName"
                     (input)="updatePassenger(
                       i,
-                      'name',
+                      'passengerName',
                       $any($event.target).value
                     )">
 
@@ -255,10 +255,10 @@
                     class="form-control"
                     placeholder="Enter 10-digit phone number"
                     maxlength="10"
-                    [value]="passenger.phone"
+                    [value]="passenger.contactNumber"
                     (input)="updatePassenger(
                       i,
-                      'phone',
+                      'contactNumber',
                       $any($event.target).value
                     )">
 
