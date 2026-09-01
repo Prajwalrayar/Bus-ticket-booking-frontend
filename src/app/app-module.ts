@@ -1,20 +1,25 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { App } from './app';
-import { HomeSearch } from './features/home-search/home-search';
-import { SeatLayout } from './features/seat-layout/seat-layout';
-import { TicketConfirmation } from './features/ticket-confirmation/ticket-confirmation';
-import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
-
+import { CoreModule } from './core/core-module';
+import { SharedModule } from './shared/shared-module';
+import { LayoutModule } from './layout/layout-module';
+import { HomeModule } from './features/home/home-module';
+import { AuthModule } from './auth/auth-module';
 
 @NgModule({
   declarations: [App],
-
   imports: [
     BrowserModule,
-    AppRoutingModule
+    CoreModule,
+    SharedModule,
+    LayoutModule,
+    HomeModule,
+    AuthModule,
+    AppRoutingModule,
   ],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],
   bootstrap: [App],
