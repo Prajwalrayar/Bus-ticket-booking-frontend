@@ -1,4 +1,18 @@
 import { BookingSeat } from './booking-seat';
+import { Passenger } from './passenger';
+
+export interface BookingCreateRequest {
+  tripId: string;
+  boardingPointId: string;
+  droppingPointId: string;
+  passengers: Passenger[];
+  offerCode?: string;
+  isInsured?: boolean;
+}
+
+export interface BookingCancelRequest {
+  cancellationReason: string;
+}
 
 export interface Booking {
 

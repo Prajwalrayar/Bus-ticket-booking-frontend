@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Login, LoginResponse } from '../models/login';
-import { Register, RegisterResponse } from '../models/register';
+import { RegisterRequest } from '../models/register';
 import { ApiResponse } from '../models/api-response';
 
 @Injectable({
@@ -20,8 +20,8 @@ export class AuthService {
       .pipe(map(res => res.data));
   }
 
-  register(registerData: Register): Observable<RegisterResponse> {
-    return this.http.post<ApiResponse<RegisterResponse>>(`${this.apiUrl}/register`, registerData)
+  register(registerData: RegisterRequest): Observable<LoginResponse> {
+    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/register`, registerData)
       .pipe(map(res => res.data));
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Bus } from '../../../core/models/bus';
 import { Passenger } from '../../../core/models/passenger';
-import { Seat } from '../../../core/models/seat';
+import { TripSeatDTO as Seat } from '../../../core/models/seat';
 import { BusService } from '../../../core/services/bus.service';
 import { BookingStateService } from '../../../core/services/booking-state.service';
 import { AuthStateService } from '../../../core/services/auth-state.service';
@@ -10,7 +10,7 @@ import { BookingService } from '../../../core/services/booking.service';
 import { User } from '../../../core/models/user';
 import { OfferService } from '../../../core/services/offer.service';
 import { Offer } from '../../../core/models/offer';
-import { CreateBookingRequest } from '../../../core/models/create-booking-request';
+import { BookingCreateRequest } from '../../../core/models/booking';
 
 @Component({
   selector: 'app-booking-confirmation',
@@ -47,6 +47,8 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
   journeyDate = signal('');
 
+  boardingPointId = signal('');
+  droppingPointId = signal('');
 
   // ==========================================================
   // UI STATE
@@ -136,9 +138,12 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
       const seatsParam =
         params['seats'] || '';
 
+      const boardingPointId = params['boardingPointId'] || '';
+      const droppingPointId = params['droppingPointId'] || '';
 
       this.journeyDate.set(date);
-
+      this.boardingPointId.set(boardingPointId);
+      this.droppingPointId.set(droppingPointId);
 
       // ------------------------------------------------------
       // VALIDATE BUS
@@ -751,46 +756,25 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
     // CREATE BOOKING REQUEST
     // ==========================================================
 
-    const bookingRequest: CreateBookingRequest = {
-
-      userId:
-        currentUser?.userId ?? '',
+    const bookingRequest: BookingCreateRequest = {
 
       tripId:
         currentBus.tripId,
 
-      journeyDate:
-        this.journeyDate(),
+      boardingPointId:
+        this.boardingPointId(),
 
-      seatNumbers:
-        this.selectedSeats()
-          .map(seat =>
-            seat.seatNumber
-          ),
+      droppingPointId:
+        this.droppingPointId(),
 
       passengers:
         this.passengers(),
 
-      boardingPointName:
-        '',
+      offerCode:
+        this.appliedOfferCode || undefined,
 
-      droppingPointName:
-        '',
-
-      discountAmount:
-        this.discountAmount,
-
-      taxAmount:
-        0,
-
-      insuranceAmount:
-        0,
-
-      totalAmount:
-        this.getTotalAmount(),
-
-      paymentMethod:
-        'CARD'
+      isInsured:
+        false // Based on UI logic, could add a checkbox later
 
     };
 
@@ -826,7 +810,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
           // ======================================================
 
           this.router.navigate(
-            ['/booking-success'],
+            ['/payment'],
             {
               queryParams: {
 

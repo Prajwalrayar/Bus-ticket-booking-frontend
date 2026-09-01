@@ -8,10 +8,10 @@
           <div class="card-body p-0">
             <div class="p-4 bg-danger text-white rounded-top text-center">
               <div class="avatar-circle bg-white text-danger fw-bold fs-3 mx-auto mb-2">
-                JD
+                {{ myProfile?.userName?.charAt(0)?.toUpperCase() || 'U' }}
               </div>
-              <h5 class="mb-0">John Doe</h5>
-              <small>john.doe@example.com</small>
+              <h5 class="mb-0">{{ myProfile?.userName || 'Loading...' }}</h5>
+              <small>{{ myProfile?.userEmail || '...' }}</small>
             </div>
             
             <div class="list-group list-group-flush profile-nav">
@@ -42,110 +42,217 @@
         @if (activeTab === 'BOOKINGS') {
           <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-4">
-              <h4 class="fw-bold mb-4">Active Bookings</h4>
-              
-              @if (activeBookings.length === 0) {
-                <div class="text-center py-4 text-secondary">
-                  No active bookings found.
-                </div>
-              }
-              
-              @for (booking of activeBookings; track booking.id) {
-                <div class="border rounded p-3 mb-3 booking-card">
-                  <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                      <span class="badge bg-success mb-2">{{ booking.status }}</span>
-                      <h5 class="fw-bold mb-1">{{ booking.from }} → {{ booking.to }}</h5>
-                      <small class="text-secondary">Booking ID: {{ booking.id }}</small>
-                    </div>
-                    <div class="text-end">
-                      <div class="fw-bold fs-5">₹{{ booking.fare }}</div>
-                      <small class="text-secondary">{{ booking.date }} | {{ booking.time }}</small>
-                    </div>
-                  </div>
-                  
-                  <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded">
-                    <div>
-                      <small class="text-secondary d-block">Operator & Seats</small>
-                      <span class="fw-semibold">{{ booking.operator }} • Seats: {{ booking.seats.join(', ') }}</span>
-                    </div>
-                    <button class="btn btn-outline-danger btn-sm" (click)="cancelBooking(booking.id)">
-                      Cancel Ticket
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
+              <h4 class="fw-bold mb-4">My Bookings</h4>
 
-          <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-              <h4 class="fw-bold mb-4">Past Bookings</h4>
-              @for (booking of pastBookings; track booking.id) {
-                <div class="border rounded p-3 mb-3 opacity-75">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <span class="badge bg-secondary mb-1">{{ booking.status }}</span>
-                      <h6 class="fw-bold mb-0">{{ booking.from }} → {{ booking.to }}</h6>
-                      <small class="text-secondary">{{ booking.date }}</small>
-                    </div>
-                    <button class="btn btn-link text-primary p-0">View Details</button>
-                  </div>
+              @if (cancelSuccess) {
+                <div class="alert alert-success alert-dismissible fade show">
+                  {{ cancelSuccess }}
+                  <button type="button" class="btn-close" (click)="cancelSuccess = ''"></button>
                 </div>
               }
+              @if (cancelError) {
+                <div class="alert alert-danger alert-dismissible fade show">
+                  {{ cancelError }}
+                  <button type="button" class="btn-close" (click)="cancelError = ''"></button>
+                </div>
+              }
+
+              <!-- Sub Tabs -->
+              <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="pill" href="#upcoming">Upcoming</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="pill" href="#completed">Completed</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="pill" href="#cancelled">Cancelled</a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- Upcoming Tab -->
+                <div class="tab-pane fade show active" id="upcoming">
+                  @if (loadingBookings) {
+                    <div class="text-center py-4">
+                      <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                  } @else if (upcomingBookings.length === 0) {
+                    <div class="text-center py-4 text-secondary">No upcoming bookings found.</div>
+                  } @else {
+                    @for (booking of upcomingBookings; track booking.bookingId) {
+                      <ng-container *ngTemplateOutlet="bookingCard; context: { $implicit: booking }"></ng-container>
+                    }
+                  }
+                </div>
+
+                <!-- Completed Tab -->
+                <div class="tab-pane fade" id="completed">
+                  @if (loadingBookings) {
+                    <div class="text-center py-4">
+                      <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                  } @else if (completedBookings.length === 0) {
+                    <div class="text-center py-4 text-secondary">No completed bookings found.</div>
+                  } @else {
+                    @for (booking of completedBookings; track booking.bookingId) {
+                      <ng-container *ngTemplateOutlet="bookingCard; context: { $implicit: booking }"></ng-container>
+                    }
+                  }
+                </div>
+
+                <!-- Cancelled Tab -->
+                <div class="tab-pane fade" id="cancelled">
+                  @if (loadingBookings) {
+                    <div class="text-center py-4">
+                      <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                  } @else if (cancelledBookings.length === 0) {
+                    <div class="text-center py-4 text-secondary">No cancelled bookings found.</div>
+                  } @else {
+                    @for (booking of cancelledBookings; track booking.bookingId) {
+                      <ng-container *ngTemplateOutlet="bookingCard; context: { $implicit: booking }"></ng-container>
+                    }
+                  }
+                </div>
+              </div>
+              
             </div>
           </div>
         }
 
         <!-- SAVED PASSENGERS TAB -->
         @if (activeTab === 'PASSENGERS') {
-          <div class="card border-0 shadow-sm">
+          <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">Saved Passengers</h4>
-                <button class="btn btn-danger btn-sm"><i class="bi bi-plus"></i> Add New</button>
+                <button class="btn btn-danger btn-sm px-3" (click)="openPassengerModal()">
+                  <i class="bi bi-plus-lg me-1"></i> Add New
+                </button>
               </div>
               
-              <div class="row g-3">
-                @for (passenger of savedPassengers; track passenger.name; let i = $index) {
-                  <div class="col-md-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <h6 class="fw-bold mb-1">{{ passenger.name }}</h6>
-                        <small class="text-secondary">{{ passenger.age }} yrs • {{ passenger.gender }}</small>
+              @if (loadingPassengers) {
+                <div class="text-center py-4">
+                  <div class="spinner-border text-primary" role="status"></div>
+                </div>
+              } @else if (savedPassengers.length === 0) {
+                <div class="text-center py-5 text-secondary bg-light rounded border border-dashed">
+                  <i class="bi bi-people fs-1 d-block mb-2 text-muted"></i>
+                  <p class="mb-0">No saved passengers found.</p>
+                  <small>Add passengers to auto-fill details during booking.</small>
+                </div>
+              } @else {
+                <div class="row g-3">
+                  @for (passenger of savedPassengers; track passenger.savedPassengerId) {
+                    <div class="col-md-6">
+                      <div class="border rounded p-3 d-flex justify-content-between align-items-start hover-shadow transition-all bg-white">
+                        <div>
+                          <div class="d-flex align-items-center mb-1">
+                            <h6 class="fw-bold mb-0 me-2">{{ passenger.passengerName }}</h6>
+                            <span class="badge bg-light text-dark border border-secondary border-opacity-25 rounded-pill" style="font-size: 0.7rem;">
+                              {{ passenger.gender }}
+                            </span>
+                          </div>
+                          <small class="text-secondary d-block mb-1">{{ passenger.age }} yrs old</small>
+                          
+                          @if (passenger.idType && passenger.idNumber) {
+                            <small class="text-muted d-block"><i class="bi bi-card-text me-1"></i>{{ passenger.idType }}: {{ passenger.idNumber }}</small>
+                          }
+                          @if (passenger.contactNumber) {
+                            <small class="text-muted d-block"><i class="bi bi-telephone me-1"></i>{{ passenger.contactNumber }}</small>
+                          }
+                        </div>
+                        <div class="d-flex flex-column gap-2">
+                          <button class="btn btn-sm btn-light text-primary" (click)="openPassengerModal(passenger)" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button class="btn btn-sm btn-light text-danger" (click)="deletePassenger(passenger.savedPassengerId)" title="Delete">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
                       </div>
-                      <button class="btn btn-light text-danger btn-sm" (click)="deletePassenger(i)">
-                        <i class="bi bi-trash"></i>
-                      </button>
                     </div>
-                  </div>
-                }
-              </div>
+                  }
+                </div>
+              }
             </div>
           </div>
         }
 
         <!-- SETTINGS TAB -->
         @if (activeTab === 'SETTINGS') {
-          <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-              <h4 class="fw-bold mb-4">Account Settings</h4>
-              <form>
-                <div class="mb-3">
-                  <label class="form-label">Full Name</label>
-                  <input type="text" class="form-control" value="John Doe">
+          <div class="row g-4">
+            
+            <!-- Edit Profile -->
+            <div class="col-12">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <h4 class="fw-bold mb-4">Edit Profile</h4>
+                  
+                  @if (profileUpdateSuccess) {
+                    <div class="alert alert-success">{{ profileUpdateSuccess }}</div>
+                  }
+                  @if (profileUpdateError) {
+                    <div class="alert alert-danger">{{ profileUpdateError }}</div>
+                  }
+
+                  <form (ngSubmit)="updateProfile()">
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label class="form-label text-muted small fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" [(ngModel)]="editProfileForm.userName" name="userName" required>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label text-muted small fw-semibold">Email Address</label>
+                        <input type="email" class="form-control bg-light" [value]="myProfile?.userEmail" disabled>
+                        <small class="text-secondary" style="font-size: 0.7rem;">Email cannot be changed</small>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" [(ngModel)]="editProfileForm.mobileNumber" name="mobileNumber" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+                  </form>
                 </div>
-                <div class="mb-3">
-                  <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" value="john.doe@example.com" disabled>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label">Phone Number</label>
-                  <input type="text" class="form-control" value="+91 98765 43210">
-                </div>
-                <button type="button" class="btn btn-danger">Save Changes</button>
-              </form>
+              </div>
             </div>
+
+            <!-- Change Password -->
+            <div class="col-12">
+              <div class="card border-0 shadow-sm border-top border-warning border-3">
+                <div class="card-body p-4">
+                  <h4 class="fw-bold mb-4"><i class="bi bi-shield-lock me-2 text-warning"></i>Change Password</h4>
+
+                  @if (passwordSuccess) {
+                    <div class="alert alert-success">{{ passwordSuccess }}</div>
+                  }
+                  @if (passwordError) {
+                    <div class="alert alert-danger">{{ passwordError }}</div>
+                  }
+
+                  <form (ngSubmit)="changePassword()">
+                    <div class="mb-3">
+                      <label class="form-label text-muted small fw-semibold">Current Password <span class="text-danger">*</span></label>
+                      <input type="password" class="form-control" [(ngModel)]="changePasswordForm.currentPassword" name="currentPassword" required>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-6">
+                        <label class="form-label text-muted small fw-semibold">New Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.newPassword" name="newPassword" required>
+                      </div>
+                      <div class="col-md-6 mt-3 mt-md-0">
+                        <label class="form-label text-muted small fw-semibold">Confirm New Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.confirmPassword" name="confirmPassword" required>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-warning px-4">Change Password</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
           </div>
         }
 
@@ -153,3 +260,229 @@
     </div>
   </div>
 </div>
+
+<!-- Saved Passenger Modal -->
+@if (showPassengerModal) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-bottom-0 bg-light">
+          <h5 class="modal-title fw-bold">{{ editingPassengerId ? 'Edit Passenger' : 'Add Passenger' }}</h5>
+          <button type="button" class="btn-close" (click)="closePassengerModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (passengerError) {
+            <div class="alert alert-danger p-2 mb-3 small">{{ passengerError }}</div>
+          }
+          
+          <form (ngSubmit)="savePassenger()">
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Full Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="passengerForm.passengerName" name="name" required placeholder="Enter passenger name">
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold small">Age <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" [(ngModel)]="passengerForm.age" name="age" required min="1" max="120">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold small">Gender <span class="text-danger">*</span></label>
+                <select class="form-select" [(ngModel)]="passengerForm.gender" name="gender" required>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold small">ID Type <span class="text-muted fw-normal">(Optional)</span></label>
+                <select class="form-select" [(ngModel)]="passengerForm.idType" name="idType">
+                  <option value="">Select ID</option>
+                  <option value="AADHAAR">Aadhaar</option>
+                  <option value="PAN">PAN</option>
+                  <option value="PASSPORT">Passport</option>
+                  <option value="DRIVING_LICENSE">Driving License</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold small">ID Number <span class="text-muted fw-normal">(Optional)</span></label>
+                <input type="text" class="form-control" [(ngModel)]="passengerForm.idNumber" name="idNumber" placeholder="ID Number">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Contact Number <span class="text-muted fw-normal">(Optional)</span></label>
+              <input type="text" class="form-control" [(ngModel)]="passengerForm.contactNumber" name="contactNumber" placeholder="10-digit mobile number">
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-outline-secondary" (click)="closePassengerModal()">Cancel</button>
+              <button type="submit" class="btn btn-danger px-4">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Reusable Booking Card Template -->
+<ng-template #bookingCard let-booking>
+  <div class="border rounded p-3 mb-3 booking-card shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
+      <div>
+        <span class="badge mb-2" 
+              [class.bg-success]="booking.status === 'CONFIRMED'" 
+              [class.bg-danger]="booking.status === 'CANCELLED' || booking.status === 'EXPIRED'"
+              [class.bg-warning]="booking.status === 'PENDING'">
+          {{ booking.status }}
+        </span>
+        <h5 class="fw-bold mb-1">{{ booking.from }} → {{ booking.to }}</h5>
+        <small class="text-secondary">Ref: <span class="fw-semibold text-dark">{{ booking.bookingReference }}</span></small>
+      </div>
+      <div class="text-end">
+        <div class="fw-bold fs-5 text-primary">₹{{ booking.fare }}</div>
+        <small class="text-dark fw-semibold d-block">{{ booking.date | date:'mediumDate' }}</small>
+        <small class="text-secondary">{{ booking.time }}</small>
+      </div>
+    </div>
+    
+    <div class="d-flex flex-wrap justify-content-between align-items-center bg-light p-3 rounded">
+      <div>
+        <small class="text-secondary d-block">Operator & Seats</small>
+        <span class="fw-semibold">{{ booking.operator }}</span>
+        <span class="mx-2 text-muted">|</span>
+        <span>Seats: <strong class="text-dark">{{ booking.seats.join(', ') }}</strong></span>
+      </div>
+      <div class="mt-2 mt-sm-0 d-flex gap-2">
+        @if (booking.status === 'CONFIRMED') {
+          <button class="btn btn-primary btn-sm px-3" (click)="viewTicket(booking.bookingReference)">
+            <i class="bi bi-ticket-detailed me-1"></i> View Ticket
+          </button>
+          <button class="btn btn-outline-warning btn-sm" (click)="openReviewModal(booking.bookingId)">
+            <i class="bi bi-star-fill me-1"></i> {{ reviewsByBookingId[booking.bookingId] ? 'View/Edit Review' : 'Write Review' }}
+          </button>
+        }
+        @if (booking.status === 'CONFIRMED' || booking.status === 'PENDING') {
+          <button class="btn btn-outline-danger btn-sm" (click)="cancelBooking(booking.bookingId)">
+            Cancel
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Cancellation Confirmation Modal -->
+@if (showCancelConfirmModal) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-bottom-0 bg-light">
+          <h5 class="modal-title fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cancel Booking</h5>
+          <button type="button" class="btn-close" (click)="closeCancelConfirmModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="mb-4 text-secondary">Are you sure you want to cancel this booking? This action cannot be undone.</p>
+          
+          <div class="form-group mb-3">
+            <label class="form-label text-muted small fw-semibold">Reason for Cancellation (Optional)</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="cancelReason" placeholder="Tell us why you are cancelling..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 bg-light">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeCancelConfirmModal()">Keep Booking</button>
+          <button type="button" class="btn btn-danger px-4" (click)="confirmCancelBooking()">Confirm Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Cancellation Result Modal -->
+@if (showCancelResultModal && cancellationResult) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-bottom-0 bg-light">
+          <h5 class="modal-title fw-bold text-success"><i class="bi bi-check-circle-fill me-2"></i>Booking Cancelled</h5>
+          <button type="button" class="btn-close" (click)="closeCancelResultModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          
+          <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+            <span class="text-secondary">Cancellation Ref</span>
+            <strong class="text-dark">{{ cancellationResult.cancellationReference }}</strong>
+          </div>
+          
+          <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+            <span class="text-secondary">Cancellation Fee</span>
+            <strong class="text-danger">₹{{ cancellationResult.cancellationFee }}</strong>
+          </div>
+
+          <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+            <span class="text-secondary">Refund Status</span>
+            <span class="badge" 
+                  [class.bg-success]="cancellationResult.refundStatus === 'COMPLETED'"
+                  [class.bg-warning]="cancellationResult.refundStatus === 'INITIATED'"
+                  [class.bg-secondary]="cancellationResult.refundStatus === 'NOT_APPLICABLE'">
+              {{ cancellationResult.refundStatus }}
+            </span>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
+            <span class="fw-bold">Total Refund Amount</span>
+            <h4 class="fw-bold text-success mb-0">₹{{ cancellationResult.refundAmount }}</h4>
+          </div>
+
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-primary px-4 w-100" (click)="closeCancelResultModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Review Modal -->
+@if (showReviewModal) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-bottom-0 bg-light">
+          <h5 class="modal-title fw-bold text-warning"><i class="bi bi-star-fill me-2"></i>{{ isEditingReview ? 'View/Edit Review' : 'Write Review' }}</h5>
+          <button type="button" class="btn-close" (click)="closeReviewModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (reviewError) {
+            <div class="alert alert-danger p-2 mb-4 small">{{ reviewError }}</div>
+          }
+          
+          <div class="mb-4 text-center">
+            <label class="form-label text-muted small fw-semibold d-block mb-2">Rating</label>
+            <div class="d-flex justify-content-center gap-2 fs-3 text-warning" style="cursor: pointer;">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <i class="bi" 
+                   [class.bi-star-fill]="star <= reviewForm.rating" 
+                   [class.bi-star]="star > reviewForm.rating"
+                   (click)="setRating(star)"></i>
+              }
+            </div>
+          </div>
+          
+          <div class="form-group mb-4">
+            <label class="form-label text-muted small fw-semibold">Comment</label>
+            <textarea class="form-control" rows="4" [(ngModel)]="reviewForm.comment" placeholder="Tell us about your trip..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 bg-light">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeReviewModal()">Cancel</button>
+          <button type="button" class="btn btn-warning px-4" (click)="submitReview()">Submit Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

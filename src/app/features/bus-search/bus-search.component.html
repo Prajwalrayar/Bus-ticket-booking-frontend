@@ -1,283 +1,258 @@
 <div class="search-page">
-
   <!-- Header -->
-
   <div class="container py-4">
-
     <div class="d-flex justify-content-between align-items-center">
-
       <div>
-
         <h2 class="fw-bold mb-1">
           {{ fromCity }}
           <span class="text-danger mx-2">→</span>
           {{ toCity }}
         </h2>
-
         <div class="text-secondary">
           Journey Date: {{ journeyDate }}
         </div>
-
       </div>
-
       <button class="btn btn-outline-danger" (click)="modifySearch()">
-
         Modify Search
-
       </button>
-
     </div>
-
   </div>
-
 
   <hr class="m-0">
 
-
   <!-- Results -->
-
   <div class="container py-4">
-
     <div class="row g-4">
 
-
-      <!-- Filters -->
-
-      <div class="col-lg-3">
-
-        <div class="card border-0 shadow-sm">
-
+      <!-- Desktop Filters -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
           <div class="card-body">
+            <h5 class="fw-bold mb-4">Filters</h5>
 
-            <h4 class="fw-bold mb-4">
-              Filters
-            </h4>
-
-            <h6 class="fw-bold mb-3">
-              Bus Type
-            </h6>
-
+            <h6 class="fw-bold mb-3">Bus Type</h6>
             <div class="form-check mb-3">
-
-              <input class="form-check-input" type="checkbox" id="ac">
-
-              <label class="form-check-label" for="ac">
-
-                AC
-
-              </label>
-
+              <input class="form-check-input" type="checkbox" id="ac" (change)="toggleAc()" [checked]="isAcSelected">
+              <label class="form-check-label" for="ac">AC</label>
             </div>
-
-
             <div class="form-check mb-3">
-
-              <input class="form-check-input" type="checkbox" id="nonAc">
-
-              <label class="form-check-label" for="nonAc">
-
-                Non AC
-
-              </label>
-
+              <input class="form-check-input" type="checkbox" id="nonAc" (change)="toggleNonAc()" [checked]="isNonAcSelected">
+              <label class="form-check-label" for="nonAc">Non AC</label>
             </div>
-
-
             <div class="form-check mb-3">
-
-              <input class="form-check-input" type="checkbox" id="sleeper">
-
-              <label class="form-check-label" for="sleeper">
-
-                Sleeper
-
-              </label>
-
+              <input class="form-check-input" type="checkbox" id="sleeper" (change)="toggleBusType('SLEEPER')" [checked]="selectedBusTypes.has('SLEEPER')">
+              <label class="form-check-label" for="sleeper">Sleeper</label>
             </div>
-
-
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="semiSleeper" (change)="toggleBusType('SEMI_SLEEPER')" [checked]="selectedBusTypes.has('SEMI_SLEEPER')">
+              <label class="form-check-label" for="semiSleeper">Semi-Sleeper</label>
+            </div>
             <div class="form-check">
-
-              <input class="form-check-input" type="checkbox" id="seater">
-
-              <label class="form-check-label" for="seater">
-
-                Seater
-
-              </label>
-
+              <input class="form-check-input" type="checkbox" id="seater" (change)="toggleBusType('SEATER')" [checked]="selectedBusTypes.has('SEATER')">
+              <label class="form-check-label" for="seater">Seater</label>
             </div>
-
           </div>
-
         </div>
-
       </div>
 
-
       <!-- Bus Results -->
-
       <div class="col-lg-9">
 
         @if (loading()) {
-
-        <div class="text-center py-5">
-
-          <div class="spinner-border text-danger mb-3">
+          <div class="text-center py-5">
+            <div class="spinner-border text-danger mb-3"></div>
+            <div class="text-secondary">Searching buses...</div>
           </div>
-
-          <div class="text-secondary">
-            Searching buses...
-          </div>
-
-        </div>
-
         }
-
 
         @if (!loading() && errorMessage()) {
-
-        <div class="alert alert-danger">
-
-          {{ errorMessage() }}
-
-        </div>
-
+          <div class="alert alert-danger">
+            {{ errorMessage() }}
+          </div>
         }
 
+        @if (!loading() && !errorMessage() && buses.length > 0 && filteredBuses.length === 0) {
+          <div class="text-center py-5">
+            <h4>No buses match your filters</h4>
+            <p class="text-secondary">Try adjusting the filter criteria.</p>
+          </div>
+        }
 
         @if (!loading() && !errorMessage() && buses.length === 0) {
-
-        <div class="text-center py-5">
-
-          <h4>
-            No buses found
-          </h4>
-
-          <p class="text-secondary">
-            Try searching for another route.
-          </p>
-
-        </div>
-
+          <div class="text-center py-5">
+            <h4>No buses found</h4>
+            <p class="text-secondary">Try searching for another route or date.</p>
+          </div>
         }
 
+        @if (!loading() && filteredBuses.length > 0) {
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <h4 class="fw-bold mb-3 mb-md-0">
+              {{ filteredBuses.length }} Buses Found
+            </h4>
+            
+            <div class="d-flex align-items-center gap-2">
+              <label for="sortOption" class="text-secondary text-nowrap mb-0 me-2">Sort By:</label>
+              <select id="sortOption" class="form-select w-auto" (change)="onSortChange($event)">
+                <option value="default">Default</option>
+                <option value="priceAsc">Price (Low to High)</option>
+                <option value="priceDesc">Price (High to Low)</option>
+                <option value="departureEarly">Departure (Earliest)</option>
+                <option value="departureLate">Departure (Latest)</option>
+              </select>
 
-        @if (!loading() && buses.length > 0) {
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-
-          <h4 class="fw-bold mb-0">
-
-            {{ buses.length }} Buses Found
-
-          </h4>
-
-        </div>
-
-
-        @for (bus of buses; track bus.tripId) {
-
-        <div class="card border-0 shadow-sm mb-3 bus-card">
-
-          <div class="card-body p-4">
-
-            <div class="row align-items-center">
-
-
-              <!-- Operator -->
-
-              <div class="col-md-3">
-
-                <h5 class="fw-bold mb-1">
-                  {{ bus.operatorName }}
-                </h5>
-
-                <div class="text-secondary small">
-                  {{ bus.busRegistrationNumber }}
-                </div>
-
-              </div>
-
-
-              <!-- Time -->
-
-              <div class="col-md-3">
-
-                <div class="fw-bold fs-5">
-                  {{ bus.departureTime }}
-                  →
-                  {{ bus.arrivalTime }}
-                </div>
-
-                <div class="text-secondary small">
-                  {{ bus.duration }}
-                </div>
-
-              </div>
-
-
-              <!-- Bus Type -->
-
-              <div class="col-md-2">
-
-                <div class="fw-semibold">
-                  {{ bus.busType }}
-                </div>
-
-                <div class="text-secondary small">
-                  {{ bus.availableSeats }} seats left
-                </div>
-
-              </div>
-
-
-              <!-- Rating -->
-
-              <div class="col-md-2">
-
-                <span class="badge bg-success">
-
-                  ★ {{ bus.rating }}
-
-                </span>
-
-              </div>
-
-
-              <!-- Price -->
-
-              <div class="col-md-2 text-md-end">
-
-                <div class="fw-bold fs-5">
-
-                  ₹{{ bus.baseFare }}
-
-                </div>
-
-                <button type="button" class="btn btn-danger btn-sm mt-2" 
-                (click)="viewSeats(bus)">
-
-                  View Seats
-
-                </button>
-
-              </div>
-
+              <!-- Mobile Filter Trigger -->
+              <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileFilterDrawer">
+                <i class="bi bi-funnel"></i>
+              </button>
             </div>
-
           </div>
 
-        </div>
+          @for (bus of filteredBuses; track bus.tripId) {
+            <div class="card border-0 shadow-sm mb-3 bus-card">
+              <div class="card-body p-4">
+                <div class="row align-items-center">
 
+                  <!-- Operator -->
+                  <div class="col-md-3 mb-3 mb-md-0">
+                    <h5 class="fw-bold mb-1">{{ bus.operatorName }}</h5>
+                    <div class="text-secondary small">{{ bus.busRegistrationNumber }}</div>
+                    @if(bus.amenities && bus.amenities.length > 0) {
+                      <div class="mt-2 d-flex gap-1 flex-wrap">
+                        @for (amenity of bus.amenities; track amenity) {
+                          <span class="badge bg-light text-dark border">{{ amenity }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Time -->
+                  <div class="col-md-3 mb-3 mb-md-0 text-md-center">
+                    <div class="fw-bold fs-5">
+                      {{ bus.departureTime }} → {{ bus.arrivalTime }}
+                    </div>
+                    <div class="text-secondary small mt-1">
+                      <i class="bi bi-clock me-1"></i> {{ getDuration(bus.departureTime, bus.arrivalTime) }}
+                    </div>
+                  </div>
+
+                  <!-- Bus Type -->
+                  <div class="col-md-3 mb-3 mb-md-0 text-md-center">
+                    <div class="fw-semibold">{{ bus.busType }}</div>
+                    <div class="text-secondary small">
+                      <span class="text-success fw-bold">{{ bus.availableSeats }}</span> seats left
+                    </div>
+                  </div>
+
+                  <!-- Price & Actions -->
+                  <div class="col-md-3 text-md-end">
+                    <div class="fw-bold fs-4 text-danger mb-2">₹{{ bus.baseFare }}</div>
+                    <div class="d-flex flex-column gap-2">
+                      <button type="button" class="btn btn-danger w-100" (click)="viewSeats(bus)">
+                        View Seats
+                      </button>
+                      <button type="button" class="btn btn-outline-secondary w-100 btn-sm" (click)="toggleDetails(bus)">
+                        {{ expandedTrips.has(bus.tripId) ? 'Hide Details' : 'View Details' }}
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Expanded Details Section -->
+                @if (expandedTrips.has(bus.tripId)) {
+                  <div class="mt-4 pt-3 border-top">
+                    
+                    @if (expandedTrips.get(bus.tripId)?.loading) {
+                      <div class="text-center py-3">
+                        <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
+                        <span class="ms-2 text-secondary small">Loading trip details...</span>
+                      </div>
+                    }
+
+                    @if (expandedTrips.get(bus.tripId)?.error) {
+                      <div class="alert alert-danger py-2 mb-0">
+                        {{ expandedTrips.get(bus.tripId)?.error }}
+                      </div>
+                    }
+
+                    @if (!expandedTrips.get(bus.tripId)?.loading && !expandedTrips.get(bus.tripId)?.error) {
+                      <div class="row">
+                        <!-- Boarding Points -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                          <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Boarding Points</h6>
+                          @if (expandedTrips.get(bus.tripId)?.boarding?.length === 0) {
+                            <div class="text-secondary small">No boarding points found.</div>
+                          }
+                          <ul class="list-unstyled mb-0 position-relative">
+                            @for (stop of expandedTrips.get(bus.tripId)?.boarding; track stop.routeStopId) {
+                              <li class="mb-2 pb-2 border-bottom">
+                                <div class="fw-semibold">{{ stop.stopName }}</div>
+                                <div class="text-secondary small">Sequence: {{ stop.stopSequence }} • {{ stop.distanceFromSourceKm }} km from source</div>
+                              </li>
+                            }
+                          </ul>
+                        </div>
+
+                        <!-- Dropping Points -->
+                        <div class="col-md-6">
+                          <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Dropping Points</h6>
+                          @if (expandedTrips.get(bus.tripId)?.dropping?.length === 0) {
+                            <div class="text-secondary small">No dropping points found.</div>
+                          }
+                          <ul class="list-unstyled mb-0 position-relative">
+                            @for (stop of expandedTrips.get(bus.tripId)?.dropping; track stop.routeStopId) {
+                              <li class="mb-2 pb-2 border-bottom">
+                                <div class="fw-semibold">{{ stop.stopName }}</div>
+                                <div class="text-secondary small">Sequence: {{ stop.stopSequence }} • {{ stop.distanceFromSourceKm }} km from source</div>
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    }
+
+                  </div>
+                }
+
+              </div>
+            </div>
+          }
         }
-
-        }
-
       </div>
 
     </div>
-
   </div>
+</div>
 
+<!-- Mobile Filter Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="mobileFilterDrawer" aria-labelledby="mobileFilterDrawerLabel">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title fw-bold" id="mobileFilterDrawerLabel">Filters</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <h6 class="fw-bold mb-3">Bus Type</h6>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="acMobile" (change)="toggleAc()" [checked]="isAcSelected">
+      <label class="form-check-label" for="acMobile">AC</label>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="nonAcMobile" (change)="toggleNonAc()" [checked]="isNonAcSelected">
+      <label class="form-check-label" for="nonAcMobile">Non AC</label>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="sleeperMobile" (change)="toggleBusType('SLEEPER')" [checked]="selectedBusTypes.has('SLEEPER')">
+      <label class="form-check-label" for="sleeperMobile">Sleeper</label>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="semiSleeperMobile" (change)="toggleBusType('SEMI_SLEEPER')" [checked]="selectedBusTypes.has('SEMI_SLEEPER')">
+      <label class="form-check-label" for="semiSleeperMobile">Semi-Sleeper</label>
+    </div>
+    <div class="form-check mb-4">
+      <input class="form-check-input" type="checkbox" id="seaterMobile" (change)="toggleBusType('SEATER')" [checked]="selectedBusTypes.has('SEATER')">
+      <label class="form-check-label" for="seaterMobile">Seater</label>
+    </div>
+    <button type="button" class="btn btn-danger w-100 mt-auto" data-bs-dismiss="offcanvas">Apply Filters</button>
+  </div>
 </div>

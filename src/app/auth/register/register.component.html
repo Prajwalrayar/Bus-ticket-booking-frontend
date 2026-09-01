@@ -1,196 +1,132 @@
 <div class="register-page">
-
   <div class="container">
-
     <div class="row justify-content-center">
-
       <div class="col-12 col-sm-10 col-md-7 col-lg-5">
-
         <div class="card register-card border-0 shadow-sm">
-
           <div class="card-body p-4 p-md-5">
 
             <!-- TITLE -->
-
             <div class="text-center mb-4">
-
-              <h3 class="fw-bold">
-                Create Account
-              </h3>
-
-              <p class="text-secondary mb-0">
-                Register to book your bus journey
-              </p>
-
+              <h3 class="fw-bold">Create Account</h3>
+              <p class="text-secondary mb-0">Register to book your bus journey</p>
             </div>
-
 
             <!-- ERROR -->
-
             @if (errorMessage()) {
-
-            <div class="alert alert-danger">
-              {{ errorMessage() }}
-            </div>
-
+              <div class="alert alert-danger">
+                {{ errorMessage() }}
+              </div>
             }
-
 
             <!-- SUCCESS -->
-
             @if (successMessage()) {
-
-            <div class="alert alert-success">
-              {{ successMessage() }}
-            </div>
-
+              <div class="alert alert-success">
+                {{ successMessage() }}
+              </div>
             }
 
-
-            <form (ngSubmit)="register()">
+            <form [formGroup]="registerForm" (ngSubmit)="register()">
 
               <!-- NAME -->
-
               <div class="mb-3">
-
-                <label for="name" class="form-label fw-semibold">
-
-                  Name
-
-                </label>
-
-                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name"
-                  [(ngModel)]="registerData.fullName">
-
+                <label for="fullName" class="form-label fw-semibold">Full Name</label>
+                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name"
+                  formControlName="fullName" [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }">
+                @if (submitted && f['fullName'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['fullName'].errors['required']) { <span>Full Name is required</span> }
+                    @if (f['fullName'].errors['minlength']) { <span>Full Name must be at least 3 characters</span> }
+                  </div>
+                }
               </div>
-
 
               <!-- EMAIL -->
-
               <div class="mb-3">
-
-                <label for="email" class="form-label fw-semibold">
-
-                  Email
-
-                </label>
-
-                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
-                  [(ngModel)]="registerData.email">
-
+                <label for="email" class="form-label fw-semibold">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email"
+                  formControlName="email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+                @if (submitted && f['email'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['email'].errors['required']) { <span>Email is required</span> }
+                    @if (f['email'].errors['email']) { <span>Email must be a valid email address</span> }
+                  </div>
+                }
               </div>
-
 
               <!-- PHONE -->
-
               <div class="mb-3">
-
-                <label for="phone" class="form-label fw-semibold">
-
-                  Phone
-
-                </label>
-
-                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number"
-                  [(ngModel)]="registerData.mobileNumber">
-
+                <label for="mobileNumber" class="form-label fw-semibold">Mobile Number</label>
+                <input type="tel" id="mobileNumber" class="form-control" placeholder="10-digit mobile number"
+                  formControlName="mobileNumber" [ngClass]="{ 'is-invalid': submitted && f['mobileNumber'].errors }">
+                @if (submitted && f['mobileNumber'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['mobileNumber'].errors['required']) { <span>Mobile Number is required</span> }
+                    @if (f['mobileNumber'].errors['pattern']) { <span>Mobile Number must be exactly 10 digits</span> }
+                  </div>
+                }
               </div>
 
+              <!-- ADDRESS -->
+              <div class="mb-3">
+                <label for="address" class="form-label fw-semibold">Address <span class="text-muted fw-normal">(Optional)</span></label>
+                <input type="text" id="address" class="form-control" placeholder="Enter your address"
+                  formControlName="address">
+              </div>
 
               <!-- PASSWORD -->
-
               <div class="mb-3">
-
-                <label for="password" class="form-label fw-semibold">
-
-                  Password
-
-                </label>
-
-                <input type="password" id="password" name="password" class="form-control"
-                  placeholder="Enter your password" [(ngModel)]="registerData.password">
-
+                <label for="password" class="form-label fw-semibold">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" 
+                  formControlName="password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+                @if (submitted && f['password'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['password'].errors['required']) { <span>Password is required</span> }
+                    @if (f['password'].errors['minlength']) { <span>Password must be at least 8 characters</span> }
+                  </div>
+                }
               </div>
-
 
               <!-- CONFIRM PASSWORD -->
-
               <div class="mb-4">
-
-                <label for="confirmPassword" class="form-label fw-semibold">
-
-                  Confirm Password
-
-                </label>
-
-                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                  placeholder="Confirm your password" [(ngModel)]="registerData.confirmPassword">
-
+                <label for="confirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" 
+                  formControlName="confirmPassword" [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }">
+                @if (submitted && f['confirmPassword'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['confirmPassword'].errors['required']) { <span>Confirm Password is required</span> }
+                    @if (f['confirmPassword'].errors['passwordMismatch']) { <span>Passwords do not match</span> }
+                  </div>
+                }
               </div>
 
-
               <!-- REGISTER BUTTON -->
-
-              <button type="submit" class="btn btn-danger w-100" [disabled]="loading()">
-
+              <button type="submit" class="btn btn-rb-primary w-100 py-2" [disabled]="loading()">
                 @if (loading()) {
-
-                <span class="spinner-border spinner-border-sm me-2">
-                </span>
-
-                Registering...
-
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Registering...
                 } @else {
-
-                Register
-
+                  Create Account
                 }
-
               </button>
 
             </form>
 
-
             <!-- LOGIN -->
-
             <div class="text-center mt-4">
-
-              <span class="text-secondary">
-                Already have an account?
-              </span>
-
-              <a routerLink="/login" class="text-danger text-decoration-none fw-semibold ms-1">
-
-                Login
-
-              </a>
-
+              <span class="text-secondary">Already have an account?</span>
+              <a routerLink="/login" class="text-rb-primary text-decoration-none fw-semibold ms-1">Login</a>
             </div>
-
 
             <!-- BROWSE -->
-
             <div class="text-center mt-3">
-
-              <a routerLink="/" class="browse-link">
-
-                <i class="bi bi-bus-front me-2"></i>
-
-                Continue browsing buses
-
+              <a routerLink="/" class="browse-link text-muted text-decoration-none small">
+                <i class="bi bi-arrow-left me-1"></i>Back to home
               </a>
-
             </div>
 
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

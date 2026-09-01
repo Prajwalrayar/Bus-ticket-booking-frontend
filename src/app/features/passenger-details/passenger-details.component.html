@@ -44,228 +44,98 @@
               </p>
 
             </div>
-
+            <!-- BOARDING & DROPPING -->
+            <div class="row g-3 mb-5">
+              <div class="col-md-6">
+                <label class="form-label fw-bold"><i class="bi bi-geo-alt text-primary me-2"></i>Boarding Point <span class="text-danger">*</span></label>
+                <select class="form-select" [value]="selectedBoardingPoint()" (change)="selectedBoardingPoint.set($any($event.target).value)">
+                  <option value="">Select Boarding Point</option>
+                  @for (stop of boardingPoints(); track stop.routeStopId) {
+                    <option [value]="stop.routeStopId">{{ stop.stopName }} ({{ stop.stopSequence }})</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Dropping Point <span class="text-danger">*</span></label>
+                <select class="form-select" [value]="selectedDroppingPoint()" (change)="selectedDroppingPoint.set($any($event.target).value)">
+                  <option value="">Select Dropping Point</option>
+                  @for (stop of droppingPoints(); track stop.routeStopId) {
+                    <option [value]="stop.routeStopId">{{ stop.stopName }} ({{ stop.stopSequence }})</option>
+                  }
+                </select>
+              </div>
+            </div>
 
             <!-- ERROR -->
-
             @if (errorMessage()) {
-
-              <div class="alert alert-danger">
-
-                {{ errorMessage() }}
-
-              </div>
-
+              <div class="alert alert-danger">{{ errorMessage() }}</div>
             }
 
-
             <!-- PASSENGERS -->
-
-            @for (
-              passenger of passengers();
-              track passenger.seatNumber;
-              let i = $index
-            ) {
-
-              <div class="passenger-card mb-4">
-
-
-                <!-- PASSENGER HEADER -->
-
-                <div class="passenger-header">
-
+            @for (passenger of passengers(); track passenger.seatNumber; let i = $index) {
+              <div class="passenger-card mb-4 border rounded p-4">
+                <div class="passenger-header d-flex justify-content-between mb-4 border-bottom pb-3">
                   <div>
-
-                    <h5 class="fw-bold mb-1">
-                      Passenger {{ i + 1 }}
-                    </h5>
-
-                    <span class="text-secondary">
-                      Seat {{ passenger.seatNumber }}
-                    </span>
-
+                    <h5 class="fw-bold mb-1">Passenger {{ i + 1 }} {{ passenger.isPrimary ? '(Primary)' : '' }}</h5>
+                    <span class="text-secondary">Seat {{ passenger.seatNumber }}</span>
                   </div>
-
-                  <span class="seat-badge">
-                    {{ passenger.seatNumber }}
-                  </span>
-
+                  <span class="seat-badge bg-danger text-white rounded px-3 py-1">{{ passenger.seatNumber }}</span>
                 </div>
 
-
-                <!-- NAME -->
+                @if (mySavedPassengers().length > 0) {
+                  <div class="mb-4 p-3 bg-light rounded border border-secondary border-opacity-25">
+                    <label class="form-label fw-semibold text-primary mb-2"><i class="bi bi-person-lines-fill me-2"></i>Select Saved Passenger (Optional)</label>
+                    <select class="form-select" (change)="applySavedPassenger(i, $event)">
+                      <option value="">-- Choose a profile to auto-fill --</option>
+                      @for (saved of mySavedPassengers(); track saved.savedPassengerId) {
+                        <option [value]="saved.savedPassengerId">{{ saved.passengerName }} ({{ saved.age }}y, {{ saved.gender }})</option>
+                      }
+                    </select>
+                  </div>
+                }
 
                 <div class="mb-3">
-
-                  <label
-                    [for]="'name' + i"
-                    class="form-label">
-
-                    Full Name
-                    <span class="text-danger">*</span>
-
-                  </label>
-
-                  <input
-                    type="text"
-                    [id]="'name' + i"
-                    class="form-control"
-                    placeholder="Enter passenger name"
-                    [value]="passenger.passengerName"
-                    (input)="updatePassenger(
-                      i,
-                      'passengerName',
-                      $any($event.target).value
-                    )">
-
+                  <label [for]="'name' + i" class="form-label">Full Name <span class="text-danger">*</span></label>
+                  <input type="text" [id]="'name' + i" class="form-control" placeholder="Enter passenger name" [value]="passenger.passengerName" (input)="updatePassenger(i, 'passengerName', $any($event.target).value)">
                 </div>
 
-
-                <!-- AGE -->
-
                 <div class="mb-3">
-
-                  <label
-                    [for]="'age' + i"
-                    class="form-label">
-
-                    Age
-                    <span class="text-danger">*</span>
-
-                  </label>
-
-                  <input
-                    type="number"
-                    [id]="'age' + i"
-                    class="form-control"
-                    placeholder="Enter age"
-                    min="1"
-                    max="100"
-                    [value]="passenger.age ?? ''"
-                    (input)="updatePassenger(
-                      i,
-                      'age',
-                      $any($event.target).value
-                        ? +$any($event.target).value
-                        : null
-                    )">
-
+                  <label [for]="'age' + i" class="form-label">Age <span class="text-danger">*</span></label>
+                  <input type="number" [id]="'age' + i" class="form-control" placeholder="Enter age" min="1" max="120" [value]="passenger.age ?? ''" (input)="updatePassenger(i, 'age', $any($event.target).value ? +$any($event.target).value : null)">
                 </div>
 
-
-                <!-- GENDER -->
-
                 <div class="mb-3">
-
-                  <label class="form-label">
-
-                    Gender
-                    <span class="text-danger">*</span>
-
-                  </label>
-
-
+                  <label class="form-label">Gender <span class="text-danger">*</span></label>
                   <div class="row g-2">
-
-
-                    <!-- MALE -->
-
-                    <div class="col-12 col-md-6">
-
-                      <label
-                        class="gender-option"
-                        [class.selected]="
-                          passenger.gender === 'MALE'
-                        ">
-
-                        <span>
-                          Male
-                        </span>
-
-                        <input
-                          type="radio"
-                          [name]="'gender' + i"
-                          value="MALE"
-                          [checked]="
-                            passenger.gender === 'MALE'
-                          "
-                          (change)="updatePassenger(
-                            i,
-                            'gender',
-                            'MALE'
-                          )">
-
+                    <div class="col-12 col-md-4">
+                      <label class="gender-option d-block border rounded p-2 text-center" [class.border-danger]="passenger.gender === 'MALE'" [class.text-danger]="passenger.gender === 'MALE'" style="cursor:pointer">
+                        <span>Male</span>
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="MALE" [checked]="passenger.gender === 'MALE'" (change)="updatePassenger(i, 'gender', 'MALE')">
                       </label>
-
                     </div>
-
-
-                    <!-- FEMALE -->
-
-                    <div class="col-12 col-md-6">
-
-                      <label
-                        class="gender-option"
-                        [class.selected]="
-                          passenger.gender === 'FEMALE'
-                        ">
-
-                        <span>
-                          Female
-                        </span>
-
-                        <input
-                          type="radio"
-                          [name]="'gender' + i"
-                          value="FEMALE"
-                          [checked]="
-                            passenger.gender === 'FEMALE'
-                          "
-                          (change)="updatePassenger(
-                            i,
-                            'gender',
-                            'FEMALE'
-                          )">
-
+                    <div class="col-12 col-md-4">
+                      <label class="gender-option d-block border rounded p-2 text-center" [class.border-danger]="passenger.gender === 'FEMALE'" [class.text-danger]="passenger.gender === 'FEMALE'" style="cursor:pointer">
+                        <span>Female</span>
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="FEMALE" [checked]="passenger.gender === 'FEMALE'" (change)="updatePassenger(i, 'gender', 'FEMALE')">
                       </label>
-
                     </div>
-
+                    <div class="col-12 col-md-4">
+                      <label class="gender-option d-block border rounded p-2 text-center" [class.border-danger]="passenger.gender === 'OTHER'" [class.text-danger]="passenger.gender === 'OTHER'" style="cursor:pointer">
+                        <span>Other</span>
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="OTHER" [checked]="passenger.gender === 'OTHER'" (change)="updatePassenger(i, 'gender', 'OTHER')">
+                      </label>
+                    </div>
                   </div>
-
                 </div>
 
-
-                <!-- PHONE -->
-
-                <div class="mb-2">
-
-                  <label
-                    [for]="'phone' + i"
-                    class="form-label">
-
-                    Phone Number
-                    <span class="text-danger">*</span>
-
-                  </label>
-
-                  <input
-                    type="tel"
-                    [id]="'phone' + i"
-                    class="form-control"
-                    placeholder="Enter 10-digit phone number"
-                    maxlength="10"
-                    [value]="passenger.contactNumber"
-                    (input)="updatePassenger(
-                      i,
-                      'contactNumber',
-                      $any($event.target).value
-                    )">
-
-                </div>
+                @if (passenger.isPrimary) {
+                  <div class="mb-2">
+                    <label [for]="'phone' + i" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                    <input type="tel" [id]="'phone' + i" class="form-control" placeholder="Enter 10-digit phone number" maxlength="10" [value]="passenger.contactNumber" (input)="updatePassenger(i, 'contactNumber', $any($event.target).value)">
+                  </div>
+                }
 
               </div>
-
             }
 
 

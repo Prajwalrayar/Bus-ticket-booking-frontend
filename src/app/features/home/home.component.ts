@@ -133,14 +133,12 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
+    this.router.navigate(['/search'], {
       queryParams: {
         from: this.fromCity.trim(),
         to: this.toCity.trim(),
         date: this.journeyDate,
       },
-      queryParamsHandling: 'merge',
     });
   }
 

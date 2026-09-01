@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Bus } from '../models/bus';
-import { Seat } from '../models/seat';
+import { TripSeatDTO as Seat } from '../models/seat';
 
 
 @Injectable({

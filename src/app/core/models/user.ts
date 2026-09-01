@@ -1,8 +1,38 @@
 export interface User {
+  userId?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  roles?: string[];
+}
+
+export interface UserDTO {
   userId: string;
-  name: string;
+  userName: string;
+  userEmail: string;
+  mobileNumber: string;
+  isActive: boolean;
+  isVerified: boolean;
+  roleNames: string[];
+  createdAt: string;
+}
+
+export interface UserUpdateRequest {
+  userName: string;
+  mobileNumber: string;
+}
+
+export interface StaffCreateRequest {
+  fullName: string;
   email: string;
-  phone: string;
-  password: string;
-  roles: string[];
+  mobileNumber: string;
+  password?: string;
+  roleName: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }

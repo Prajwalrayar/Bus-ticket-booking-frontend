@@ -1,11 +1,9 @@
 export const APP_CONSTANTS = {
-  APP_NAME: 'Bus Ticket Booking System',
+  APP_NAME: 'BusTicket',
 
   STORAGE_KEYS: {
-    ACCESS_TOKEN: 'access_token',
-    REFRESH_TOKEN: 'refresh_token',
-    USER_ID: 'user_id',
-    USER_ROLE: 'user_role'
+    AUTH_TOKEN: 'authToken',
+    LOGGED_IN_USER: 'loggedInUser'
   },
 
   ROLES: {
@@ -31,5 +29,29 @@ export const APP_CONSTANTS = {
   PAYMENT_METHOD_OPTIONS: [
     'UPI',
     'WALLET'
+  ],
+
+  STAFF_ROLE_OPTIONS: [
+    'BUS_OPERATOR',
+    'SUPPORT_AGENT'
   ]
+} as const;
+
+export const APP_ROUTES = {
+  HOME: '',
+  LOGIN: 'login',
+  REGISTER: 'register',
+  SEARCH: 'search',
+  TRIP_DETAILS: 'trip',
+  BOOKING: 'booking',
+  PAYMENT: 'payment',
+  BOOKING_CONFIRMATION: 'booking-confirmation',
+  TICKETS: 'tickets',
+  MY_BOOKINGS: 'my-bookings',
+  SAVED_PASSENGERS: 'saved-passengers',
+  REVIEWS: 'reviews',
+  NOTIFICATIONS: 'notifications',
+  PROFILE: 'profile',
+  ADMIN: 'admin',
+  OPERATOR: 'operator'
 } as const;
