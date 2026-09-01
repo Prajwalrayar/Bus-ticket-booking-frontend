@@ -1,105 +1,163 @@
-<div class="ticket-page print-container">
-  <div class="container py-5">
-    
-    <!-- Action Buttons (Hidden when printing) -->
-    <div class="d-flex justify-content-between mb-4 no-print">
-      <button class="btn btn-outline-secondary" (click)="goHome()">
-        <i class="bi bi-house me-2"></i> Back to Home
-      </button>
-      <button class="btn btn-danger" (click)="printTicket()">
-        <i class="bi bi-printer me-2"></i> Download / Print Ticket
-      </button>
-    </div>
+<div class="ticket-page d-print-block">
+  <div class="container py-4 py-md-5">
 
-    <!-- Ticket Card -->
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="ticket-wrapper shadow-lg">
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+        <h5 class="fw-bold">Retrieving Ticket Details...</h5>
+      </div>
+    }
+
+    @if (!loading && errorMessage) {
+      <div class="alert alert-danger text-center">
+        <i class="bi bi-exclamation-triangle fs-4 d-block mb-2"></i>
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (!loading && ticket) {
+      <!-- Action Bar (Hidden in Print) -->
+      <div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+        <button class="btn btn-outline-secondary" (click)="goHome()">
+          <i class="bi bi-house me-2"></i> Home
+        </button>
+        <div>
+          <button class="btn btn-outline-primary me-2" (click)="toggleQrCode()">
+            <i class="bi bi-qr-code-scan me-2"></i> Show QR
+          </button>
+          <button class="btn btn-primary" (click)="printTicket()">
+            <i class="bi bi-printer me-2"></i> Download / Print
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticket Container -->
+      <div class="card border-0 shadow-sm ticket-container mx-auto" style="max-width: 900px;">
+        <div class="row g-0">
           
-          <!-- Ticket Header -->
-          <div class="ticket-header bg-danger text-white p-4 d-flex justify-content-between align-items-center">
-            <div>
-              <h3 class="fw-bold mb-0">BusTicket</h3>
-              <small>Booking ID: {{ bookingId }}</small>
-            </div>
-            <div class="text-end">
-              <h5 class="mb-0">Confirmed</h5>
-              <small>Booked on {{ currentDate | date:'medium' }}</small>
-            </div>
-          </div>
-
-          <div class="ticket-body bg-white p-4">
-            <!-- Route Details -->
-            <div class="route-details d-flex justify-content-between align-items-center mb-4">
-              <div class="text-center">
-                <h2 class="fw-bold mb-0 text-primary">BLR</h2>
-                <small class="text-secondary">Bangalore</small>
-              </div>
-              <div class="flex-grow-1 px-4 text-center">
-                <div class="fw-semibold">10:30 PM</div>
-                <div class="border-top border-2 border-dashed border-secondary my-2 position-relative">
-                  <i class="bi bi-bus-front position-absolute top-50 start-50 translate-middle bg-white px-2"></i>
+          <!-- Left Main Section -->
+          <div class="col-md-9 border-end position-relative">
+            <!-- Decorative cutouts -->
+            <div class="ticket-cutout cutout-top"></div>
+            <div class="ticket-cutout cutout-bottom"></div>
+            
+            <div class="p-4 p-md-5">
+              <!-- Header -->
+              <div class="d-flex justify-content-between align-items-start mb-4 pb-3 border-bottom">
+                <div>
+                  <h3 class="fw-bold text-primary mb-1">{{ ticket.operatorName }}</h3>
+                  <span class="badge bg-light text-dark border">{{ ticket.busType }}</span>
+                  <span class="ms-2 small text-secondary">Bus: {{ ticket.busNumber }}</span>
                 </div>
-                <div class="fw-semibold">06:00 AM</div>
+                <div class="text-end">
+                  <span class="text-secondary small d-block mb-1">Ticket Number</span>
+                  <h4 class="fw-bold mb-0 text-dark">{{ ticket.ticketNumber }}</h4>
+                </div>
               </div>
-              <div class="text-center">
-                <h2 class="fw-bold mb-0 text-primary">MAA</h2>
-                <small class="text-secondary">Chennai</small>
-              </div>
-            </div>
 
-            <!-- Bus Info -->
-            <div class="bg-light p-3 rounded mb-4 d-flex justify-content-between">
-              <div>
-                <small class="text-secondary d-block">Operator</small>
-                <span class="fw-bold">SRS Travels (AC Sleeper)</span>
+              <!-- Journey Details -->
+              <div class="row mb-5 position-relative journey-path">
+                <div class="col-5">
+                  <span class="text-secondary small">From</span>
+                  <h4 class="fw-bold mb-1">{{ ticket.source }}</h4>
+                  <p class="mb-0 text-muted small">{{ ticket.boardingPoint }}</p>
+                  <p class="mb-0 text-dark fw-semibold mt-2">{{ ticket.travelDate | date:'mediumDate' }}</p>
+                  <p class="mb-0 text-primary fw-bold">{{ ticket.departureTime }}</p>
+                </div>
+                <div class="col-2 d-flex align-items-center justify-content-center">
+                  <i class="bi bi-arrow-right-circle text-primary fs-3 bg-white px-2 z-1"></i>
+                  <div class="position-absolute border-bottom border-2 border-primary border-dashed w-100" style="top: 50%; left: 0; z-index: 0;"></div>
+                </div>
+                <div class="col-5 text-end">
+                  <span class="text-secondary small">To</span>
+                  <h4 class="fw-bold mb-1">{{ ticket.destination }}</h4>
+                  <p class="mb-0 text-muted small">{{ ticket.droppingPoint }}</p>
+                  <p class="mb-0 text-dark fw-semibold mt-2">{{ ticket.travelDate | date:'mediumDate' }}</p>
+                  <p class="mb-0 text-primary fw-bold">{{ ticket.arrivalTime }}</p>
+                </div>
               </div>
-              <div class="text-end">
-                <small class="text-secondary d-block">Total Fare</small>
-                <span class="fw-bold text-success">₹{{ totalAmount }}</span>
-              </div>
-            </div>
 
-            <hr class="border-dashed mb-4">
-
-            <!-- Passenger Details & QR -->
-            <div class="row">
-              <div class="col-md-8 border-end border-dashed">
-                <h5 class="fw-bold mb-3">Passenger Details</h5>
+              <!-- Passengers -->
+              <div class="bg-light rounded p-3 mb-4">
+                <h6 class="fw-bold text-secondary mb-3 text-uppercase" style="font-size: 0.8rem;">Passenger Details</h6>
                 <div class="table-responsive">
-                  <table class="table table-borderless table-sm">
-                    <thead>
-                      <tr class="text-secondary">
+                  <table class="table table-sm table-borderless mb-0 align-middle">
+                    <thead class="text-muted small">
+                      <tr>
                         <th>Name</th>
-                        <th>Age/Gender</th>
-                        <th>Seat</th>
+                        <th>Age</th>
+                        <th>Gender</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @for (passenger of passengers; track passenger.seatNumber) {
+                      @for (p of bookingSeats; track p) {
                         <tr>
-                          <td class="fw-semibold">{{ passenger.passengerName }}</td>
-                          <td>{{ passenger.age }} / {{ passenger.gender }}</td>
-                          <td><span class="badge bg-danger">{{ passenger.seatNumber }}</span></td>
+                          <td class="fw-semibold">{{ p.passengerName }}</td>
+                          <td>{{ p.passengerAge }}</td>
+                          <td>{{ p.passengerGender }}</td>
                         </tr>
                       }
                     </tbody>
                   </table>
                 </div>
               </div>
-              
-              <!-- QR Code Section -->
-              <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-                <div class="qr-placeholder bg-light border p-2 mb-2 d-flex align-items-center justify-content-center">
-                  <i class="bi bi-qr-code text-secondary" style="font-size: 5rem;"></i>
-                </div>
-                <small class="text-center text-secondary">Scan to board</small>
+
+            </div>
+          </div>
+
+          <!-- Right Stub Section -->
+          <div class="col-md-3 bg-light rounded-end d-flex flex-column justify-content-between p-4 ticket-stub">
+            <div>
+              <div class="mb-4">
+                <span class="text-secondary small d-block">PNR / Booking Ref</span>
+                <strong class="fs-5 text-dark">{{ ticket.bookingId }}</strong>
+              </div>
+              <div class="mb-4">
+                <span class="text-secondary small d-block">Seat(s)</span>
+                <h3 class="fw-bold text-primary mb-0">
+                  {{ ticket.seatNumbers.join(', ') }}
+                </h3>
+              </div>
+              <div class="mb-4">
+                <span class="text-secondary small d-block">Total Fare</span>
+                <h4 class="fw-bold mb-0">₹{{ ticket.totalAmount }}</h4>
+                <span class="badge bg-success mt-2">PAID</span>
               </div>
             </div>
 
+            <!-- Print QR Space -->
+            <div class="text-center d-none d-print-block mt-auto border-top pt-3">
+              <img [src]="qrCodeUrl" class="img-fluid rounded" alt="QR Code" style="max-width: 120px;">
+              <p class="small text-muted mt-2 mb-0">Scan for e-Ticket</p>
+            </div>
+            
+            <div class="text-center d-print-none mt-auto">
+              <i class="bi bi-bus-front text-primary opacity-25" style="font-size: 4rem;"></i>
+            </div>
           </div>
+
         </div>
       </div>
-    </div>
+      
+      <!-- QR Code Modal (Hidden in Print) -->
+      @if (showQrModal) {
+        <div class="modal fade show d-block d-print-none" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header border-0 pb-0 justify-content-end">
+                <button type="button" class="btn-close" aria-label="Close" (click)="toggleQrCode()"></button>
+              </div>
+              <div class="modal-body text-center pt-0 pb-4">
+                <h5 class="fw-bold mb-3">E-Ticket QR</h5>
+                <div class="bg-white p-3 rounded shadow-sm border d-inline-block mb-3">
+                  <img [src]="qrCodeUrl" class="img-fluid" alt="Ticket QR Code">
+                </div>
+                <p class="text-secondary small mb-0">Present this code at the boarding point.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
   </div>
 </div>

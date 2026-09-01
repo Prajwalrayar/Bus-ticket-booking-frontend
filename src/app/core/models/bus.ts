@@ -17,3 +17,31 @@ export interface Bus {
   availableSeats: number;
   rating: number;
 }
+
+export interface BusDTO {
+  busId: string;
+  registrationNumber: string;
+  busType: string;
+  amenities: string[];
+  isActive: boolean;
+  operatorCompanyName: string;
+}
+
+export interface BusCreateRequest {
+  registrationNumber: string;
+  busType: string;
+  amenities: string[];
+  operatorCompanyName: string;
+}
+
+export interface BusSeatDTO {
+  busSeatId: string;
+  seatNumber: string;
+  seatPosition: string;
+  isActive: boolean;
+}
+
+export interface BusSeatCreateRequest {
+  seatNumber: string;
+  seatPosition: string;
+}

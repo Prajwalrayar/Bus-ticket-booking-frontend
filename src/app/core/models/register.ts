@@ -1,13 +1,8 @@
-export interface Register {
+export interface RegisterRequest {
   fullName: string;
   email: string;
   mobileNumber: string;
   password: string;
   confirmPassword: string;
-}
-
-export interface RegisterResponse {
-  userId: string;
-  roles: string[];
-  token: string;
+  address?: string;
 }

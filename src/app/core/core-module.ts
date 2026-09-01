@@ -1,6 +1,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { AuthService } from './services/auth.service';
 import { AuthStateService } from './services/auth-state.service';
 import { BookingStateService } from './services/booking-state.service';
@@ -10,13 +11,11 @@ import { OfferService } from './services/offer.service';
 import { TokenService } from './services/token-service';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
 import { AuthGuard } from './guards/auth-guard';
+import { GuestGuard } from './guards/guest-guard';
 import { RoleGuard } from './guards/role-guard';
-import { Navbar } from './navbar/navbar';
-
-import { RouterModule } from '@angular/router';
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   providers: [
     AuthService,
     AuthStateService,
@@ -26,6 +25,7 @@ import { RouterModule } from '@angular/router';
     OfferService,
     TokenService,
     AuthGuard,
+    GuestGuard,
     RoleGuard,
     {
       provide: HTTP_INTERCEPTORS,
@@ -33,8 +33,6 @@ import { RouterModule } from '@angular/router';
       multi: true,
     },
   ],
-  declarations: [Navbar],
-  exports: [Navbar],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

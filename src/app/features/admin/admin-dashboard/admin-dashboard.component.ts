@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../../core/services/admin.service';
+import { AdminDashboardDTO } from '../../../core/models/admin-dashboard';
+import { UserService } from '../../../core/services/user.service';
+import { UserDTO, StaffCreateRequest } from '../../../core/models/user';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -8,30 +12,100 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardComponent implements OnInit {
 
-
   activeTab: 'OVERVIEW' | 'ROUTES' | 'OPERATORS' | 'REPORTS' = 'OVERVIEW';
 
-  // Mock KPIs
-  kpis = {
-    totalRevenue: 4525000,
-    totalBookings: 3420,
-    activeOperators: 45,
-    occupancyRate: 82 // percentage
+  dashboardData: AdminDashboardDTO | null = null;
+  loading: boolean = true;
+  error: string = '';
+
+  users: UserDTO[] = [];
+  usersLoading: boolean = false;
+  usersError: string = '';
+
+  showStaffModal: boolean = false;
+  staffForm: StaffCreateRequest = {
+    fullName: '',
+    email: '',
+    mobileNumber: '',
+    password: '',
+    roleName: 'BUS_OPERATOR'
   };
+  staffSubmitSuccess: string = '';
+  staffSubmitError: string = '';
 
-  // Mock Recent Bookings
-  recentBookings = [
-    { id: 'BKG-9921', user: 'John Doe', route: 'Bangalore → Chennai', amount: 1500, status: 'CONFIRMED', date: '2026-08-29' },
-    { id: 'BKG-9922', user: 'Alice Smith', route: 'Mumbai → Pune', amount: 800, status: 'PENDING', date: '2026-08-29' },
-    { id: 'BKG-9923', user: 'Rahul K', route: 'Hyderabad → Bangalore', amount: 1200, status: 'CANCELLED', date: '2026-08-28' },
-    { id: 'BKG-9924', user: 'Priya M', route: 'Delhi → Jaipur', amount: 950, status: 'CONFIRMED', date: '2026-08-28' }
-  ];
+  constructor(
+    private adminService: AdminService,
+    private userService: UserService
+  ) {}
 
-  constructor() {}
+  ngOnInit(): void {
+    this.fetchDashboardData();
+  }
 
-  ngOnInit(): void {}
+  fetchDashboardData(): void {
+    this.loading = true;
+    this.error = '';
+    this.adminService.getDashboardKPIs().subscribe({
+      next: (data) => {
+        this.dashboardData = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load admin dashboard data', err);
+        this.error = 'Failed to load dashboard metrics. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
+  fetchAllUsers(): void {
+    this.usersLoading = true;
+    this.usersError = '';
+    this.userService.getAllUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+        this.usersLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch users', err);
+        this.usersError = 'Failed to load users list.';
+        this.usersLoading = false;
+      }
+    });
+  }
+
+  openStaffModal(): void {
+    this.staffSubmitSuccess = '';
+    this.staffSubmitError = '';
+    this.staffForm = { fullName: '', email: '', mobileNumber: '', password: '', roleName: 'BUS_OPERATOR' };
+    this.showStaffModal = true;
+  }
+
+  closeStaffModal(): void {
+    this.showStaffModal = false;
+  }
+
+  createStaff(): void {
+    this.staffSubmitError = '';
+    this.staffSubmitSuccess = '';
+    this.adminService.createStaff(this.staffForm).subscribe({
+      next: (res) => {
+        this.staffSubmitSuccess = 'Staff member created successfully.';
+        this.fetchAllUsers();
+        setTimeout(() => this.closeStaffModal(), 1500);
+      },
+      error: (err) => {
+        console.error('Error creating staff', err);
+        this.staffSubmitError = err.error?.message || 'Failed to create staff member.';
+      }
+    });
+  }
 
   setTab(tab: 'OVERVIEW' | 'ROUTES' | 'OPERATORS' | 'REPORTS'): void {
     this.activeTab = tab;
+    if (tab === 'OPERATORS') {
+      this.fetchAllUsers();
+    }
   }
 }
+

@@ -90,15 +90,19 @@ export class LoginComponent {
 
         },
 
-        error: (error) => {
+        error: (err) => {
 
-          console.error('Login error:', error);
+          console.error('Login error:', err);
 
           this.loading.set(false);
 
-          this.errorMessage.set(
-            'Unable to login. Please try again.'
-          );
+          if (err.error && err.error.message) {
+            this.errorMessage.set(err.error.message);
+          } else {
+            this.errorMessage.set(
+              'Unable to login. Please try again.'
+            );
+          }
         }
 
       });

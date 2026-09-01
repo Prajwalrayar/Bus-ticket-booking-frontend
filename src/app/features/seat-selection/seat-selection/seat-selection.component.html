@@ -161,13 +161,13 @@
                             ) {
 
                             <button type="button" class="seat" [class.available]="
-                      seat.seatStatus === 'AVAILABLE'
+                      seat.seatStatus === 'AVAILABLE' && !isSelected(seat)
                     " [class.occupied]="
-                      seat.seatStatus === 'TEMPORARILY_LOCKED'
+                      seat.seatStatus === 'TEMPORARILY_LOCKED' || seat.seatStatus === 'BOOKED'
                     " [class.selected]="
                       isSelected(seat)
                     " [disabled]="
-                      seat.seatStatus === 'BOOKED'
+                      seat.seatStatus === 'BOOKED' || seat.seatStatus === 'TEMPORARILY_LOCKED'
                     " (click)="selectSeat(seat)">
 
                                 {{ seat.seatNumber }}

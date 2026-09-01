@@ -1,0 +1,36 @@
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #d84e55 0%, #b83b42 60%, #8b1a20 100%);
+}
+
+.auth-layout-brand {
+  padding: 24px 32px;
+}
+
+.auth-brand-link {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.auth-brand-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.auth-layout-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 48px;
+}
+
+.auth-layout-footer {
+  text-align: center;
+  padding: 16px;
+  color: rgba(255, 255, 255, 0.65);
+}
