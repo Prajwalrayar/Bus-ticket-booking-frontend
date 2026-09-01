@@ -5,6 +5,6 @@ import { PassengerDetailsComponent } from './passenger-details.component';
 @NgModule({
   declarations: [PassengerDetailsComponent],
   imports: [SharedModule],
-  exports: [PassengerDetailsComponent],
+  exports: [PassengerDetailsComponent]
 })
 export class PassengerDetailsModule {}

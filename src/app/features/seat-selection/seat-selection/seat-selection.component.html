@@ -82,19 +82,19 @@
 
                             <h5 class="fw-bold mb-1">
 
-                                {{ bus()!.operator }}
+                                {{ bus()!.operatorName }}
 
                             </h5>
 
                             <div class="text-secondary">
 
-                                {{ bus()!.fromCity }}
+                                {{ bus()!.source }}
 
                                 <span class="text-danger mx-2">
                                     →
                                 </span>
 
-                                {{ bus()!.toCity }}
+                                {{ bus()!.destination }}
 
                             </div>
 
@@ -161,13 +161,13 @@
                             ) {
 
                             <button type="button" class="seat" [class.available]="
-                      seat.status === 'AVAILABLE'
+                      seat.seatStatus === 'AVAILABLE'
                     " [class.occupied]="
-                      seat.status === 'OCCUPIED'
+                      seat.seatStatus === 'TEMPORARILY_LOCKED'
                     " [class.selected]="
                       isSelected(seat)
                     " [disabled]="
-                      seat.status === 'OCCUPIED'
+                      seat.seatStatus === 'BOOKED'
                     " (click)="selectSeat(seat)">
 
                                 {{ seat.seatNumber }}
@@ -210,7 +210,7 @@
 
                             <span class="fw-semibold">
 
-                                {{ bus()!.operator }}
+                                {{ bus()!.operatorName }}
 
                             </span>
 

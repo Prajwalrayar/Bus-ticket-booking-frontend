@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeSearchComponent } from './features/home-search/home-search';
 import { BusSearchComponent } from './features/bus-search/bus-search.component';
 import { SeatSelectionComponent } from './features/seat-selection/seat-selection/seat-selection.component';
 import { PassengerDetailsComponent } from './features/passenger-details/passenger-details.component';
@@ -14,9 +13,10 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthGuard } from './core/guards/auth-guard';
 import { RoleGuard } from './core/guards/role-guard';
+import { HomeComponent } from './features/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeSearchComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
 
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: RegisterComponent },

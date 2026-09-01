@@ -5,6 +5,6 @@ import { BusSearchComponent } from './bus-search.component';
 @NgModule({
   declarations: [BusSearchComponent],
   imports: [SharedModule],
-  exports: [BusSearchComponent],
+  exports: [BusSearchComponent]
 })
 export class BusSearchModule {}

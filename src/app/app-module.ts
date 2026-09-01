@@ -39,7 +39,7 @@ import { TicketConfirmation } from './features/ticket-confirmation/ticket-confir
     BusSearchModule,
     AdminModule,
     OperatorModule,
-    PassengerDetailsModule,
+    PassengerDetailsModule
   ],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],
   bootstrap: [App],

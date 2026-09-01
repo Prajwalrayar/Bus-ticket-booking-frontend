@@ -17,165 +17,269 @@
       "role": "BUS_OPERATOR"
     },
     {
+      "id": 3,
       "name": "Ram",
       "email": "ram@gmail.com",
       "phone": "123456789",
       "password": "123456",
-      "role": "PASSENGER",
-      "id": 3
+      "role": "PASSENGER"
     }
   ],
 
-  "buses": [
+  "trips": [
     {
-      "id": 1,
-      "registrationNumber": "KA 22 F 7689",
-      "operator": "VRL Travels",
-      "fromCity": "Bangalore",
-      "toCity": "Chennai",
+      "tripId": "TRIP001",
+      "travelDate": "2026-09-02",
       "departureTime": "21:30",
       "arrivalTime": "06:00",
-      "duration": "08h 30m",
+      "baseFare": 850,
+      "isCancelled": false,
+      "cancellationReason": "",
+      "source": "Bangalore",
+      "destination": "Chennai",
+      "busRegistrationNumber": "KA 22 F 7689",
       "busType": "AC Sleeper",
-      "price": 850,
+      "amenities": [
+        "WiFi",
+        "Charging Point",
+        "Blanket"
+      ],
+      "operatorName": "VRL Travels",
       "totalSeats": 40,
-      "availableSeats": 12,
-      "rating": 4.5
+      "availableSeats": 12
     },
     {
-      "id": 2,
-      "registrationNumber": "KA 01 AB 4521",
-      "operator": "SRS Travels",
-      "fromCity": "Bangalore",
-      "toCity": "Belagavi",
+      "tripId": "TRIP002",
+      "travelDate": "2026-09-02",
       "departureTime": "22:00",
       "arrivalTime": "07:00",
-      "duration": "09h 00m",
+      "baseFare": 650,
+      "isCancelled": false,
+      "cancellationReason": "",
+      "source": "Bangalore",
+      "destination": "Belagavi",
+      "busRegistrationNumber": "KA 01 AB 4521",
       "busType": "AC Seater",
-      "price": 650,
+      "amenities": [
+        "WiFi",
+        "Charging Point"
+      ],
+      "operatorName": "SRS Travels",
       "totalSeats": 45,
-      "availableSeats": 25,
-      "rating": 4.2
+      "availableSeats": 25
     },
     {
-      "id": 3,
-      "registrationNumber": "TN 38 X 9021",
-      "operator": "Orange Tours",
-      "fromCity": "Bangalore",
-      "toCity": "Mumbai",
+      "tripId": "TRIP003",
+      "travelDate": "2026-09-02",
       "departureTime": "20:45",
       "arrivalTime": "05:30",
-      "duration": "08h 45m",
+      "baseFare": 950,
+      "isCancelled": false,
+      "cancellationReason": "",
+      "source": "Bangalore",
+      "destination": "Mumbai",
+      "busRegistrationNumber": "TN 38 X 9021",
       "busType": "AC Sleeper",
-      "price": 950,
+      "amenities": [
+        "WiFi",
+        "Charging Point",
+        "Blanket",
+        "Water Bottle"
+      ],
+      "operatorName": "Orange Tours",
       "totalSeats": 36,
-      "availableSeats": 8,
-      "rating": 4.7
+      "availableSeats": 8
     },
     {
-      "id": 4,
-      "registrationNumber": "KA 05 CD 7788",
-      "operator": "Kallada Travels",
-      "fromCity": "Bangalore",
-      "toCity": "Chennai",
+      "tripId": "TRIP004",
+      "travelDate": "2026-09-02",
       "departureTime": "23:15",
       "arrivalTime": "08:30",
-      "duration": "09h 15m",
+      "baseFare": 550,
+      "isCancelled": false,
+      "cancellationReason": "",
+      "source": "Bangalore",
+      "destination": "Chennai",
+      "busRegistrationNumber": "KA 05 CD 7788",
       "busType": "Non AC Seater",
-      "price": 550,
+      "amenities": [
+        "Charging Point"
+      ],
+      "operatorName": "Kallada Travels",
       "totalSeats": 50,
-      "availableSeats": 32,
-      "rating": 4.0
+      "availableSeats": 32
     },
     {
-      "id": 5,
-      "registrationNumber": "TS 09 EF 1234",
-      "operator": "Orange Tours",
-      "fromCity": "Hyderabad",
-      "toCity": "Bangalore",
+      "tripId": "TRIP005",
+      "travelDate": "2026-09-02",
       "departureTime": "21:00",
       "arrivalTime": "07:00",
-      "duration": "10h 00m",
+      "baseFare": 900,
+      "isCancelled": false,
+      "cancellationReason": "",
+      "source": "Hyderabad",
+      "destination": "Bangalore",
+      "busRegistrationNumber": "TS 09 EF 1234",
       "busType": "AC Sleeper",
-      "price": 900,
+      "amenities": [
+        "WiFi",
+        "Charging Point",
+        "Blanket"
+      ],
+      "operatorName": "Orange Tours",
       "totalSeats": 36,
-      "availableSeats": 15,
-      "rating": 4.4
+      "availableSeats": 15
     }
   ],
 
-  "seats": [
+  "tripSeats": [
     {
-      "id": 1,
-      "busId": 1,
+      "tripSeatId": 1,
+      "tripId": "TRIP001",
       "seatNumber": "A1",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 2,
-      "busId": 1,
+      "tripSeatId": 2,
+      "tripId": "TRIP001",
       "seatNumber": "A2",
-      "status": "OCCUPIED"
+      "seatStatus": "BOOKED"
     },
     {
-      "id": 3,
-      "busId": 1,
+      "tripSeatId": 3,
+      "tripId": "TRIP001",
       "seatNumber": "A3",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 4,
-      "busId": 1,
+      "tripSeatId": 4,
+      "tripId": "TRIP001",
       "seatNumber": "A4",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 5,
-      "busId": 1,
+      "tripSeatId": 5,
+      "tripId": "TRIP001",
       "seatNumber": "B1",
-      "status": "OCCUPIED"
+      "seatStatus": "BOOKED"
     },
     {
-      "id": 6,
-      "busId": 1,
+      "tripSeatId": 6,
+      "tripId": "TRIP001",
       "seatNumber": "B2",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 7,
-      "busId": 1,
+      "tripSeatId": 7,
+      "tripId": "TRIP001",
       "seatNumber": "B3",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 8,
-      "busId": 1,
+      "tripSeatId": 8,
+      "tripId": "TRIP001",
       "seatNumber": "B4",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
+
     {
-      "id": 9,
-      "busId": 2,
+      "tripSeatId": 9,
+      "tripId": "TRIP002",
       "seatNumber": "A1",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 10,
-      "busId": 2,
+      "tripSeatId": 10,
+      "tripId": "TRIP002",
       "seatNumber": "A2",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
     },
     {
-      "id": 11,
-      "busId": 2,
+      "tripSeatId": 11,
+      "tripId": "TRIP002",
       "seatNumber": "A3",
-      "status": "OCCUPIED"
+      "seatStatus": "BOOKED"
     },
     {
-      "id": 12,
-      "busId": 2,
+      "tripSeatId": 12,
+      "tripId": "TRIP002",
       "seatNumber": "A4",
-      "status": "AVAILABLE"
+      "seatStatus": "AVAILABLE"
+    },
+
+    {
+      "tripSeatId": 13,
+      "tripId": "TRIP003",
+      "seatNumber": "A1",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 14,
+      "tripId": "TRIP003",
+      "seatNumber": "A2",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 15,
+      "tripId": "TRIP003",
+      "seatNumber": "A3",
+      "seatStatus": "BOOKED"
+    },
+    {
+      "tripSeatId": 16,
+      "tripId": "TRIP003",
+      "seatNumber": "A4",
+      "seatStatus": "AVAILABLE"
+    },
+
+    {
+      "tripSeatId": 17,
+      "tripId": "TRIP004",
+      "seatNumber": "A1",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 18,
+      "tripId": "TRIP004",
+      "seatNumber": "A2",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 19,
+      "tripId": "TRIP004",
+      "seatNumber": "A3",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 20,
+      "tripId": "TRIP004",
+      "seatNumber": "A4",
+      "seatStatus": "BOOKED"
+    },
+
+    {
+      "tripSeatId": 21,
+      "tripId": "TRIP005",
+      "seatNumber": "A1",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 22,
+      "tripId": "TRIP005",
+      "seatNumber": "A2",
+      "seatStatus": "AVAILABLE"
+    },
+    {
+      "tripSeatId": 23,
+      "tripId": "TRIP005",
+      "seatNumber": "A3",
+      "seatStatus": "BOOKED"
+    },
+    {
+      "tripSeatId": 24,
+      "tripId": "TRIP005",
+      "seatNumber": "A4",
+      "seatStatus": "AVAILABLE"
     }
   ],
 

@@ -10,9 +10,11 @@ import { BookingService } from '../../../core/services/booking.service';
 import { User } from '../../../core/models/user';
 import { OfferService } from '../../../core/services/offer.service';
 import { Offer } from '../../../core/models/offer';
+import { CreateBookingRequest } from '../../../core/models/create-booking-request';
 
 @Component({
   selector: 'app-booking-confirmation',
+  standalone: false,
   templateUrl: './booking-confirmation.component.html',
   styleUrl: './booking-confirmation.component.css',
 })
@@ -299,7 +301,7 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
     return (
       this.selectedSeats().length *
-      currentBus.price
+      currentBus.baseFare
     );
 
   }
@@ -360,28 +362,28 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
   applyOffer(offer: Offer): void {
 
-  const baseAmount =
-    this.getBaseAmount();
+    const baseAmount =
+      this.getBaseAmount();
 
 
-  this.appliedOfferCode =
-    offer.code;
+    this.appliedOfferCode =
+      offer.code;
 
 
-  this.couponCode = '';
+    this.couponCode = '';
 
-  this.couponError = '';
+    this.couponError = '';
 
 
-  // IMPORTANT:
-  // Store the returned discount amount
-  this.discountAmount =
-    this.offerService.calculateDiscount(
-      offer,
-      baseAmount
-    );
+    // IMPORTANT:
+    // Store the returned discount amount
+    this.discountAmount =
+      this.offerService.calculateDiscount(
+        offer,
+        baseAmount
+      );
 
-}
+  }
 
 
   // ==========================================================
@@ -687,6 +689,9 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
   }
 
 
+
+
+
   // ==========================================================
   // CONFIRM BOOKING
   // ==========================================================
@@ -696,38 +701,25 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
     this.errorMessage.set('');
 
 
-    // ========================================================
+    // ==========================================================
     // GET LOGGED-IN USER
-    // ========================================================
+    // ==========================================================
 
     const currentUser =
       this.authStateService.getUser();
 
 
-    // ========================================================
-    // REQUIRE LOGIN
-    // ========================================================
-
-    if (!currentUser) {
-
-      this.goToLogin();
-
-      return;
-
-    }
-
-
-    // ========================================================
+    // ==========================================================
     // GET BUS
-    // ========================================================
+    // ==========================================================
 
     const currentBus =
       this.bus();
 
 
-    // ========================================================
+    // ==========================================================
     // VALIDATE BUS
-    // ========================================================
+    // ==========================================================
 
     if (!currentBus) {
 
@@ -740,13 +732,11 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
     }
 
 
-    // ========================================================
-    // VALIDATE SEATS
-    // ========================================================
+    // ==========================================================
+    // VALIDATE SELECTED SEATS
+    // ==========================================================
 
-    if (
-      this.selectedSeats().length === 0
-    ) {
+    if (this.selectedSeats().length === 0) {
 
       this.errorMessage.set(
         'No seats have been selected.'
@@ -757,54 +747,47 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
     }
 
 
-    // ========================================================
-    // CREATE BOOKING
-    // ========================================================
+    // ==========================================================
+    // CREATE BOOKING REQUEST
+    // ==========================================================
 
-    const booking = {
+    const bookingRequest: CreateBookingRequest = {
+
+      userId:
+        currentUser?.userId ?? '',
 
       tripId:
         currentBus.tripId,
 
-
-      fromCity:
-        currentBus.fromCity,
-
-
-      toCity:
-        currentBus.toCity,
-
-
       journeyDate:
         this.journeyDate(),
 
-
-      busName:
-        currentBus.operator,
-
-
       seatNumbers:
         this.selectedSeats()
-          .map(
-            seat =>
-              seat.seatNumber
+          .map(seat =>
+            seat.seatNumber
           ),
-
 
       passengers:
         this.passengers(),
 
+      boardingPointName:
+        '',
+
+      droppingPointName:
+        '',
+
+      discountAmount:
+        this.discountAmount,
+
+      taxAmount:
+        0,
+
+      insuranceAmount:
+        0,
 
       totalAmount:
         this.getTotalAmount(),
-
-
-      status:
-        'CONFIRMED' as const,
-
-
-      bookingDate:
-        new Date().toISOString(),
 
       paymentMethod:
         'CARD'
@@ -812,16 +795,20 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
     };
 
 
-    // ========================================================
+    // ==========================================================
     // SAVE BOOKING
-    // ========================================================
+    // ==========================================================
 
     this.loading.set(true);
 
 
     this.bookingService
-      .createBooking(booking)
+      .createBooking(bookingRequest)
       .subscribe({
+
+        // ========================================================
+        // SUCCESS
+        // ========================================================
 
         next: (savedBooking) => {
 
@@ -834,9 +821,9 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
           this.loading.set(false);
 
 
-          // --------------------------------------------------
+          // ======================================================
           // GO TO BOOKING SUCCESS
-          // --------------------------------------------------
+          // ======================================================
 
           this.router.navigate(
             ['/booking-success'],
@@ -852,6 +839,10 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
 
         },
 
+
+        // ========================================================
+        // ERROR
+        // ========================================================
 
         error: (error) => {
 
@@ -901,10 +892,10 @@ export class BookingConfirmationComponent implements OnInit, OnDestroy {
             currentBus.tripId,
 
           from:
-            currentBus.fromCity,
+            currentBus.source,
 
           to:
-            currentBus.toCity,
+            currentBus.destination,
 
           date:
             this.journeyDate(),

@@ -4,6 +4,7 @@ import { BookingStateService } from '../../../core/services/booking-state.servic
 
 @Component({
   selector: 'app-payment',
+  standalone:false,
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css',
 })

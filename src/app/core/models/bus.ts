@@ -3,6 +3,7 @@ export interface Bus {
   travelDate: string;
   departureTime: string;
   arrivalTime: string;
+  duration: string;
   baseFare: number;
   isCancelled: boolean;
   cancellationReason: string;
@@ -14,4 +15,5 @@ export interface Bus {
   operatorName: string;
   totalSeats: number;
   availableSeats: number;
+  rating: number;
 }

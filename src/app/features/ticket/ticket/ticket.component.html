@@ -78,7 +78,7 @@
                     <tbody>
                       @for (passenger of passengers; track passenger.seatNumber) {
                         <tr>
-                          <td class="fw-semibold">{{ passenger.name }}</td>
+                          <td class="fw-semibold">{{ passenger.passengerName }}</td>
                           <td>{{ passenger.age }} / {{ passenger.gender }}</td>
                           <td><span class="badge bg-danger">{{ passenger.seatNumber }}</span></td>
                         </tr>

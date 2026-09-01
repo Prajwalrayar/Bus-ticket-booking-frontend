@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-operator-dashboard',
+  standalone:false,
   templateUrl: './operator-dashboard.component.html',
   styleUrl: './operator-dashboard.component.css',
 })

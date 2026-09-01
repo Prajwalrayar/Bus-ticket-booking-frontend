@@ -5,6 +5,6 @@ import { OperatorDashboardComponent } from './operator-dashboard/operator-dashbo
 @NgModule({
   declarations: [OperatorDashboardComponent],
   imports: [SharedModule],
-  exports: [OperatorDashboardComponent],
+  exports: [OperatorDashboardComponent]
 })
 export class OperatorModule {}

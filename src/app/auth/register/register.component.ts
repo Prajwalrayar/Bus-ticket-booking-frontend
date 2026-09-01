@@ -8,6 +8,7 @@ import { User } from '../../core/models/user';
 
 @Component({
   selector: 'app-register',
+  standalone: false,
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
