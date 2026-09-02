@@ -11,8 +11,16 @@
         <i class="bi bi-speedometer2 me-2"></i> Dashboard
       </button>
       <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'ROUTES_MGT'" (click)="setTab('ROUTES_MGT')">
+        <i class="bi bi-signpost-split me-2"></i> Route & Stops Management
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'TRIPS'" (click)="setTab('TRIPS')">
+        <i class="bi bi-calendar-event me-2"></i> Trip Management
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
               [class.active-nav]="activeTab === 'ROUTES'" (click)="setTab('ROUTES')">
-        <i class="bi bi-signpost-split me-2"></i> Route Management
+        <i class="bi bi-bus-front me-2"></i> Fleet Management
       </button>
       <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
               [class.active-nav]="activeTab === 'OPERATORS'" (click)="setTab('OPERATORS')">
@@ -179,10 +187,303 @@
           </div>
         }
 
+      } @else if (activeTab === 'ROUTES') {
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold text-secondary mb-0">
+            @if (selectedBus) {
+              Seat Config: {{ selectedBus.registrationNumber }}
+            } @else {
+              Fleet Management
+            }
+          </h4>
+          <div>
+            @if (selectedBus) {
+              <button class="btn btn-outline-secondary me-2" (click)="closeSeatsView()">Back to Fleet</button>
+              <button class="btn btn-primary" (click)="openSeatModal()">
+                <i class="bi bi-plus-circle me-2"></i> Add Seat
+              </button>
+            } @else {
+              <button class="btn btn-primary px-4" (click)="openBusModal()">
+                <i class="bi bi-plus-circle me-2"></i> Add Bus
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (!selectedBus) {
+          <!-- BUS LIST -->
+          @if (busesLoading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
+          } @else if (busesError) {
+            <div class="alert alert-danger">{{ busesError }}</div>
+          } @else {
+            <div class="card border-0 shadow-sm">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">Registration</th>
+                      <th>Type</th>
+                      <th>Operator</th>
+                      <th>Status</th>
+                      <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (bus of buses; track bus.busId) {
+                      <tr>
+                        <td class="ps-4 fw-semibold">{{ bus.registrationNumber }}</td>
+                        <td>
+                          <span class="badge bg-secondary">{{ bus.busType }}</span>
+                        </td>
+                        <td>{{ bus.operatorCompanyName }}</td>
+                        <td>
+                          <span class="badge" [class.bg-success]="bus.isActive" [class.bg-danger]="!bus.isActive">
+                            {{ bus.isActive ? 'Active' : 'Inactive' }}
+                          </span>
+                        </td>
+                        <td class="pe-4 text-end">
+                          <button class="btn btn-sm btn-outline-primary me-2" (click)="viewBusSeats(bus)">Seats</button>
+                          <button class="btn btn-sm btn-outline-secondary me-2" (click)="openBusModal(bus)">Edit</button>
+                          @if (bus.isActive) {
+                            <button class="btn btn-sm btn-outline-danger" (click)="deactivateBus(bus.registrationNumber)">Disable</button>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        } @else {
+          <!-- SEAT CONFIG -->
+          @if (seatsLoading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
+          } @else if (seatsError) {
+            <div class="alert alert-danger">{{ seatsError }}</div>
+          } @else {
+            <div class="card border-0 shadow-sm p-3">
+              <div class="row g-3">
+                @for (seat of seats; track seat.busSeatId) {
+                  <div class="col-6 col-md-4 col-lg-3">
+                    <div class="border rounded p-3 text-center position-relative" [class.bg-light]="seat.isActive" [class.bg-secondary]="!seat.isActive">
+                      <h5 class="fw-bold mb-1">{{ seat.seatNumber }}</h5>
+                      <div class="small text-muted">{{ seat.seatPosition }}</div>
+                      @if (seat.isActive) {
+                        <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" style="padding: 2px 6px; font-size: 0.7rem;" (click)="deactivateSeat(seat.seatNumber)">
+                          <i class="bi bi-x"></i>
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
+                @if (seats.length === 0) {
+                  <div class="col-12 text-center py-4 text-muted">No seats configured for this bus yet.</div>
+                }
+              </div>
+            </div>
+          }
+        }
+
+      } @else if (activeTab === 'ROUTES_MGT') {
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold text-secondary mb-0">
+            @if (selectedRoute) {
+              Stops Config: {{ selectedRoute.source }} to {{ selectedRoute.destination }}
+            } @else {
+              Route Management
+            }
+          </h4>
+          <div>
+            @if (selectedRoute) {
+              <button class="btn btn-outline-secondary me-2" (click)="closeRouteStopsView()">Back to Routes</button>
+              <button class="btn btn-primary" (click)="openStopModal()">
+                <i class="bi bi-plus-circle me-2"></i> Add Stop
+              </button>
+            } @else {
+              <button class="btn btn-primary px-4" (click)="openRouteModal()">
+                <i class="bi bi-plus-circle me-2"></i> Add Route
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (!selectedRoute) {
+          <!-- ROUTE LIST -->
+          @if (routesLoading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
+          } @else if (routesError) {
+            <div class="alert alert-danger">{{ routesError }}</div>
+          } @else {
+            <div class="card border-0 shadow-sm">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">Source</th>
+                      <th>Destination</th>
+                      <th>Distance (km)</th>
+                      <th>Status</th>
+                      <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (route of routes; track route.routeId) {
+                      <tr>
+                        <td class="ps-4 fw-semibold">{{ route.source }}</td>
+                        <td class="fw-semibold">{{ route.destination }}</td>
+                        <td>{{ route.distance }}</td>
+                        <td>
+                          <span class="badge" [class.bg-success]="route.isActive" [class.bg-danger]="!route.isActive">
+                            {{ route.isActive ? 'Active' : 'Inactive' }}
+                          </span>
+                        </td>
+                        <td class="pe-4 text-end">
+                          <button class="btn btn-sm btn-outline-primary me-2" (click)="viewRouteStops(route)">Stops</button>
+                          <button class="btn btn-sm btn-outline-secondary me-2" (click)="openRouteModal(route)">Edit</button>
+                          @if (route.isActive) {
+                            <button class="btn btn-sm btn-outline-danger" (click)="deactivateRoute(route.source, route.destination)">Disable</button>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        } @else {
+          <!-- ROUTE STOP CONFIG -->
+          @if (stopsLoading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
+          } @else if (stopsError) {
+            <div class="alert alert-danger">{{ stopsError }}</div>
+          } @else {
+            <div class="card border-0 shadow-sm p-3">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">Seq</th>
+                      <th>Stop Name</th>
+                      <th>Type</th>
+                      <th>Distance (km)</th>
+                      <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (stop of routeStops; track stop.routeStopId) {
+                      <tr>
+                        <td class="ps-4">{{ stop.stopSequence }}</td>
+                        <td class="fw-semibold">{{ stop.stopName }}</td>
+                        <td>
+                          <span class="badge bg-secondary">{{ stop.stopType }}</span>
+                        </td>
+                        <td>{{ stop.distanceFromSourceKm }}</td>
+                        <td class="pe-4 text-end">
+                          <button class="btn btn-sm btn-outline-secondary me-2" (click)="openStopModal(stop)">Edit</button>
+                        </td>
+                      </tr>
+                    }
+                    @if (routeStops.length === 0) {
+                      <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">No stops configured for this route yet.</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        }
+
+      } @else if (activeTab === 'TRIPS') {
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold text-secondary mb-0">Trip Management</h4>
+          <button class="btn btn-primary px-4" (click)="openTripModal()">
+            <i class="bi bi-plus-circle me-2"></i> Add Trip
+          </button>
+        </div>
+
+        @if (tripsLoading) {
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+        } @else if (tripsError) {
+          <div class="alert alert-danger">{{ tripsError }}</div>
+        } @else {
+          <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="ps-4">Route</th>
+                    <th>Bus</th>
+                    <th>Date & Time</th>
+                    <th>Fare & Seats</th>
+                    <th>Status</th>
+                    <th class="pe-4 text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (trip of trips; track trip.tripId) {
+                    <tr>
+                      <td class="ps-4">
+                        <div class="fw-semibold">{{ trip.source }}</div>
+                        <div class="small text-muted">to {{ trip.destination }}</div>
+                      </td>
+                      <td>
+                        <div class="fw-semibold">{{ trip.busRegistrationNumber }}</div>
+                        <div class="small text-muted">{{ trip.operatorName }}</div>
+                      </td>
+                      <td>
+                        <div class="fw-semibold">{{ trip.travelDate }}</div>
+                        <div class="small text-muted">{{ trip.departureTime }} - {{ trip.arrivalTime }}</div>
+                      </td>
+                      <td>
+                        <div class="fw-semibold">₹{{ trip.baseFare }}</div>
+                        <div class="small text-muted">{{ trip.availableSeats }} / {{ trip.totalSeats }} available</div>
+                      </td>
+                      <td>
+                        <span class="badge" [class.bg-success]="!trip.isCancelled" [class.bg-danger]="trip.isCancelled">
+                          {{ trip.isCancelled ? 'Cancelled' : 'Scheduled' }}
+                        </span>
+                      </td>
+                      <td class="pe-4 text-end">
+                        <button class="btn btn-sm btn-outline-secondary me-2" (click)="openTripModal(trip)">Edit</button>
+                        @if (!trip.isCancelled) {
+                          <button class="btn btn-sm btn-outline-danger" (click)="cancelTrip(trip)">Cancel</button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                  @if (trips.length === 0) {
+                    <tr>
+                      <td colspan="6" class="text-center py-4 text-muted">No trips scheduled.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
       } @else {
         <div class="text-center py-5 text-secondary">
           <i class="bi bi-tools fs-1 mb-3 d-block"></i>
-          <h4>{{ activeTab === 'ROUTES' ? 'Route' : 'Reports' }} Module</h4>
+          <h4>Reports Module</h4>
           <p>This section is under construction.</p>
         </div>
       }
@@ -243,6 +544,268 @@
             </div>
           </form>
 
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Bus Modal -->
+@if (showBusModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-bus-front me-2"></i>
+            {{ isEditingBus ? 'Edit Bus' : 'Add New Bus' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeBusModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (busSubmitError) { <div class="alert alert-danger">{{ busSubmitError }}</div> }
+          @if (busSubmitSuccess) { <div class="alert alert-success">{{ busSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
+              @if (isEditingBus) { <div class="form-text">Registration number cannot be changed.</div> }
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-danger">*</span></label>
+              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
+                <option value="SEATER">Seater</option>
+                <option value="SLEEPER">Sleeper</option>
+                <option value="SEMI_SLEEPER">Semi-Sleeper</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Operator Company Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="operator" [(ngModel)]="busForm.operatorCompanyName" required>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Amenities (comma-separated)</label>
+              <input type="text" class="form-control" name="amenities" [(ngModel)]="busAmenitiesStr" placeholder="e.g. WiFi, AC, Water Bottle">
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeBusModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Seat Modal -->
+@if (showSeatModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">Add Seat</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeSeatModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (seatSubmitError) { <div class="alert alert-danger">{{ seatSubmitError }}</div> }
+          @if (seatSubmitSuccess) { <div class="alert alert-success">{{ seatSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required placeholder="e.g. 1A">
+            </div>
+            
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Position <span class="text-danger">*</span></label>
+              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
+                <option value="LOWER">Lower</option>
+                <option value="UPPER">Upper</option>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Add Seat</button>
+              <button type="button" class="btn btn-light" (click)="closeSeatModal()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Route Modal -->
+@if (showRouteModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-signpost-split me-2"></i>
+            {{ isEditingRoute ? 'Edit Route' : 'Add New Route' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeRouteModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (routeSubmitError) { <div class="alert alert-danger">{{ routeSubmitError }}</div> }
+          @if (routeSubmitSuccess) { <div class="alert alert-success">{{ routeSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveRoute()" #routeFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Source City <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="source" [(ngModel)]="routeForm.source" required>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Destination City <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="destination" [(ngModel)]="routeForm.destination" required>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Distance (km) <span class="text-danger">*</span></label>
+              <input type="number" step="0.1" min="0" class="form-control" name="distance" [(ngModel)]="routeForm.distance" required>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeRouteModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!routeFormCtrl.form.valid || routeSubmitSuccess !== ''">Save Route</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Route Stop Modal -->
+@if (showStopModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            {{ isEditingStop ? 'Edit Stop' : 'Add Stop' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeStopModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (stopSubmitError) { <div class="alert alert-danger">{{ stopSubmitError }}</div> }
+          @if (stopSubmitSuccess) { <div class="alert alert-success">{{ stopSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveStop()" #stopFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Stop Name (e.g. Anand Vihar) <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="stopName" [(ngModel)]="stopForm.stopName" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted small fw-semibold">Sequence Number <span class="text-danger">*</span></label>
+                <input type="number" min="1" class="form-control" name="stopSequence" [(ngModel)]="stopForm.stopSequence" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted small fw-semibold">Distance from Source (km) <span class="text-danger">*</span></label>
+                <input type="number" step="0.1" min="0" class="form-control" name="distanceFromSourceKm" [(ngModel)]="stopForm.distanceFromSourceKm" required>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Stop Type <span class="text-danger">*</span></label>
+              <select class="form-select" name="stopType" [(ngModel)]="stopForm.stopType" required>
+                <option value="BOARDING">Boarding</option>
+                <option value="DROPPING">Dropping</option>
+                <option value="INTERMEDIATE">Intermediate</option>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeStopModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!stopFormCtrl.form.valid || stopSubmitSuccess !== ''">Save Stop</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Trip Modal -->
+@if (showTripModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-calendar-event me-2"></i>
+            {{ isEditingTrip ? 'Edit Trip' : 'Schedule New Trip' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeTripModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (tripSubmitError) { <div class="alert alert-danger">{{ tripSubmitError }}</div> }
+          @if (tripSubmitSuccess) { <div class="alert alert-success">{{ tripSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveTrip()" #tripFormCtrl="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted small fw-semibold">Assign Bus <span class="text-danger">*</span></label>
+                <select class="form-select" name="busReg" [(ngModel)]="tripForm.busRegistrationNumber" required [disabled]="isEditingTrip">
+                  <option value="" disabled>Select a Bus</option>
+                  @for (bus of availableBuses; track bus.registrationNumber) {
+                    <option [value]="bus.registrationNumber">{{ bus.registrationNumber }} ({{ bus.busType }}) - {{ bus.operatorCompanyName }}</option>
+                  }
+                </select>
+                @if (isEditingTrip) { <div class="form-text">Bus cannot be changed after creation.</div> }
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted small fw-semibold">Assign Route <span class="text-danger">*</span></label>
+                <select class="form-select" name="routeSelect" 
+                  [ngModel]="tripForm.source + '|' + tripForm.destination" 
+                  (ngModelChange)="tripForm.source = $event.split('|')[0]; tripForm.destination = $event.split('|')[1]" 
+                  required [disabled]="isEditingTrip">
+                  <option value="|" disabled>Select a Route</option>
+                  @for (route of availableRoutes; track route.routeId) {
+                    <option [value]="route.source + '|' + route.destination">{{ route.source }} to {{ route.destination }} ({{ route.distance }}km)</option>
+                  }
+                </select>
+                @if (isEditingTrip) { <div class="form-text">Route cannot be changed after creation.</div> }
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label text-muted small fw-semibold">Travel Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" name="travelDate" [(ngModel)]="tripForm.travelDate" required [disabled]="isEditingTrip">
+                @if (isEditingTrip) { <div class="form-text">Date cannot be changed after creation.</div> }
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label text-muted small fw-semibold">Departure Time <span class="text-danger">*</span></label>
+                <input type="time" class="form-control" name="departureTime" [(ngModel)]="tripForm.departureTime" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label text-muted small fw-semibold">Arrival Time <span class="text-danger">*</span></label>
+                <input type="time" class="form-control" name="arrivalTime" [(ngModel)]="tripForm.arrivalTime" required>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Base Fare (₹) <span class="text-danger">*</span></label>
+              <input type="number" step="0.01" min="0" class="form-control" name="baseFare" [(ngModel)]="tripForm.baseFare" required>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeTripModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!tripFormCtrl.form.valid || tripSubmitSuccess !== ''">Save Trip</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
