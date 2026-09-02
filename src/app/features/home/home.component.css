@@ -3,11 +3,11 @@
 }
 
 .home-section {
-  padding: 56px 0;
+  padding: 48px 0;
 }
 
 .section-header {
-  margin-bottom: 36px;
+  margin-bottom: 24px;
 }
 
 .section-title {
@@ -195,7 +195,7 @@
 
 @media (max-width: 768px) {
   .home-section {
-    padding: 40px 0;
+    padding: 32px 0;
   }
 
   .section-title {

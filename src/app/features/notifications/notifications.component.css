@@ -1,4 +1,4 @@
-.bg-light-danger {
+.bg-rb-primary-light {
   background-color: #fff0f1;
 }
 
@@ -6,7 +6,7 @@
   background-color: #f8f9fa;
 }
 
-.bg-light-danger:hover {
+.bg-rb-primary-light:hover {
   background-color: #ffe5e7;
 }
 

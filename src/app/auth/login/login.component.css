@@ -1,6 +1,20 @@
-  /* ==========================================================
-    CONTINUE BROWSING BUSES
-  ========================================================== */
+:host {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background: var(--rb-bg);
+  padding: 40px 0;
+}
+
+.login-wrapper {
+  max-width: 100%;
+}
+
+/* ==========================================================
+  CONTINUE BROWSING BUSES
+========================================================== */
 
   .browse-link {
     display: inline-block;

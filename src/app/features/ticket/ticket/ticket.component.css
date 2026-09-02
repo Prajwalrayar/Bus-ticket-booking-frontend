@@ -1,6 +1,6 @@
 .ticket-page {
   min-height: 100vh;
-  background-color: #f4f6f8;
+  background-color: var(--rb-bg);
 }
 
 .ticket-wrapper {
@@ -17,7 +17,7 @@
   top: 90px; /* Align with header bottom */
   width: 20px;
   height: 20px;
-  background-color: #f4f6f8;
+  background-color: var(--rb-bg);
   border-radius: 50%;
   z-index: 1;
 }

@@ -1,6 +1,6 @@
 .passenger-page {
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--rb-bg);
 }
 
 
@@ -9,32 +9,20 @@
 ========================================================== */
 
 .passenger-card {
-
   padding: 24px;
-
-  border: 1px solid var(--border-color);
-
+  border: 1px solid var(--rb-border);
   border-radius: 12px;
-
-  background-color: var(--surface-color);
-
+  background-color: var(--rb-surface);
 }
 
 
 .passenger-header {
-
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 24px;
-
   padding-bottom: 16px;
-
-  border-bottom: 1px solid var(--border-color);
-
+  border-bottom: 1px solid var(--rb-border);
 }
 
 
@@ -43,25 +31,15 @@
 ========================================================== */
 
 .seat-badge {
-
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 6px 12px;
-
   background-color: #fff1f1;
-
-  color: var(--primary-color);
-
+  color: var(--rb-primary);
   border-radius: 6px;
-
   font-size: 14px;
-
   font-weight: 700;
-
 }
 
 
@@ -70,34 +48,22 @@
 ========================================================== */
 
 .form-label {
-
   font-weight: 600;
-
-  color: var(--text-primary);
-
+  color: var(--rb-text);
   margin-bottom: 8px;
-
 }
 
 
 .form-control {
-
   min-height: 48px;
-
-  border-color: var(--border-color);
-
-  border-radius: var(--border-radius);
-
+  border-color: var(--rb-border);
+  border-radius: var(--radius-sm);
 }
 
 
 .form-control:focus {
-
-  border-color: var(--primary-color);
-
-  box-shadow:
-    0 0 0 0.2rem rgba(211, 47, 47, 0.12);
-
+  border-color: var(--rb-primary);
+  box-shadow: 0 0 0 0.2rem rgba(216, 78, 85, 0.12);
 }
 
 
@@ -135,31 +101,21 @@
 
 
 .gender-option input {
-
   width: 22px;
-
   height: 22px;
-
   margin: 0;
-
   cursor: pointer;
-
-  accent-color: var(--primary-color);
-
+  accent-color: var(--rb-primary);
 }
 
 
 .gender-option.selected {
-
-  border-color: var(--primary-color);
-
+  border-color: var(--rb-primary);
 }
 
 
 .gender-option:hover {
-
-  border-color: var(--primary-color);
-
+  border-color: var(--rb-primary);
 }
 
 
@@ -177,17 +133,11 @@
 
 
 .summary-item {
-
   display: flex;
-
   justify-content: space-between;
-
   gap: 20px;
-
   padding: 14px 0;
-
-  border-bottom: 1px solid var(--border-color);
-
+  border-bottom: 1px solid var(--rb-border);
 }
 
 

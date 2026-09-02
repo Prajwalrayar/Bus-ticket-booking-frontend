@@ -71,8 +71,7 @@
 
   font-size: 16px;
 
-  color: var(--text-primary);
-
+  color: var(--rb-text);
 }
 
 
@@ -181,7 +180,7 @@
 .coupon-title {
     flex: 0 1 auto;
 
-    color: #dc3545;
+    color: var(--rb-primary);
 
     font-size: 16px;
 
@@ -395,7 +394,7 @@
 
     background: #fff1f1;
 
-    color: #dc3545;
+    color: var(--rb-primary);
 
     font-size: 13px;
 
@@ -451,7 +450,7 @@
 
     background: transparent;
 
-    color: #dc3545;
+    color: var(--rb-primary);
 
     font-size: 22px;
 
@@ -495,7 +494,7 @@
 
 
 .offer-dot.active {
-    background: #dc3545;
+    background: var(--rb-primary);
 
     transform: scale(1.25);
 }
@@ -566,7 +565,7 @@
 
     font-size: 16px;
 
-    color: var(--text-primary);
+    color: var(--rb-text);
 
     cursor: pointer;
 
@@ -575,7 +574,7 @@
 
 
 .coupon-button:hover {
-    color: var(--primary-color);
+    color: var(--rb-primary);
 }
 
 

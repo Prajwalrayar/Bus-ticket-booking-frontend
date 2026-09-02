@@ -1,4 +1,4 @@
-<div class="bg-light min-vh-100 d-flex align-items-center">
+<div class="login-wrapper w-100">
 
   <div class="container">
 
@@ -68,7 +68,7 @@
 
               <!-- Login -->
 
-              <button type="submit" class="btn btn-danger w-100" [disabled]="loading()">
+              <button type="submit" class="btn btn-rb-primary w-100 py-2" [disabled]="loading()">
 
                 @if (loading()) {
 
@@ -95,7 +95,7 @@
                 Don't have an account?
               </span>
 
-              <a routerLink="/register" class="text-danger text-decoration-none fw-semibold ms-1">
+              <a routerLink="/register" class="text-rb-primary text-decoration-none fw-semibold ms-1">
 
                 Register
 

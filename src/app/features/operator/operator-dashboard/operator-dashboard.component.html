@@ -79,7 +79,7 @@
                 <input type="text" class="form-control" [(ngModel)]="operatorProfile.websiteUrl">
               </div>
               <div class="text-end mt-4">
-                <button class="btn btn-primary px-4" (click)="saveProfile()">Save Changes</button>
+                <button class="btn btn-rb-primary px-4" (click)="saveProfile()">Save Changes</button>
               </div>
             }
           </div>
@@ -90,13 +90,13 @@
         @if (!selectedBusForSeats) {
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold text-secondary mb-0">My Fleet</h4>
-            <button class="btn btn-primary px-4" (click)="openBusModal()">
+            <button class="btn btn-rb-primary px-4" (click)="openBusModal()">
               <i class="bi bi-plus-circle me-2"></i> Register New Bus
             </button>
           </div>
 
           @if (busesLoading) {
-            <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+            <div class="text-center py-5"><div class="spinner-border text-rb-primary" role="status"></div></div>
           } @else {
             <div class="row g-4">
               @for (bus of buses; track bus.registrationNumber) {
@@ -141,14 +141,14 @@
             <button class="btn btn-light rounded-circle" (click)="backToBuses()"><i class="bi bi-arrow-left"></i></button>
             <h4 class="fw-bold text-secondary mb-0">Seat Config: {{ selectedBusForSeats.registrationNumber }}</h4>
             <div class="ms-auto">
-              <button class="btn btn-primary px-4" (click)="openSeatModal()">
+              <button class="btn btn-rb-primary px-4" (click)="openSeatModal()">
                 <i class="bi bi-plus-circle me-2"></i> Add Seat
               </button>
             </div>
           </div>
 
           @if (seatsLoading) {
-            <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+            <div class="text-center py-5"><div class="spinner-border text-rb-primary" role="status"></div></div>
           } @else {
             <div class="card border-0 shadow-sm">
               <div class="table-responsive">
@@ -201,14 +201,14 @@
                 <input type="date" class="form-control" [(ngModel)]="tripSearchForm.travelDate">
               </div>
               <div class="col-md-2">
-                <button class="btn btn-primary w-100" (click)="searchTrips()" [disabled]="!tripSearchForm.source || !tripSearchForm.destination">Search</button>
+                <button class="btn btn-rb-primary w-100" (click)="searchTrips()" [disabled]="!tripSearchForm.source || !tripSearchForm.destination">Search</button>
               </div>
             </div>
           </div>
         </div>
 
         @if (tripSearchLoading) {
-          <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+          <div class="text-center py-4"><div class="spinner-border text-rb-primary"></div></div>
         } @else if (tripSearchResults.length > 0) {
           <div class="card border-0 shadow-sm">
             <ul class="list-group list-group-flush">
@@ -234,12 +234,12 @@
 
         <div class="card border-0 shadow-sm col-md-6 mx-auto mt-5">
           <div class="card-body p-5 text-center">
-            <i class="bi bi-qr-code-scan display-1 text-primary mb-3"></i>
+            <i class="bi bi-qr-code-scan display-1 text-rb-primary mb-3"></i>
             <h4 class="fw-bold mb-3">Validate Boarding Ticket</h4>
             <p class="text-muted mb-4">Enter the Ticket Number from the passenger's e-ticket or QR code to validate boarding.</p>
             <div class="input-group mb-3">
               <input type="text" class="form-control form-control-lg text-center fw-bold" placeholder="TKT-XXXXXX" [(ngModel)]="ticketNumberToValidate">
-              <button class="btn btn-primary px-4" type="button" (click)="validateTicket()">Validate</button>
+              <button class="btn btn-rb-primary px-4" type="button" (click)="validateTicket()">Validate</button>
             </div>
             
             @if (ticketValidationMsg) {
@@ -285,12 +285,12 @@
 
           <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
             </div>
             
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
                 <option value="SEATER">Seater</option>
                 <option value="SLEEPER">Sleeper</option>
@@ -307,7 +307,7 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeBusModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
             </div>
           </form>
         </div>
@@ -334,12 +334,12 @@
 
           <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required [disabled]="isEditingSeat">
             </div>
             
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Seat Position <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Seat Position <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
                 <option value="WINDOW">Window</option>
                 <option value="AISLE">Aisle</option>
@@ -349,7 +349,7 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeSeatModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Save Seat</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Save Seat</button>
             </div>
           </form>
         </div>

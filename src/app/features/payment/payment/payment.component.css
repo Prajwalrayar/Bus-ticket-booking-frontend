@@ -1,6 +1,6 @@
 .payment-page {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--rb-bg);
 }
 
 .list-group-item {
@@ -11,9 +11,9 @@
 }
 
 .list-group-item.active {
-  background-color: #fce8e8;
-  color: #dc3545;
-  border-left: 4px solid #dc3545;
+  background-color: var(--rb-primary-light);
+  color: var(--rb-primary-dark);
+  border-left: 4px solid var(--rb-primary);
 }
 
 .list-group-item:hover:not(.active) {
@@ -26,10 +26,6 @@
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-}
-
-.btn-danger {
-  border-radius: 8px;
+  border-color: var(--rb-primary);
+  box-shadow: 0 0 0 0.2rem rgba(216, 78, 85, 0.12);
 }
