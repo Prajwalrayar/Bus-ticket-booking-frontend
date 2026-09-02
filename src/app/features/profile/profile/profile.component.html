@@ -6,8 +6,8 @@
       <div class="col-lg-3">
         <div class="card border-0 shadow-sm">
           <div class="card-body p-0">
-            <div class="p-4 bg-danger text-white rounded-top text-center">
-              <div class="avatar-circle bg-white text-danger fw-bold fs-3 mx-auto mb-2">
+            <div class="p-4 bg-rb-primary text-white rounded-top text-center">
+              <div class="avatar-circle bg-white text-rb-primary fw-bold fs-3 mx-auto mb-2">
                 {{ myProfile?.userName?.charAt(0)?.toUpperCase() || 'U' }}
               </div>
               <h5 class="mb-0">{{ myProfile?.userName || 'Loading...' }}</h5>
@@ -75,7 +75,7 @@
                 <div class="tab-pane fade show active" id="upcoming">
                   @if (loadingBookings) {
                     <div class="text-center py-4">
-                      <div class="spinner-border text-primary" role="status"></div>
+                      <div class="spinner-border text-rb-primary" role="status"></div>
                     </div>
                   } @else if (upcomingBookings.length === 0) {
                     <div class="text-center py-4 text-secondary">No upcoming bookings found.</div>
@@ -90,7 +90,7 @@
                 <div class="tab-pane fade" id="completed">
                   @if (loadingBookings) {
                     <div class="text-center py-4">
-                      <div class="spinner-border text-primary" role="status"></div>
+                      <div class="spinner-border text-rb-primary" role="status"></div>
                     </div>
                   } @else if (completedBookings.length === 0) {
                     <div class="text-center py-4 text-secondary">No completed bookings found.</div>
@@ -105,7 +105,7 @@
                 <div class="tab-pane fade" id="cancelled">
                   @if (loadingBookings) {
                     <div class="text-center py-4">
-                      <div class="spinner-border text-primary" role="status"></div>
+                      <div class="spinner-border text-rb-primary" role="status"></div>
                     </div>
                   } @else if (cancelledBookings.length === 0) {
                     <div class="text-center py-4 text-secondary">No cancelled bookings found.</div>
@@ -127,14 +127,14 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">Saved Passengers</h4>
-                <button class="btn btn-danger btn-sm px-3" (click)="openPassengerModal()">
+                <button class="btn btn-rb-primary btn-sm px-3" (click)="openPassengerModal()">
                   <i class="bi bi-plus-lg me-1"></i> Add New
                 </button>
               </div>
               
               @if (loadingPassengers) {
                 <div class="text-center py-4">
-                  <div class="spinner-border text-primary" role="status"></div>
+                  <div class="spinner-border text-rb-primary" role="status"></div>
                 </div>
               } @else if (savedPassengers.length === 0) {
                 <div class="text-center py-5 text-secondary bg-light rounded border border-dashed">
@@ -164,7 +164,7 @@
                           }
                         </div>
                         <div class="d-flex flex-column gap-2">
-                          <button class="btn btn-sm btn-light text-primary" (click)="openPassengerModal(passenger)" title="Edit">
+                          <button class="btn btn-sm btn-light text-rb-primary" (click)="openPassengerModal(passenger)" title="Edit">
                             <i class="bi bi-pencil"></i>
                           </button>
                           <button class="btn btn-sm btn-light text-danger" (click)="deletePassenger(passenger.savedPassengerId)" title="Delete">
@@ -200,7 +200,7 @@
                   <form (ngSubmit)="updateProfile()">
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="form-label text-muted small fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <label class="form-label text-muted small fw-semibold">Full Name <span class="text-rb-primary">*</span></label>
                         <input type="text" class="form-control" [(ngModel)]="editProfileForm.userName" name="userName" required>
                       </div>
                       <div class="col-md-6">
@@ -210,10 +210,10 @@
                       </div>
                     </div>
                     <div class="mb-4">
-                      <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+                      <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-rb-primary">*</span></label>
                       <input type="text" class="form-control" [(ngModel)]="editProfileForm.mobileNumber" name="mobileNumber" required>
                     </div>
-                    <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+                    <button type="submit" class="btn btn-rb-primary px-4">Update Profile</button>
                   </form>
                 </div>
               </div>
@@ -234,16 +234,16 @@
 
                   <form (ngSubmit)="changePassword()">
                     <div class="mb-3">
-                      <label class="form-label text-muted small fw-semibold">Current Password <span class="text-danger">*</span></label>
+                      <label class="form-label text-muted small fw-semibold">Current Password <span class="text-rb-primary">*</span></label>
                       <input type="password" class="form-control" [(ngModel)]="changePasswordForm.currentPassword" name="currentPassword" required>
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-6">
-                        <label class="form-label text-muted small fw-semibold">New Password <span class="text-danger">*</span></label>
+                        <label class="form-label text-muted small fw-semibold">New Password <span class="text-rb-primary">*</span></label>
                         <input type="password" class="form-control" [(ngModel)]="changePasswordForm.newPassword" name="newPassword" required>
                       </div>
                       <div class="col-md-6 mt-3 mt-md-0">
-                        <label class="form-label text-muted small fw-semibold">Confirm New Password <span class="text-danger">*</span></label>
+                        <label class="form-label text-muted small fw-semibold">Confirm New Password <span class="text-rb-primary">*</span></label>
                         <input type="password" class="form-control" [(ngModel)]="changePasswordForm.confirmPassword" name="confirmPassword" required>
                       </div>
                     </div>
@@ -277,17 +277,17 @@
           
           <form (ngSubmit)="savePassenger()">
             <div class="mb-3">
-              <label class="form-label fw-semibold small">Full Name <span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold small">Full Name <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" [(ngModel)]="passengerForm.passengerName" name="name" required placeholder="Enter passenger name">
             </div>
             
             <div class="row mb-3">
               <div class="col-6">
-                <label class="form-label fw-semibold small">Age <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold small">Age <span class="text-rb-primary">*</span></label>
                 <input type="number" class="form-control" [(ngModel)]="passengerForm.age" name="age" required min="1" max="120">
               </div>
               <div class="col-6">
-                <label class="form-label fw-semibold small">Gender <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold small">Gender <span class="text-rb-primary">*</span></label>
                 <select class="form-select" [(ngModel)]="passengerForm.gender" name="gender" required>
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
@@ -320,7 +320,7 @@
 
             <div class="d-flex justify-content-end gap-2 mt-4">
               <button type="button" class="btn btn-outline-secondary" (click)="closePassengerModal()">Cancel</button>
-              <button type="submit" class="btn btn-danger px-4">Save</button>
+              <button type="submit" class="btn btn-rb-primary px-4">Save</button>
             </div>
           </form>
         </div>
@@ -344,7 +344,7 @@
         <small class="text-secondary">Ref: <span class="fw-semibold text-dark">{{ booking.bookingReference }}</span></small>
       </div>
       <div class="text-end">
-        <div class="fw-bold fs-5 text-primary">₹{{ booking.fare }}</div>
+        <div class="fw-bold fs-5 text-rb-primary">₹{{ booking.fare }}</div>
         <small class="text-dark fw-semibold d-block">{{ booking.date | date:'mediumDate' }}</small>
         <small class="text-secondary">{{ booking.time }}</small>
       </div>
@@ -359,7 +359,7 @@
       </div>
       <div class="mt-2 mt-sm-0 d-flex gap-2">
         @if (booking.status === 'CONFIRMED') {
-          <button class="btn btn-primary btn-sm px-3" (click)="viewTicket(booking.bookingReference)">
+          <button class="btn btn-rb-primary btn-sm px-3" (click)="viewTicket(booking.bookingReference)">
             <i class="bi bi-ticket-detailed me-1"></i> View Ticket
           </button>
           <button class="btn btn-outline-warning btn-sm" (click)="openReviewModal(booking.bookingId)">
@@ -440,7 +440,7 @@
 
         </div>
         <div class="modal-footer border-top-0">
-          <button type="button" class="btn btn-primary px-4 w-100" (click)="closeCancelResultModal()">Close</button>
+          <button type="button" class="btn btn-rb-primary px-4 w-100" (click)="closeCancelResultModal()">Close</button>
         </div>
       </div>
     </div>

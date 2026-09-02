@@ -9,7 +9,7 @@
 
         <button
             type="button"
-            class="btn btn-outline-danger mb-4"
+            class="btn btn-outline-secondary mb-4"
             (click)="goBack()">
 
             <i class="bi bi-arrow-left me-2"></i>
@@ -27,7 +27,7 @@
 
         <div class="text-center py-5">
 
-            <div class="spinner-border text-danger mb-3">
+            <div class="spinner-border text-rb-primary mb-3">
             </div>
 
             <div class="text-secondary">
@@ -128,7 +128,7 @@
 
                                     {{ bus()!.source }}
 
-                                    <span class="text-danger mx-2">
+                                    <span class="text-rb-primary mx-2">
                                         →
                                     </span>
 
@@ -247,7 +247,7 @@
 
                         <button
                             type="button"
-                            class="btn btn-outline-danger"
+                            class="btn btn-outline-secondary"
                             (click)="editPassengerDetails()">
 
                             <i class="bi bi-pencil me-2"></i>
@@ -485,7 +485,7 @@
 
                                             <button
                                                 type="button"
-                                                class="btn btn-outline-danger"
+                                                class="btn btn-rb-primary"
                                                 (click)="applyOffer(
                                                     getOffers()[selectedOfferIndex()]
                                                 )">
@@ -684,7 +684,7 @@
 
                                     <button
                                         type="button"
-                                        class="btn btn-danger"
+                                        class="btn btn-rb-primary"
                                         (click)="applyCoupon()">
 
                                         Apply
@@ -837,7 +837,7 @@
                                 Total Amount
                             </span>
 
-                            <span class="fw-bold fs-4 text-danger">
+                            <span class="fw-bold fs-4 text-rb-primary">
 
                                 ₹{{ getTotalAmount() }}
 
@@ -852,7 +852,7 @@
 
                         <button
                             type="button"
-                            class="btn btn-danger w-100 mt-4 py-3 fw-semibold"
+                            class="btn btn-rb-primary w-100 mt-4 py-3 fw-semibold"
                             [disabled]="loading()"
                             (click)="confirmBooking()">
 

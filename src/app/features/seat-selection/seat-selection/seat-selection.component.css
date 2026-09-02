@@ -6,7 +6,7 @@
 
   min-height: 100vh;
 
-  background-color: var(--background-color);
+  background-color: var(--rb-bg);
 
 }
 
@@ -36,7 +36,7 @@
 
   flex-wrap: wrap;
 
-  color: var(--text-secondary);
+  color: var(--rb-text-muted);
 
   font-size: 14px;
 
@@ -62,7 +62,7 @@
 
   border-radius: 5px;
 
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--rb-border);
 
 }
 
@@ -76,9 +76,9 @@
 
 .legend-seat.selected {
 
-  background-color: var(--primary-color);
+  background-color: var(--rb-primary);
 
-  border-color: var(--primary-color);
+  border-color: var(--rb-primary);
 
 }
 
@@ -124,11 +124,11 @@
 
   border-radius: 7px;
 
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--rb-border);
 
   background-color: #ffffff;
 
-  color: var(--text-primary);
+  color: var(--rb-text);
 
   font-weight: 600;
 
@@ -141,9 +141,9 @@
 
 .seat.available:hover {
 
-  border-color: var(--primary-color);
+  border-color: var(--rb-primary);
 
-  color: var(--primary-color);
+  color: var(--rb-primary);
 
   transform: translateY(-2px);
 
@@ -152,11 +152,11 @@
 
 .seat.selected {
 
-  background-color: var(--primary-color);
+  background-color: var(--rb-primary);
 
   color: #ffffff;
 
-  border-color: var(--primary-color);
+  border-color: var(--rb-primary);
 
 }
 

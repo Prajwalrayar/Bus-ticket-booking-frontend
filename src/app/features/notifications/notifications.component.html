@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-end mb-4">
       <div>
         <h2 class="fw-bold mb-1">Notifications</h2>
-        <p class="text-secondary mb-0">You have <strong class="text-danger">{{ unreadCount }}</strong> unread notifications</p>
+        <p class="text-secondary mb-0">You have <strong class="text-rb-primary">{{ unreadCount }}</strong> unread notifications</p>
       </div>
       @if (unreadCount > 0) {
         <button class="btn btn-sm btn-outline-secondary" (click)="markAllAsRead()">
@@ -15,7 +15,7 @@
 
     @if (loading) {
       <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status"></div>
+        <div class="spinner-border text-rb-primary" role="status"></div>
       </div>
     } @else if (error) {
       <div class="alert alert-danger">{{ error }}</div>
@@ -34,7 +34,7 @@
             <div 
               class="list-group-item list-group-item-action p-4 d-flex gap-3 align-items-start transition-all"
               [class.bg-white]="notification.isRead"
-              [class.bg-light-danger]="!notification.isRead"
+              [class.bg-rb-primary-light]="!notification.isRead"
               style="cursor: pointer;"
               (click)="markAsRead(notification)"
             >
@@ -56,7 +56,7 @@
 
               @if (!notification.isRead) {
                 <div class="mt-2 ms-2">
-                  <span class="badge bg-danger rounded-circle p-2 border border-white border-2">
+                  <span class="badge bg-rb-primary rounded-circle p-2 border border-white border-2">
                     <span class="visually-hidden">Unread</span>
                   </span>
                 </div>

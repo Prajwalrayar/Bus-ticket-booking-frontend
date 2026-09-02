@@ -34,7 +34,7 @@
                        placeholder="e.g. CREATE_BOOKING, CANCEL_BOOKING" required>
               </div>
               <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100" [disabled]="!searchAction.trim() || isLoading">
+                <button type="submit" class="btn btn-rb-primary w-100" [disabled]="!searchAction.trim() || isLoading">
                   <i class="bi bi-search me-1"></i> Search
                 </button>
               </div>
@@ -55,7 +55,7 @@
                        placeholder="e.g. BKG-12345" required>
               </div>
               <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100" [disabled]="!searchEntityName.trim() || !searchEntityReference.trim() || isLoading">
+                <button type="submit" class="btn btn-rb-primary w-100" [disabled]="!searchEntityName.trim() || !searchEntityReference.trim() || isLoading">
                   <i class="bi bi-search me-1"></i> Search
                 </button>
               </div>
@@ -79,7 +79,7 @@
 
           @if (isLoading) {
             <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
+              <div class="spinner-border text-rb-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
               <p class="text-muted mt-3 mb-0">Searching audit logs...</p>

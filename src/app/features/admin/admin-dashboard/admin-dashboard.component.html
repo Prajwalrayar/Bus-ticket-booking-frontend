@@ -3,7 +3,7 @@
   <!-- Sidebar -->
   <aside class="admin-sidebar bg-dark text-white">
     <div class="sidebar-header p-4 border-bottom border-secondary">
-      <h4 class="fw-bold mb-0 text-danger">BusTicket <span class="text-white fs-6 fw-normal">Admin</span></h4>
+      <h4 class="fw-bold mb-0 text-rb-primary">BusTicket <span class="text-white fs-6 fw-normal">Admin</span></h4>
     </div>
     <div class="list-group list-group-flush mt-3">
       <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
@@ -39,7 +39,7 @@
     <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
       <h4 class="mb-0 fw-bold">{{ activeTab | titlecase }}</h4>
       <div class="d-flex align-items-center gap-3">
-        <span class="badge bg-danger">AI Engine Active</span>
+        <span class="badge bg-rb-primary">AI Engine Active</span>
         <div class="dropdown">
           <button class="btn btn-light rounded-circle p-2" type="button">
             <i class="bi bi-person-circle fs-5"></i>
@@ -53,7 +53,7 @@
         
         @if (loading) {
           <div class="text-center py-5">
-            <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem;"></div>
+            <div class="spinner-border text-rb-primary" role="status" style="width: 3rem; height: 3rem;"></div>
             <p class="mt-3 text-secondary fw-semibold">Loading Admin Dashboard...</p>
           </div>
         } @else if (error) {
@@ -138,14 +138,14 @@
         
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h4 class="fw-bold text-secondary mb-0">Staff & Users Management</h4>
-          <button class="btn btn-primary px-4" (click)="openStaffModal()">
+          <button class="btn btn-rb-primary px-4" (click)="openStaffModal()">
             <i class="bi bi-person-plus-fill me-2"></i> Add Staff
           </button>
         </div>
 
         @if (usersLoading) {
           <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+            <div class="spinner-border text-rb-primary" role="status" style="width: 3rem; height: 3rem;"></div>
             <p class="mt-3 text-secondary fw-semibold">Loading users...</p>
           </div>
         } @else if (usersError) {
@@ -200,11 +200,11 @@
           <div>
             @if (selectedBus) {
               <button class="btn btn-outline-secondary me-2" (click)="closeSeatsView()">Back to Fleet</button>
-              <button class="btn btn-primary" (click)="openSeatModal()">
+              <button class="btn btn-rb-primary" (click)="openSeatModal()">
                 <i class="bi bi-plus-circle me-2"></i> Add Seat
               </button>
             } @else {
-              <button class="btn btn-primary px-4" (click)="openBusModal()">
+              <button class="btn btn-rb-primary px-4" (click)="openBusModal()">
                 <i class="bi bi-plus-circle me-2"></i> Add Bus
               </button>
             }
@@ -215,7 +215,7 @@
           <!-- BUS LIST -->
           @if (busesLoading) {
             <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status"></div>
+              <div class="spinner-border text-rb-primary" role="status"></div>
             </div>
           } @else if (busesError) {
             <div class="alert alert-danger">{{ busesError }}</div>
@@ -263,7 +263,7 @@
           <!-- SEAT CONFIG -->
           @if (seatsLoading) {
             <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status"></div>
+              <div class="spinner-border text-rb-primary" role="status"></div>
             </div>
           } @else if (seatsError) {
             <div class="alert alert-danger">{{ seatsError }}</div>
@@ -304,11 +304,11 @@
           <div>
             @if (selectedRoute) {
               <button class="btn btn-outline-secondary me-2" (click)="closeRouteStopsView()">Back to Routes</button>
-              <button class="btn btn-primary" (click)="openStopModal()">
+              <button class="btn btn-rb-primary" (click)="openStopModal()">
                 <i class="bi bi-plus-circle me-2"></i> Add Stop
               </button>
             } @else {
-              <button class="btn btn-primary px-4" (click)="openRouteModal()">
+              <button class="btn btn-rb-primary px-4" (click)="openRouteModal()">
                 <i class="bi bi-plus-circle me-2"></i> Add Route
               </button>
             }
@@ -319,7 +319,7 @@
           <!-- ROUTE LIST -->
           @if (routesLoading) {
             <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status"></div>
+              <div class="spinner-border text-rb-primary" role="status"></div>
             </div>
           } @else if (routesError) {
             <div class="alert alert-danger">{{ routesError }}</div>
@@ -365,7 +365,7 @@
           <!-- ROUTE STOP CONFIG -->
           @if (stopsLoading) {
             <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status"></div>
+              <div class="spinner-border text-rb-primary" role="status"></div>
             </div>
           } @else if (stopsError) {
             <div class="alert alert-danger">{{ stopsError }}</div>
@@ -412,14 +412,14 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h4 class="fw-bold text-secondary mb-0">Trip Management</h4>
-          <button class="btn btn-primary px-4" (click)="openTripModal()">
+          <button class="btn btn-rb-primary px-4" (click)="openTripModal()">
             <i class="bi bi-plus-circle me-2"></i> Add Trip
           </button>
         </div>
 
         @if (tripsLoading) {
           <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status"></div>
+            <div class="spinner-border text-rb-primary" role="status"></div>
           </div>
         } @else if (tripsError) {
           <div class="alert alert-danger">{{ tripsError }}</div>
@@ -511,27 +511,27 @@
 
           <form (ngSubmit)="createStaff()" #staffFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Full Name <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Full Name <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="fullName" [(ngModel)]="staffForm.fullName" required>
             </div>
             
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Email <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Email <span class="text-rb-primary">*</span></label>
               <input type="email" class="form-control" name="email" [(ngModel)]="staffForm.email" required>
             </div>
 
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="mobile" [(ngModel)]="staffForm.mobileNumber" required pattern="^[0-9]{10}$">
             </div>
 
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Password <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Password <span class="text-rb-primary">*</span></label>
               <input type="password" class="form-control" name="password" [(ngModel)]="staffForm.password" required minlength="8">
             </div>
 
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Staff Role <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Staff Role <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="roleName" [(ngModel)]="staffForm.roleName" required>
                 <option value="BUS_OPERATOR">Bus Operator</option>
                 <option value="SUPPORT_AGENT">Support Agent</option>
@@ -540,7 +540,7 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeStaffModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!staffFormCtrl.form.valid || staffSubmitSuccess !== ''">Create Staff</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!staffFormCtrl.form.valid || staffSubmitSuccess !== ''">Create Staff</button>
             </div>
           </form>
 
@@ -568,13 +568,13 @@
 
           <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
               @if (isEditingBus) { <div class="form-text">Registration number cannot be changed.</div> }
             </div>
             
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
                 <option value="SEATER">Seater</option>
                 <option value="SLEEPER">Sleeper</option>
@@ -583,7 +583,7 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Operator Company Name <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Operator Company Name <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="operator" [(ngModel)]="busForm.operatorCompanyName" required>
             </div>
 
@@ -594,7 +594,7 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeBusModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
             </div>
           </form>
         </div>
@@ -618,12 +618,12 @@
 
           <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required placeholder="e.g. 1A">
             </div>
             
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Position <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Position <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
                 <option value="LOWER">Lower</option>
                 <option value="UPPER">Upper</option>
@@ -631,7 +631,7 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Add Seat</button>
+              <button type="submit" class="btn btn-rb-primary" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Add Seat</button>
               <button type="button" class="btn btn-light" (click)="closeSeatModal()">Cancel</button>
             </div>
           </form>
@@ -659,23 +659,23 @@
 
           <form (ngSubmit)="saveRoute()" #routeFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Source City <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Source City <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="source" [(ngModel)]="routeForm.source" required>
             </div>
             
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Destination City <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Destination City <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="destination" [(ngModel)]="routeForm.destination" required>
             </div>
 
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Distance (km) <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Distance (km) <span class="text-rb-primary">*</span></label>
               <input type="number" step="0.1" min="0" class="form-control" name="distance" [(ngModel)]="routeForm.distance" required>
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeRouteModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!routeFormCtrl.form.valid || routeSubmitSuccess !== ''">Save Route</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!routeFormCtrl.form.valid || routeSubmitSuccess !== ''">Save Route</button>
             </div>
           </form>
         </div>
@@ -701,23 +701,23 @@
 
           <form (ngSubmit)="saveStop()" #stopFormCtrl="ngForm">
             <div class="mb-3">
-              <label class="form-label text-muted small fw-semibold">Stop Name (e.g. Anand Vihar) <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Stop Name (e.g. Anand Vihar) <span class="text-rb-primary">*</span></label>
               <input type="text" class="form-control" name="stopName" [(ngModel)]="stopForm.stopName" required>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label text-muted small fw-semibold">Sequence Number <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Sequence Number <span class="text-rb-primary">*</span></label>
                 <input type="number" min="1" class="form-control" name="stopSequence" [(ngModel)]="stopForm.stopSequence" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label text-muted small fw-semibold">Distance from Source (km) <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Distance from Source (km) <span class="text-rb-primary">*</span></label>
                 <input type="number" step="0.1" min="0" class="form-control" name="distanceFromSourceKm" [(ngModel)]="stopForm.distanceFromSourceKm" required>
               </div>
             </div>
             
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Stop Type <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Stop Type <span class="text-rb-primary">*</span></label>
               <select class="form-select" name="stopType" [(ngModel)]="stopForm.stopType" required>
                 <option value="BOARDING">Boarding</option>
                 <option value="DROPPING">Dropping</option>
@@ -727,7 +727,7 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeStopModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!stopFormCtrl.form.valid || stopSubmitSuccess !== ''">Save Stop</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!stopFormCtrl.form.valid || stopSubmitSuccess !== ''">Save Stop</button>
             </div>
           </form>
         </div>
@@ -755,7 +755,7 @@
           <form (ngSubmit)="saveTrip()" #tripFormCtrl="ngForm">
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label text-muted small fw-semibold">Assign Bus <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Assign Bus <span class="text-rb-primary">*</span></label>
                 <select class="form-select" name="busReg" [(ngModel)]="tripForm.busRegistrationNumber" required [disabled]="isEditingTrip">
                   <option value="" disabled>Select a Bus</option>
                   @for (bus of availableBuses; track bus.registrationNumber) {
@@ -766,7 +766,7 @@
               </div>
 
               <div class="col-md-6 mb-3">
-                <label class="form-label text-muted small fw-semibold">Assign Route <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Assign Route <span class="text-rb-primary">*</span></label>
                 <select class="form-select" name="routeSelect" 
                   [ngModel]="tripForm.source + '|' + tripForm.destination" 
                   (ngModelChange)="tripForm.source = $event.split('|')[0]; tripForm.destination = $event.split('|')[1]" 
@@ -782,28 +782,28 @@
 
             <div class="row">
               <div class="col-md-4 mb-3">
-                <label class="form-label text-muted small fw-semibold">Travel Date <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Travel Date <span class="text-rb-primary">*</span></label>
                 <input type="date" class="form-control" name="travelDate" [(ngModel)]="tripForm.travelDate" required [disabled]="isEditingTrip">
                 @if (isEditingTrip) { <div class="form-text">Date cannot be changed after creation.</div> }
               </div>
               <div class="col-md-4 mb-3">
-                <label class="form-label text-muted small fw-semibold">Departure Time <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Departure Time <span class="text-rb-primary">*</span></label>
                 <input type="time" class="form-control" name="departureTime" [(ngModel)]="tripForm.departureTime" required>
               </div>
               <div class="col-md-4 mb-3">
-                <label class="form-label text-muted small fw-semibold">Arrival Time <span class="text-danger">*</span></label>
+                <label class="form-label text-muted small fw-semibold">Arrival Time <span class="text-rb-primary">*</span></label>
                 <input type="time" class="form-control" name="arrivalTime" [(ngModel)]="tripForm.arrivalTime" required>
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label text-muted small fw-semibold">Base Fare (₹) <span class="text-danger">*</span></label>
+              <label class="form-label text-muted small fw-semibold">Base Fare (₹) <span class="text-rb-primary">*</span></label>
               <input type="number" step="0.01" min="0" class="form-control" name="baseFare" [(ngModel)]="tripForm.baseFare" required>
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-light px-4" (click)="closeTripModal()">Cancel</button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!tripFormCtrl.form.valid || tripSubmitSuccess !== ''">Save Trip</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="!tripFormCtrl.form.valid || tripSubmitSuccess !== ''">Save Trip</button>
             </div>
           </form>
         </div>
