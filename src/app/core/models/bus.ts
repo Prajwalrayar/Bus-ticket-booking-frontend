@@ -39,6 +39,7 @@ export interface BusSeatDTO {
   seatNumber: string;
   seatPosition: string;
   isActive: boolean;
+  busRegistrationNumber: string;
 }
 
 export interface BusSeatCreateRequest {

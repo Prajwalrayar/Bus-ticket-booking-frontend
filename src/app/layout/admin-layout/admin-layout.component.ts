@@ -39,6 +39,10 @@ export class AdminLayoutComponent {
     { icon: 'bi-ticket-perforated', label: 'Bookings', route: '/operator/bookings', roles: [APP_CONSTANTS.ROLES.BUS_OPERATOR] },
   ];
 
+  readonly supportNavItems: AdminNavItem[] = [
+    { icon: 'bi-speedometer2', label: 'Dashboard', route: '/support', roles: [APP_CONSTANTS.ROLES.SUPPORT_AGENT] },
+  ];
+
   constructor(
     private authStateService: AuthStateService,
     private tokenService: TokenService,
@@ -62,6 +66,10 @@ export class AdminLayoutComponent {
     return this.tokenService.hasRole(APP_CONSTANTS.ROLES.BUS_OPERATOR);
   }
 
+  get isSupportAgent(): boolean {
+    return this.tokenService.hasRole(APP_CONSTANTS.ROLES.SUPPORT_AGENT);
+  }
+
   get currentNavItems(): AdminNavItem[] {
     if (this.isAdmin) {
       return this.navItems;
@@ -69,12 +77,16 @@ export class AdminLayoutComponent {
     if (this.isOperator) {
       return this.operatorNavItems;
     }
+    if (this.isSupportAgent) {
+      return this.supportNavItems;
+    }
     return [];
   }
 
   get panelTitle(): string {
     if (this.isAdmin) return 'Admin Panel';
     if (this.isOperator) return 'Operator Panel';
+    if (this.isSupportAgent) return 'Support Panel';
     return 'Dashboard';
   }
 

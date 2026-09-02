@@ -18,6 +18,10 @@ import { GuestGuard } from './core/guards/guest-guard';
 import { AuthGuard } from './core/guards/auth-guard';
 import { RoleGuard } from './core/guards/role-guard';
 import { APP_CONSTANTS } from './core/constants/app-constants';
+import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
+import { AuditLogs } from './features/admin/audit-logs/audit-logs';
+import { OperatorDashboardComponent } from './features/operator/operator-dashboard/operator-dashboard.component';
+import { SupportDashboard } from './features/support/support-dashboard/support-dashboard';
 
 const routes: Routes = [
   {
@@ -83,9 +87,28 @@ const routes: Routes = [
     path: '',
     component: AdminLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRoles: [APP_CONSTANTS.ROLES.ADMIN, APP_CONSTANTS.ROLES.BUS_OPERATOR] },
+    data: { expectedRoles: [APP_CONSTANTS.ROLES.ADMIN, APP_CONSTANTS.ROLES.BUS_OPERATOR, APP_CONSTANTS.ROLES.SUPPORT_AGENT] },
     children: [
-      // Placeholder for admin/operator modules to be added later
+      {
+        path: 'admin',
+        component: AdminDashboardComponent,
+        data: { expectedRoles: [APP_CONSTANTS.ROLES.ADMIN] }
+      },
+      {
+        path: 'admin/audit-logs',
+        component: AuditLogs,
+        data: { expectedRoles: [APP_CONSTANTS.ROLES.ADMIN] }
+      },
+      {
+        path: 'operator',
+        component: OperatorDashboardComponent,
+        data: { expectedRoles: [APP_CONSTANTS.ROLES.BUS_OPERATOR] }
+      },
+      {
+        path: 'support',
+        component: SupportDashboard,
+        data: { expectedRoles: [APP_CONSTANTS.ROLES.SUPPORT_AGENT] }
+      }
     ],
   },
   {

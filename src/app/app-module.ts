@@ -10,6 +10,9 @@ import { LayoutModule } from './layout/layout-module';
 import { HomeModule } from './features/home/home-module';
 import { AuthModule } from './auth/auth-module';
 import { NotificationsModule } from './features/notifications/notifications-module';
+import { AdminModule } from './features/admin/admin-module';
+import { OperatorModule } from './features/operator/operator-module';
+import { SupportModule } from './features/support/support-module';
 
 @NgModule({
   declarations: [App],
@@ -21,6 +24,9 @@ import { NotificationsModule } from './features/notifications/notifications-modu
     HomeModule,
     AuthModule,
     NotificationsModule,
+    AdminModule,
+    OperatorModule,
+    SupportModule,
     AppRoutingModule,
   ],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient(withInterceptorsFromDi())],

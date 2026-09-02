@@ -38,3 +38,13 @@ export interface RouteStopDTO {
   source: string;
   destination: string;
 }
+
+export interface TripCreateRequest {
+  busRegistrationNumber: string;
+  source: string;
+  destination: string;
+  travelDate: string; // YYYY-MM-DD
+  departureTime: string; // HH:MM:SS or HH:MM
+  arrivalTime: string; // HH:MM:SS or HH:MM
+  baseFare: number;
+}

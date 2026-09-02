@@ -1,150 +1,359 @@
-<div class="operator-layout">
+<div class="admin-layout">
   
   <!-- Sidebar -->
-  <aside class="operator-sidebar bg-primary text-white">
-    <div class="sidebar-header p-4 border-bottom border-light border-opacity-25">
-      <h4 class="fw-bold mb-0">BusTicket <span class="fs-6 fw-normal">Operator</span></h4>
-      <small class="text-white-50">{{ operatorName }}</small>
+  <aside class="admin-sidebar bg-dark text-white">
+    <div class="sidebar-header p-4 border-bottom border-secondary">
+      <h4 class="fw-bold mb-0 text-warning">BusTicket <span class="text-white fs-6 fw-normal">Operator</span></h4>
     </div>
     <div class="list-group list-group-flush mt-3">
-      <button class="list-group-item list-group-item-action text-white py-3 border-0"
-              [class.active-nav]="activeTab === 'DASHBOARD'" (click)="setTab('DASHBOARD')">
-        <i class="bi bi-graph-up me-2"></i> Performance
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'SETUP'" (click)="setTab('SETUP')" [disabled]="isSetupComplete">
+        <i class="bi bi-building me-2"></i> Company Setup
       </button>
-      <button class="list-group-item list-group-item-action text-white py-3 border-0"
-              [class.active-nav]="activeTab === 'TRIPS'" (click)="setTab('TRIPS')">
-        <i class="bi bi-calendar-check me-2"></i> Active Trips
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'PROFILE'" (click)="setTab('PROFILE')" [disabled]="!isSetupComplete">
+        <i class="bi bi-person-lines-fill me-2"></i> My Profile
       </button>
-      <button class="list-group-item list-group-item-action text-white py-3 border-0"
-              [class.active-nav]="activeTab === 'FLEET'" (click)="setTab('FLEET')">
-        <i class="bi bi-bus-front me-2"></i> Manage Fleet
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'FLEET'" (click)="setTab('FLEET')" [disabled]="!isSetupComplete">
+        <i class="bi bi-bus-front me-2"></i> My Fleet (Buses)
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'TRIPS'" (click)="setTab('TRIPS')" [disabled]="!isSetupComplete">
+        <i class="bi bi-calendar-range me-2"></i> Trip Lookup
+      </button>
+      <button class="list-group-item list-group-item-action bg-dark text-white py-3 border-0"
+              [class.active-nav]="activeTab === 'TICKETS'" (click)="setTab('TICKETS')" [disabled]="!isSetupComplete">
+        <i class="bi bi-qr-code-scan me-2"></i> Validate Ticket
       </button>
     </div>
   </aside>
 
   <!-- Main Content -->
-  <main class="operator-main bg-light">
+  <main class="admin-main bg-light">
     <!-- Topbar -->
     <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
       <h4 class="mb-0 fw-bold">{{ activeTab | titlecase }}</h4>
       <div class="d-flex align-items-center gap-3">
-        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-plus me-1"></i> New Trip</button>
-        <div class="dropdown">
-          <button class="btn btn-light rounded-circle p-2" type="button">
-            <i class="bi bi-building fs-5 text-primary"></i>
-          </button>
-        </div>
+        <span class="badge bg-warning text-dark">{{ companyNameInput || 'Unbound' }}</span>
+        <button class="btn btn-outline-danger btn-sm" routerLink="/">Exit to Storefront</button>
       </div>
     </header>
 
     <div class="p-4">
-      @if (activeTab === 'DASHBOARD') {
-        
-        <!-- KPI Cards -->
-        <div class="row g-4 mb-4">
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm kpi-card">
-              <div class="card-body">
-                <div class="text-secondary mb-1">Today's Revenue</div>
-                <h3 class="fw-bold text-success mb-0">₹{{ kpis.todayRevenue }}</h3>
-              </div>
+      
+      @if (activeTab === 'SETUP') {
+        <div class="card border-0 shadow-sm col-md-6 mx-auto mt-5">
+          <div class="card-body p-4 text-center">
+            <h4 class="fw-bold mb-3">Operator Context Binding</h4>
+            <p class="text-muted mb-4">Please enter your registered Company Name to bind this session and load your data.</p>
+            <div class="mb-3">
+              <input type="text" class="form-control form-control-lg text-center" [(ngModel)]="companyNameInput" placeholder="e.g. SRS Travels">
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm kpi-card">
-              <div class="card-body">
-                <div class="text-secondary mb-1">Fleet Utilization</div>
-                <h3 class="fw-bold mb-0">{{ kpis.activeBuses }} / {{ kpis.totalBuses }}</h3>
-                <small class="text-secondary">Buses on road</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm kpi-card">
-              <div class="card-body">
-                <div class="text-secondary mb-1">Avg Occupancy</div>
-                <h3 class="fw-bold text-primary mb-0">{{ kpis.avgOccupancy }}%</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow-sm bg-primary text-white kpi-card">
-              <div class="card-body d-flex flex-column justify-content-center">
-                <h6 class="mb-1"><i class="bi bi-robot me-2"></i> AI Insight</h6>
-                <small>Demand for weekend routes is spiking. Consider deploying reserve buses.</small>
-              </div>
-            </div>
+            @if (profileError) { <div class="alert alert-danger">{{ profileError }}</div> }
+            <button class="btn btn-warning w-100 py-2" (click)="setupCompany()">Bind Company Data</button>
           </div>
         </div>
 
-        <!-- Active Trips Table -->
-        <div class="card border-0 shadow-sm">
+      } @else if (activeTab === 'PROFILE') {
+        <div class="card border-0 shadow-sm col-md-8 mx-auto">
+          <div class="card-header bg-white border-0 pt-4 pb-0">
+            <h5 class="fw-bold">Company Profile Information</h5>
+          </div>
           <div class="card-body p-4">
-            <h5 class="fw-bold mb-4">Today's Scheduled Trips</h5>
-            <div class="table-responsive">
-              <table class="table table-hover align-middle">
-                <thead class="table-light">
-                  <tr>
-                    <th>Trip ID</th>
-                    <th>Route</th>
-                    <th>Departure</th>
-                    <th>Occupancy</th>
-                    <th>AI Demand</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (trip of activeTrips; track trip.id) {
-                    <tr>
-                      <td class="fw-semibold">{{ trip.id }}</td>
-                      <td>
-                        {{ trip.route }}<br>
-                        <small class="text-secondary">{{ trip.busType }}</small>
-                      </td>
-                      <td>{{ trip.time }}</td>
-                      <td>
-                        <div class="d-flex align-items-center gap-2">
-                          <div class="progress flex-grow-1" style="height: 6px;">
-                            <div class="progress-bar" 
-                                 [style.width.%]="(trip.bookedSeats / trip.totalSeats) * 100"
-                                 [ngClass]="{'bg-success': (trip.bookedSeats / trip.totalSeats) > 0.8, 'bg-warning': (trip.bookedSeats / trip.totalSeats) <= 0.8}">
-                            </div>
-                          </div>
-                          <small class="text-secondary">{{ trip.bookedSeats }}/{{ trip.totalSeats }}</small>
-                        </div>
-                      </td>
-                      <td>
-                        <span class="badge" 
-                              [ngClass]="{
-                                'bg-danger': trip.aiDemand === 'HIGH',
-                                'bg-warning text-dark': trip.aiDemand === 'MEDIUM',
-                                'bg-info text-dark': trip.aiDemand === 'LOW'
-                              }">
-                          {{ trip.aiDemand }}
+            @if (operatorProfile) {
+              <div class="mb-3">
+                <label class="form-label text-muted small fw-semibold">Company Name</label>
+                <input type="text" class="form-control" [(ngModel)]="operatorProfile.companyName" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted small fw-semibold">Contact Email</label>
+                <input type="email" class="form-control" [(ngModel)]="operatorProfile.contactEmail">
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted small fw-semibold">Contact Phone</label>
+                <input type="text" class="form-control" [(ngModel)]="operatorProfile.contactPhone">
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted small fw-semibold">Website URL</label>
+                <input type="text" class="form-control" [(ngModel)]="operatorProfile.websiteUrl">
+              </div>
+              <div class="text-end mt-4">
+                <button class="btn btn-primary px-4" (click)="saveProfile()">Save Changes</button>
+              </div>
+            }
+          </div>
+        </div>
+
+      } @else if (activeTab === 'FLEET') {
+
+        @if (!selectedBusForSeats) {
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-secondary mb-0">My Fleet</h4>
+            <button class="btn btn-primary px-4" (click)="openBusModal()">
+              <i class="bi bi-plus-circle me-2"></i> Register New Bus
+            </button>
+          </div>
+
+          @if (busesLoading) {
+            <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+          } @else {
+            <div class="row g-4">
+              @for (bus of buses; track bus.registrationNumber) {
+                <div class="col-md-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold mb-1">{{ bus.registrationNumber }}</h5>
+                        <span class="badge" [class.bg-success]="bus.isActive" [class.bg-danger]="!bus.isActive">
+                          {{ bus.isActive ? 'Active' : 'Inactive' }}
                         </span>
-                      </td>
-                      <td>
-                        @if (trip.status === 'ON_TIME') {
-                          <span class="text-success fw-semibold"><i class="bi bi-check-circle me-1"></i> On Time</span>
-                        } @else {
-                          <span class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i> Delayed</span>
-                        }
-                      </td>
+                      </div>
+                      <p class="text-muted small mb-3"><i class="bi bi-tag me-1"></i> {{ bus.busType }}</p>
+                      
+                      <div class="mb-3">
+                        <div class="small fw-semibold text-secondary mb-1">Amenities:</div>
+                        <div class="d-flex flex-wrap gap-1">
+                          @for (amenity of bus.amenities; track amenity) {
+                            <span class="badge bg-light text-dark border">{{ amenity }}</span>
+                          }
+                          @if (!bus.amenities || bus.amenities.length === 0) {
+                            <span class="text-muted small">None configured</span>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 pt-0 d-flex gap-2">
+                      <button class="btn btn-sm btn-outline-primary flex-fill" (click)="openBusModal(bus)">Edit Info</button>
+                      <button class="btn btn-sm btn-outline-secondary flex-fill" (click)="manageSeats(bus)">Configure Seats</button>
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (buses.length === 0) {
+                <div class="col-12 text-center py-5 text-muted">No buses registered.</div>
+              }
+            </div>
+          }
+        } @else {
+          <!-- SEAT MANAGEMENT VIEW -->
+          <div class="d-flex align-items-center mb-4 gap-3">
+            <button class="btn btn-light rounded-circle" (click)="backToBuses()"><i class="bi bi-arrow-left"></i></button>
+            <h4 class="fw-bold text-secondary mb-0">Seat Config: {{ selectedBusForSeats.registrationNumber }}</h4>
+            <div class="ms-auto">
+              <button class="btn btn-primary px-4" (click)="openSeatModal()">
+                <i class="bi bi-plus-circle me-2"></i> Add Seat
+              </button>
+            </div>
+          </div>
+
+          @if (seatsLoading) {
+            <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+          } @else {
+            <div class="card border-0 shadow-sm">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">Seat Number</th>
+                      <th>Seat Position</th>
+                      <th>Status</th>
+                      <th class="text-end pe-4">Action</th>
                     </tr>
-                  }
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    @for (seat of busSeats; track seat.seatNumber) {
+                      <tr>
+                        <td class="ps-4 fw-bold">{{ seat.seatNumber }}</td>
+                        <td><span class="badge bg-secondary">{{ seat.seatPosition || 'WINDOW' }}</span></td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td class="text-end pe-4">
+                          <button class="btn btn-sm btn-outline-secondary" (click)="openSeatModal(seat)">Edit</button>
+                        </td>
+                      </tr>
+                    }
+                    @if (busSeats.length === 0) {
+                      <tr><td colspan="6" class="text-center py-4 text-muted">No seats configured.</td></tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        }
+
+      } @else if (activeTab === 'TRIPS') {
+        
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold mb-3">Lookup Trips</h5>
+            <div class="row g-2 align-items-end">
+              <div class="col-md-4">
+                <label class="form-label small text-muted">Source</label>
+                <input type="text" class="form-control" [(ngModel)]="tripSearchForm.source" placeholder="e.g. Bangalore">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted">Destination</label>
+                <input type="text" class="form-control" [(ngModel)]="tripSearchForm.destination" placeholder="e.g. Chennai">
+              </div>
+              <div class="col-md-2">
+                <label class="form-label small text-muted">Travel Date</label>
+                <input type="date" class="form-control" [(ngModel)]="tripSearchForm.travelDate">
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-primary w-100" (click)="searchTrips()" [disabled]="!tripSearchForm.source || !tripSearchForm.destination">Search</button>
+              </div>
             </div>
           </div>
         </div>
 
-      } @else {
-        <div class="text-center py-5 text-secondary">
-          <i class="bi bi-cone-striped fs-1 mb-3 d-block"></i>
-          <h4>{{ activeTab | titlecase }} Management</h4>
-          <p>Add buses, configure seat layouts, or manage schedules here.</p>
+        @if (tripSearchLoading) {
+          <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+        } @else if (tripSearchResults.length > 0) {
+          <div class="card border-0 shadow-sm">
+            <ul class="list-group list-group-flush">
+              @for (trip of tripSearchResults; track trip.tripId) {
+                <li class="list-group-item p-3 d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="fw-bold">{{ trip.source }} to {{ trip.destination }}</div>
+                    <div class="text-muted small">{{ trip.travelDate }} | {{ trip.departureTime }} | Bus: {{ trip.busRegistrationNumber }} | Op: {{ trip.operatorName }}</div>
+                  </div>
+                  <div>
+                    @if (!trip.isCancelled && trip.operatorName === companyNameInput) {
+                      <button class="btn btn-sm btn-outline-danger" (click)="cancelTrip(trip)">Cancel Trip</button>
+                    }
+                    @if (trip.isCancelled) { <span class="badge bg-danger">Cancelled</span> }
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
+      } @else if (activeTab === 'TICKETS') {
+
+        <div class="card border-0 shadow-sm col-md-6 mx-auto mt-5">
+          <div class="card-body p-5 text-center">
+            <i class="bi bi-qr-code-scan display-1 text-primary mb-3"></i>
+            <h4 class="fw-bold mb-3">Validate Boarding Ticket</h4>
+            <p class="text-muted mb-4">Enter the Ticket Number from the passenger's e-ticket or QR code to validate boarding.</p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control form-control-lg text-center fw-bold" placeholder="TKT-XXXXXX" [(ngModel)]="ticketNumberToValidate">
+              <button class="btn btn-primary px-4" type="button" (click)="validateTicket()">Validate</button>
+            </div>
+            
+            @if (ticketValidationMsg) {
+              <div class="alert alert-success d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                <div class="text-start">
+                  <strong>Success</strong><br>{{ ticketValidationMsg }}
+                </div>
+              </div>
+            }
+            @if (ticketValidationError) {
+              <div class="alert alert-danger d-flex align-items-center">
+                <i class="bi bi-x-circle-fill me-2 fs-4"></i>
+                <div class="text-start">
+                  <strong>Error</strong><br>{{ ticketValidationError }}
+                </div>
+              </div>
+            }
+          </div>
         </div>
+
       }
+
     </div>
   </main>
 </div>
+
+<!-- Bus Modal -->
+@if (showBusModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-bus-front me-2"></i>
+            {{ isEditingBus ? 'Edit Bus' : 'Register New Bus' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeBusModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (busSubmitError) { <div class="alert alert-danger">{{ busSubmitError }}</div> }
+          @if (busSubmitSuccess) { <div class="alert alert-success">{{ busSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-danger">*</span></label>
+              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
+                <option value="SEATER">Seater</option>
+                <option value="SLEEPER">Sleeper</option>
+                <option value="SEMI_SLEEPER">Semi-Sleeper</option>
+                <option value="AC_SEATER">AC Seater</option>
+                <option value="AC_SLEEPER">AC Sleeper</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Amenities (comma-separated)</label>
+              <input type="text" class="form-control" name="amenities" [(ngModel)]="busAmenitiesStr" placeholder="e.g. WiFi, AC, Water Bottle">
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeBusModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!busFormCtrl.form.valid || busSubmitSuccess !== ''">Save Bus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Seat Modal -->
+@if (showSeatModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-person-workspace me-2"></i>
+            {{ isEditingSeat ? 'Edit Seat' : 'Add Seat' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeSeatModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          @if (seatSubmitError) { <div class="alert alert-danger">{{ seatSubmitError }}</div> }
+          @if (seatSubmitSuccess) { <div class="alert alert-success">{{ seatSubmitSuccess }}</div> }
+
+          <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required [disabled]="isEditingSeat">
+            </div>
+            
+            <div class="mb-4">
+              <label class="form-label text-muted small fw-semibold">Seat Position <span class="text-danger">*</span></label>
+              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
+                <option value="WINDOW">Window</option>
+                <option value="AISLE">Aisle</option>
+                <option value="MIDDLE">Middle</option>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-light px-4" (click)="closeSeatModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="!seatFormCtrl.form.valid || seatSubmitSuccess !== ''">Save Seat</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
