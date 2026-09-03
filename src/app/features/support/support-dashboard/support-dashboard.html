@@ -54,13 +54,19 @@
               </div>
 
               <div class="mb-3">
-                <label class="form-label text-muted small fw-semibold">Name</label>
-                <input type="text" class="form-control" name="userName" [(ngModel)]="profileForm.userName" required>
+                <label class="form-label text-muted small fw-semibold">Name <span class="text-rb-primary">*</span></label>
+                <input type="text" class="form-control" name="userName" [(ngModel)]="profileForm.userName" required #sName="ngModel" [class.is-invalid]="sName.invalid && (sName.dirty || sName.touched)">
+                @if (sName.invalid && (sName.dirty || sName.touched)) {
+                  <div class="invalid-feedback">Name is required.</div>
+                }
               </div>
 
               <div class="mb-3">
                 <label class="form-label text-muted small fw-semibold">Mobile Number</label>
-                <input type="tel" class="form-control" name="mobileNumber" [(ngModel)]="profileForm.mobileNumber">
+                <input type="tel" class="form-control" name="mobileNumber" [(ngModel)]="profileForm.mobileNumber" pattern="^[0-9]{10}$" #sMob="ngModel" [class.is-invalid]="sMob.invalid && (sMob.dirty || sMob.touched)">
+                @if (sMob.invalid && (sMob.dirty || sMob.touched)) {
+                  <div class="invalid-feedback">Mobile Number must be exactly 10 digits.</div>
+                }
               </div>
 
               <button type="submit" class="btn btn-rb-primary" [disabled]="!form.valid">Update Profile</button>

@@ -58,6 +58,7 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     this.submitted = true;
+    this.registerForm.markAllAsTouched();
     this.errorMessage.set('');
     this.successMessage.set('');
 
