@@ -121,30 +121,15 @@ export class SeatSelectionComponent implements OnInit {
       return;
     }
 
-    const seatIds = this.selectedSeats().map(seat => seat.tripSeatId);
-    
-    // Perform temporary lock
-    this.seatService.lockSeats(currentBus.tripId, seatIds).subscribe({
-      next: (response) => {
-        // Lock successful, proceed to passenger details
-        this.router.navigate(['/passenger-details'], {
-          queryParams: {
-            tripId: currentBus.tripId,
-            busName: currentBus.operatorName,
-            from: this.fromCity() || currentBus.source,
-            to: this.toCity() || currentBus.destination,
-            date: this.journeyDate(),
-            seats: this.selectedSeats().map(s => s.seatNumber).join(',')
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Failed to lock seats:', err);
-        this.errorMessage.set('Some of the selected seats are no longer available. Please select different seats.');
-        // Refresh the seat layout to show current availability
-        this.loadSeats(currentBus.tripId);
-        // Clear selection
-        this.selectedSeats.set([]);
+    // Directly navigate to passenger details, deferring the lock until the actual booking creation
+    this.router.navigate(['/passenger-details'], {
+      queryParams: {
+        tripId: currentBus.tripId,
+        busName: currentBus.operatorName,
+        from: this.fromCity() || currentBus.source,
+        to: this.toCity() || currentBus.destination,
+        date: this.journeyDate(),
+        seats: this.selectedSeats().map(s => s.seatNumber).join(',')
       }
     });
   }

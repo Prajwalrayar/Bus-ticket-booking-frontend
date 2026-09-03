@@ -197,11 +197,14 @@
                     <div class="alert alert-danger">{{ profileUpdateError }}</div>
                   }
 
-                  <form (ngSubmit)="updateProfile()">
+                  <form #editProfileFormRef="ngForm" (ngSubmit)="updateProfile()">
                     <div class="row mb-3">
                       <div class="col-md-6">
                         <label class="form-label text-muted small fw-semibold">Full Name <span class="text-rb-primary">*</span></label>
-                        <input type="text" class="form-control" [(ngModel)]="editProfileForm.userName" name="userName" required>
+                        <input type="text" class="form-control" [(ngModel)]="editProfileForm.userName" name="userName" required #userName="ngModel" [class.is-invalid]="userName.invalid && (userName.dirty || userName.touched)">
+                        @if (userName.invalid && (userName.dirty || userName.touched)) {
+                          <div class="invalid-feedback">Full Name is required.</div>
+                        }
                       </div>
                       <div class="col-md-6">
                         <label class="form-label text-muted small fw-semibold">Email Address</label>
@@ -211,9 +214,15 @@
                     </div>
                     <div class="mb-4">
                       <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-rb-primary">*</span></label>
-                      <input type="text" class="form-control" [(ngModel)]="editProfileForm.mobileNumber" name="mobileNumber" required>
+                      <input type="text" class="form-control" [(ngModel)]="editProfileForm.mobileNumber" name="mobileNumber" required pattern="^[0-9]{10}$" #mobileNumber="ngModel" [class.is-invalid]="mobileNumber.invalid && (mobileNumber.dirty || mobileNumber.touched)">
+                      @if (mobileNumber.invalid && (mobileNumber.dirty || mobileNumber.touched)) {
+                        <div class="invalid-feedback">
+                          @if (mobileNumber.errors?.['required']) { <span>Mobile Number is required.</span> }
+                          @if (mobileNumber.errors?.['pattern']) { <span>Mobile Number must be exactly 10 digits.</span> }
+                        </div>
+                      }
                     </div>
-                    <button type="submit" class="btn btn-rb-primary px-4">Update Profile</button>
+                    <button type="submit" class="btn btn-rb-primary px-4" [disabled]="editProfileFormRef.invalid">Update Profile</button>
                   </form>
                 </div>
               </div>
@@ -232,22 +241,37 @@
                     <div class="alert alert-danger">{{ passwordError }}</div>
                   }
 
-                  <form (ngSubmit)="changePassword()">
+                  <form #pwdForm="ngForm" (ngSubmit)="changePassword()">
                     <div class="mb-3">
                       <label class="form-label text-muted small fw-semibold">Current Password <span class="text-rb-primary">*</span></label>
-                      <input type="password" class="form-control" [(ngModel)]="changePasswordForm.currentPassword" name="currentPassword" required>
+                      <input type="password" class="form-control" [(ngModel)]="changePasswordForm.currentPassword" name="currentPassword" required #currPwd="ngModel" [class.is-invalid]="currPwd.invalid && (currPwd.dirty || currPwd.touched)">
+                      @if (currPwd.invalid && (currPwd.dirty || currPwd.touched)) {
+                        <div class="invalid-feedback">Current password is required.</div>
+                      }
                     </div>
                     <div class="row mb-4">
                       <div class="col-md-6">
                         <label class="form-label text-muted small fw-semibold">New Password <span class="text-rb-primary">*</span></label>
-                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.newPassword" name="newPassword" required>
+                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.newPassword" name="newPassword" required minlength="8" #newPwd="ngModel" [class.is-invalid]="newPwd.invalid && (newPwd.dirty || newPwd.touched)">
+                        @if (newPwd.invalid && (newPwd.dirty || newPwd.touched)) {
+                          <div class="invalid-feedback">
+                            @if (newPwd.errors?.['required']) { <span>New password is required.</span> }
+                            @if (newPwd.errors?.['minlength']) { <span>Password must be at least 8 characters.</span> }
+                          </div>
+                        }
                       </div>
                       <div class="col-md-6 mt-3 mt-md-0">
                         <label class="form-label text-muted small fw-semibold">Confirm New Password <span class="text-rb-primary">*</span></label>
-                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.confirmPassword" name="confirmPassword" required>
+                        <input type="password" class="form-control" [(ngModel)]="changePasswordForm.confirmPassword" name="confirmPassword" required #confPwd="ngModel" [class.is-invalid]="(confPwd.invalid || changePasswordForm.confirmPassword !== changePasswordForm.newPassword) && (confPwd.dirty || confPwd.touched)">
+                        @if ((confPwd.invalid || changePasswordForm.confirmPassword !== changePasswordForm.newPassword) && (confPwd.dirty || confPwd.touched)) {
+                          <div class="invalid-feedback">
+                            @if (confPwd.errors?.['required']) { <span>Confirm password is required.</span> }
+                            @else if (changePasswordForm.confirmPassword !== changePasswordForm.newPassword) { <span>Passwords do not match.</span> }
+                          </div>
+                        }
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-warning px-4">Change Password</button>
+                    <button type="submit" class="btn btn-warning px-4" [disabled]="pwdForm.invalid || changePasswordForm.newPassword !== changePasswordForm.confirmPassword">Change Password</button>
                   </form>
                 </div>
               </div>
@@ -275,24 +299,36 @@
             <div class="alert alert-danger p-2 mb-3 small">{{ passengerError }}</div>
           }
           
-          <form (ngSubmit)="savePassenger()">
+          <form #passForm="ngForm" (ngSubmit)="savePassenger()">
             <div class="mb-3">
               <label class="form-label fw-semibold small">Full Name <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" [(ngModel)]="passengerForm.passengerName" name="name" required placeholder="Enter passenger name">
+              <input type="text" class="form-control" [(ngModel)]="passengerForm.passengerName" name="name" required placeholder="Enter passenger name" #pName="ngModel" [class.is-invalid]="pName.invalid && (pName.dirty || pName.touched)">
+              @if (pName.invalid && (pName.dirty || pName.touched)) {
+                <div class="invalid-feedback">Passenger name is required.</div>
+              }
             </div>
             
             <div class="row mb-3">
               <div class="col-6">
                 <label class="form-label fw-semibold small">Age <span class="text-rb-primary">*</span></label>
-                <input type="number" class="form-control" [(ngModel)]="passengerForm.age" name="age" required min="1" max="120">
+                <input type="number" class="form-control" [(ngModel)]="passengerForm.age" name="age" required min="1" max="120" #pAge="ngModel" [class.is-invalid]="pAge.invalid && (pAge.dirty || pAge.touched)">
+                @if (pAge.invalid && (pAge.dirty || pAge.touched)) {
+                  <div class="invalid-feedback">
+                    @if (pAge.errors?.['required']) { <span>Age is required.</span> }
+                    @if (pAge.errors?.['min'] || pAge.errors?.['max']) { <span>Age must be between 1 and 120.</span> }
+                  </div>
+                }
               </div>
               <div class="col-6">
                 <label class="form-label fw-semibold small">Gender <span class="text-rb-primary">*</span></label>
-                <select class="form-select" [(ngModel)]="passengerForm.gender" name="gender" required>
+                <select class="form-select" [(ngModel)]="passengerForm.gender" name="gender" required #pGender="ngModel" [class.is-invalid]="pGender.invalid && (pGender.dirty || pGender.touched)">
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
                   <option value="OTHER">Other</option>
                 </select>
+                @if (pGender.invalid && (pGender.dirty || pGender.touched)) {
+                  <div class="invalid-feedback">Gender is required.</div>
+                }
               </div>
             </div>
 
@@ -320,7 +356,7 @@
 
             <div class="d-flex justify-content-end gap-2 mt-4">
               <button type="button" class="btn btn-outline-secondary" (click)="closePassengerModal()">Cancel</button>
-              <button type="submit" class="btn btn-rb-primary px-4">Save</button>
+              <button type="submit" class="btn btn-rb-primary px-4" [disabled]="passForm.invalid">Save</button>
             </div>
           </form>
         </div>

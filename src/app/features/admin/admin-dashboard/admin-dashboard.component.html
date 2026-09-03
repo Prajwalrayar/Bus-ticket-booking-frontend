@@ -512,30 +512,51 @@
           <form (ngSubmit)="createStaff()" #staffFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Full Name <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="fullName" [(ngModel)]="staffForm.fullName" required>
+              <input type="text" class="form-control" name="fullName" [(ngModel)]="staffForm.fullName" required #sFullName="ngModel" [class.is-invalid]="sFullName.invalid && (sFullName.dirty || sFullName.touched)">
+              @if (sFullName.invalid && (sFullName.dirty || sFullName.touched)) {
+                <div class="invalid-feedback">Full Name is required.</div>
+              }
             </div>
             
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Email <span class="text-rb-primary">*</span></label>
-              <input type="email" class="form-control" name="email" [(ngModel)]="staffForm.email" required>
+              <input type="email" class="form-control" name="email" [(ngModel)]="staffForm.email" required #sEmail="ngModel" [class.is-invalid]="sEmail.invalid && (sEmail.dirty || sEmail.touched)">
+              @if (sEmail.invalid && (sEmail.dirty || sEmail.touched)) {
+                <div class="invalid-feedback">Valid Email is required.</div>
+              }
             </div>
 
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Mobile Number <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="mobile" [(ngModel)]="staffForm.mobileNumber" required pattern="^[0-9]{10}$">
+              <input type="text" class="form-control" name="mobile" [(ngModel)]="staffForm.mobileNumber" required pattern="^[0-9]{10}$" #sMobile="ngModel" [class.is-invalid]="sMobile.invalid && (sMobile.dirty || sMobile.touched)">
+              @if (sMobile.invalid && (sMobile.dirty || sMobile.touched)) {
+                <div class="invalid-feedback">
+                  @if (sMobile.errors?.['required']) { <span>Mobile Number is required.</span> }
+                  @if (sMobile.errors?.['pattern']) { <span>Mobile Number must be exactly 10 digits.</span> }
+                </div>
+              }
             </div>
 
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Password <span class="text-rb-primary">*</span></label>
-              <input type="password" class="form-control" name="password" [(ngModel)]="staffForm.password" required minlength="8">
+              <input type="password" class="form-control" name="password" [(ngModel)]="staffForm.password" required minlength="8" #sPwd="ngModel" [class.is-invalid]="sPwd.invalid && (sPwd.dirty || sPwd.touched)">
+              @if (sPwd.invalid && (sPwd.dirty || sPwd.touched)) {
+                <div class="invalid-feedback">
+                  @if (sPwd.errors?.['required']) { <span>Password is required.</span> }
+                  @if (sPwd.errors?.['minlength']) { <span>Password must be at least 8 characters.</span> }
+                </div>
+              }
             </div>
 
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Staff Role <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="roleName" [(ngModel)]="staffForm.roleName" required>
+              <select class="form-select" name="roleName" [(ngModel)]="staffForm.roleName" required #sRole="ngModel" [class.is-invalid]="sRole.invalid && (sRole.dirty || sRole.touched)">
                 <option value="BUS_OPERATOR">Bus Operator</option>
                 <option value="SUPPORT_AGENT">Support Agent</option>
               </select>
+              @if (sRole.invalid && (sRole.dirty || sRole.touched)) {
+                <div class="invalid-feedback">Staff Role is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -569,22 +590,31 @@
           <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
+              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus" #bReg="ngModel" [class.is-invalid]="bReg.invalid && (bReg.dirty || bReg.touched)">
+              @if (bReg.invalid && (bReg.dirty || bReg.touched)) {
+                <div class="invalid-feedback">Registration Number is required.</div>
+              }
               @if (isEditingBus) { <div class="form-text">Registration number cannot be changed.</div> }
             </div>
             
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
+              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required #bType="ngModel" [class.is-invalid]="bType.invalid && (bType.dirty || bType.touched)">
                 <option value="SEATER">Seater</option>
                 <option value="SLEEPER">Sleeper</option>
                 <option value="SEMI_SLEEPER">Semi-Sleeper</option>
               </select>
+              @if (bType.invalid && (bType.dirty || bType.touched)) {
+                <div class="invalid-feedback">Bus Type is required.</div>
+              }
             </div>
 
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Operator Company Name <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="operator" [(ngModel)]="busForm.operatorCompanyName" required>
+              <input type="text" class="form-control" name="operator" [(ngModel)]="busForm.operatorCompanyName" required #bOp="ngModel" [class.is-invalid]="bOp.invalid && (bOp.dirty || bOp.touched)">
+              @if (bOp.invalid && (bOp.dirty || bOp.touched)) {
+                <div class="invalid-feedback">Operator Company Name is required.</div>
+              }
             </div>
 
             <div class="mb-4">
@@ -619,15 +649,21 @@
           <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required placeholder="e.g. 1A">
+              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required placeholder="e.g. 1A" #stNum="ngModel" [class.is-invalid]="stNum.invalid && (stNum.dirty || stNum.touched)">
+              @if (stNum.invalid && (stNum.dirty || stNum.touched)) {
+                <div class="invalid-feedback">Seat Number is required.</div>
+              }
             </div>
             
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Position <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
+              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required #stPos="ngModel" [class.is-invalid]="stPos.invalid && (stPos.dirty || stPos.touched)">
                 <option value="LOWER">Lower</option>
                 <option value="UPPER">Upper</option>
               </select>
+              @if (stPos.invalid && (stPos.dirty || stPos.touched)) {
+                <div class="invalid-feedback">Position is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2">
@@ -660,17 +696,26 @@
           <form (ngSubmit)="saveRoute()" #routeFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Source City <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="source" [(ngModel)]="routeForm.source" required>
+              <input type="text" class="form-control" name="source" [(ngModel)]="routeForm.source" required #rtSrc="ngModel" [class.is-invalid]="rtSrc.invalid && (rtSrc.dirty || rtSrc.touched)">
+              @if (rtSrc.invalid && (rtSrc.dirty || rtSrc.touched)) {
+                <div class="invalid-feedback">Source City is required.</div>
+              }
             </div>
             
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Destination City <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="destination" [(ngModel)]="routeForm.destination" required>
+              <input type="text" class="form-control" name="destination" [(ngModel)]="routeForm.destination" required #rtDest="ngModel" [class.is-invalid]="rtDest.invalid && (rtDest.dirty || rtDest.touched)">
+              @if (rtDest.invalid && (rtDest.dirty || rtDest.touched)) {
+                <div class="invalid-feedback">Destination City is required.</div>
+              }
             </div>
 
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Distance (km) <span class="text-rb-primary">*</span></label>
-              <input type="number" step="0.1" min="0" class="form-control" name="distance" [(ngModel)]="routeForm.distance" required>
+              <input type="number" step="0.1" min="0" class="form-control" name="distance" [(ngModel)]="routeForm.distance" required #rtDist="ngModel" [class.is-invalid]="rtDist.invalid && (rtDist.dirty || rtDist.touched)">
+              @if (rtDist.invalid && (rtDist.dirty || rtDist.touched)) {
+                <div class="invalid-feedback">Distance is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -702,27 +747,39 @@
           <form (ngSubmit)="saveStop()" #stopFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Stop Name (e.g. Anand Vihar) <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="stopName" [(ngModel)]="stopForm.stopName" required>
+              <input type="text" class="form-control" name="stopName" [(ngModel)]="stopForm.stopName" required #stpName="ngModel" [class.is-invalid]="stpName.invalid && (stpName.dirty || stpName.touched)">
+              @if (stpName.invalid && (stpName.dirty || stpName.touched)) {
+                <div class="invalid-feedback">Stop Name is required.</div>
+              }
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label text-muted small fw-semibold">Sequence Number <span class="text-rb-primary">*</span></label>
-                <input type="number" min="1" class="form-control" name="stopSequence" [(ngModel)]="stopForm.stopSequence" required>
+                <input type="number" min="1" class="form-control" name="stopSequence" [(ngModel)]="stopForm.stopSequence" required #stpSeq="ngModel" [class.is-invalid]="stpSeq.invalid && (stpSeq.dirty || stpSeq.touched)">
+                @if (stpSeq.invalid && (stpSeq.dirty || stpSeq.touched)) {
+                  <div class="invalid-feedback">Sequence Number is required.</div>
+                }
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label text-muted small fw-semibold">Distance from Source (km) <span class="text-rb-primary">*</span></label>
-                <input type="number" step="0.1" min="0" class="form-control" name="distanceFromSourceKm" [(ngModel)]="stopForm.distanceFromSourceKm" required>
+                <input type="number" step="0.1" min="0" class="form-control" name="distanceFromSourceKm" [(ngModel)]="stopForm.distanceFromSourceKm" required #stpDist="ngModel" [class.is-invalid]="stpDist.invalid && (stpDist.dirty || stpDist.touched)">
+                @if (stpDist.invalid && (stpDist.dirty || stpDist.touched)) {
+                  <div class="invalid-feedback">Distance is required.</div>
+                }
               </div>
             </div>
             
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Stop Type <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="stopType" [(ngModel)]="stopForm.stopType" required>
+              <select class="form-select" name="stopType" [(ngModel)]="stopForm.stopType" required #stpType="ngModel" [class.is-invalid]="stpType.invalid && (stpType.dirty || stpType.touched)">
                 <option value="BOARDING">Boarding</option>
                 <option value="DROPPING">Dropping</option>
                 <option value="INTERMEDIATE">Intermediate</option>
               </select>
+              @if (stpType.invalid && (stpType.dirty || stpType.touched)) {
+                <div class="invalid-feedback">Stop Type is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -756,12 +813,15 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label text-muted small fw-semibold">Assign Bus <span class="text-rb-primary">*</span></label>
-                <select class="form-select" name="busReg" [(ngModel)]="tripForm.busRegistrationNumber" required [disabled]="isEditingTrip">
+                <select class="form-select" name="busReg" [(ngModel)]="tripForm.busRegistrationNumber" required [disabled]="isEditingTrip" #tBus="ngModel" [class.is-invalid]="tBus.invalid && (tBus.dirty || tBus.touched)">
                   <option value="" disabled>Select a Bus</option>
                   @for (bus of availableBuses; track bus.registrationNumber) {
                     <option [value]="bus.registrationNumber">{{ bus.registrationNumber }} ({{ bus.busType }}) - {{ bus.operatorCompanyName }}</option>
                   }
                 </select>
+                @if (tBus.invalid && (tBus.dirty || tBus.touched)) {
+                  <div class="invalid-feedback">Bus selection is required.</div>
+                }
                 @if (isEditingTrip) { <div class="form-text">Bus cannot be changed after creation.</div> }
               </div>
 
@@ -770,12 +830,15 @@
                 <select class="form-select" name="routeSelect" 
                   [ngModel]="tripForm.source + '|' + tripForm.destination" 
                   (ngModelChange)="tripForm.source = $event.split('|')[0]; tripForm.destination = $event.split('|')[1]" 
-                  required [disabled]="isEditingTrip">
+                  required [disabled]="isEditingTrip" #tRoute="ngModel" [class.is-invalid]="tRoute.invalid && (tRoute.dirty || tRoute.touched)">
                   <option value="|" disabled>Select a Route</option>
                   @for (route of availableRoutes; track route.routeId) {
                     <option [value]="route.source + '|' + route.destination">{{ route.source }} to {{ route.destination }} ({{ route.distance }}km)</option>
                   }
                 </select>
+                @if (tRoute.invalid && (tRoute.dirty || tRoute.touched)) {
+                  <div class="invalid-feedback">Route selection is required.</div>
+                }
                 @if (isEditingTrip) { <div class="form-text">Route cannot be changed after creation.</div> }
               </div>
             </div>
@@ -783,22 +846,34 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label class="form-label text-muted small fw-semibold">Travel Date <span class="text-rb-primary">*</span></label>
-                <input type="date" class="form-control" name="travelDate" [(ngModel)]="tripForm.travelDate" required [disabled]="isEditingTrip">
+                <input type="date" class="form-control" name="travelDate" [(ngModel)]="tripForm.travelDate" required [disabled]="isEditingTrip" #tDate="ngModel" [class.is-invalid]="tDate.invalid && (tDate.dirty || tDate.touched)">
+                @if (tDate.invalid && (tDate.dirty || tDate.touched)) {
+                  <div class="invalid-feedback">Travel Date is required.</div>
+                }
                 @if (isEditingTrip) { <div class="form-text">Date cannot be changed after creation.</div> }
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label text-muted small fw-semibold">Departure Time <span class="text-rb-primary">*</span></label>
-                <input type="time" class="form-control" name="departureTime" [(ngModel)]="tripForm.departureTime" required>
+                <input type="time" class="form-control" name="departureTime" [(ngModel)]="tripForm.departureTime" required #tDep="ngModel" [class.is-invalid]="tDep.invalid && (tDep.dirty || tDep.touched)">
+                @if (tDep.invalid && (tDep.dirty || tDep.touched)) {
+                  <div class="invalid-feedback">Departure Time is required.</div>
+                }
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label text-muted small fw-semibold">Arrival Time <span class="text-rb-primary">*</span></label>
-                <input type="time" class="form-control" name="arrivalTime" [(ngModel)]="tripForm.arrivalTime" required>
+                <input type="time" class="form-control" name="arrivalTime" [(ngModel)]="tripForm.arrivalTime" required #tArr="ngModel" [class.is-invalid]="tArr.invalid && (tArr.dirty || tArr.touched)">
+                @if (tArr.invalid && (tArr.dirty || tArr.touched)) {
+                  <div class="invalid-feedback">Arrival Time is required.</div>
+                }
               </div>
             </div>
 
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Base Fare (₹) <span class="text-rb-primary">*</span></label>
-              <input type="number" step="0.01" min="0" class="form-control" name="baseFare" [(ngModel)]="tripForm.baseFare" required>
+              <input type="number" step="0.01" min="0" class="form-control" name="baseFare" [(ngModel)]="tripForm.baseFare" required #tFare="ngModel" [class.is-invalid]="tFare.invalid && (tFare.dirty || tFare.touched)">
+              @if (tFare.invalid && (tFare.dirty || tFare.touched)) {
+                <div class="invalid-feedback">Base Fare is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">

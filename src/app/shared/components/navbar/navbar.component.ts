@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthStateService } from '../../../core/services/auth-state.service';
 import { TokenService } from '../../../core/services/token-service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import { APP_CONSTANTS } from '../../../core/constants/app-constants';
 import { Subscription } from 'rxjs';
 
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authStateService: AuthStateService,
     private tokenService: TokenService,
     private notificationService: NotificationService,
+    private themeService: ThemeService,
     private router: Router
   ) {}
 
@@ -99,5 +101,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userName = '';
     this.userRoles = [];
     this.router.navigate(['/']);
+  }
+
+  setTheme(theme: 'light' | 'dark'): void {
+    this.themeService.setTheme(theme);
+  }
+
+  isLightTheme(): boolean {
+    return this.themeService.getCurrentTheme() === 'light';
+  }
+
+  isDarkTheme(): boolean {
+    return this.themeService.getCurrentTheme() === 'dark';
   }
 }

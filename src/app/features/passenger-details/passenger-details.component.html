@@ -44,24 +44,31 @@
 
             </div>
             <!-- BOARDING & DROPPING -->
+            <form #bookingForm="ngForm">
             <div class="row g-3 mb-5">
               <div class="col-md-6">
                 <label class="form-label fw-bold"><i class="bi bi-geo-alt text-primary me-2"></i>Boarding Point <span class="text-rb-primary">*</span></label>
-                <select class="form-select" [value]="selectedBoardingPoint()" (change)="selectedBoardingPoint.set($any($event.target).value)">
+                <select class="form-select" [ngModel]="selectedBoardingPoint()" (ngModelChange)="selectedBoardingPoint.set($event)" name="boardingPoint" required #bp="ngModel" [class.is-invalid]="bp.invalid && (bp.dirty || bp.touched)">
                   <option value="">Select Boarding Point</option>
                   @for (stop of boardingPoints(); track stop.routeStopId) {
                     <option [value]="stop.routeStopId">{{ stop.stopName }} ({{ stop.stopSequence }})</option>
                   }
                 </select>
+                @if (bp.invalid && (bp.dirty || bp.touched)) {
+                  <div class="invalid-feedback">Please select a boarding point.</div>
+                }
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold"><i class="bi bi-geo-alt-fill text-rb-primary me-2"></i>Dropping Point <span class="text-rb-primary">*</span></label>
-                <select class="form-select" [value]="selectedDroppingPoint()" (change)="selectedDroppingPoint.set($any($event.target).value)">
+                <select class="form-select" [ngModel]="selectedDroppingPoint()" (ngModelChange)="selectedDroppingPoint.set($event)" name="droppingPoint" required #dp="ngModel" [class.is-invalid]="dp.invalid && (dp.dirty || dp.touched)">
                   <option value="">Select Dropping Point</option>
                   @for (stop of droppingPoints(); track stop.routeStopId) {
                     <option [value]="stop.routeStopId">{{ stop.stopName }} ({{ stop.stopSequence }})</option>
                   }
                 </select>
+                @if (dp.invalid && (dp.dirty || dp.touched)) {
+                  <div class="invalid-feedback">Please select a dropping point.</div>
+                }
               </div>
             </div>
 
@@ -95,12 +102,21 @@
 
                 <div class="mb-3">
                   <label [for]="'name' + i" class="form-label">Full Name <span class="text-rb-primary">*</span></label>
-                  <input type="text" [id]="'name' + i" class="form-control" placeholder="Enter passenger name" [value]="passenger.passengerName" (input)="updatePassenger(i, 'passengerName', $any($event.target).value)">
+                  <input type="text" [id]="'name' + i" class="form-control" placeholder="Enter passenger name" [ngModel]="passenger.passengerName" (ngModelChange)="updatePassenger(i, 'passengerName', $event)" [name]="'passengerName' + i" required #pName="ngModel" [class.is-invalid]="pName.invalid && (pName.dirty || pName.touched)">
+                  @if (pName.invalid && (pName.dirty || pName.touched)) {
+                    <div class="invalid-feedback">Name is required.</div>
+                  }
                 </div>
 
                 <div class="mb-3">
                   <label [for]="'age' + i" class="form-label">Age <span class="text-rb-primary">*</span></label>
-                  <input type="number" [id]="'age' + i" class="form-control" placeholder="Enter age" min="1" max="120" [value]="passenger.age ?? ''" (input)="updatePassenger(i, 'age', $any($event.target).value ? +$any($event.target).value : null)">
+                  <input type="number" [id]="'age' + i" class="form-control" placeholder="Enter age" min="1" max="120" [ngModel]="passenger.age ?? ''" (ngModelChange)="updatePassenger(i, 'age', $event ? +$event : null)" [name]="'age' + i" required #pAge="ngModel" [class.is-invalid]="pAge.invalid && (pAge.dirty || pAge.touched)">
+                  @if (pAge.invalid && (pAge.dirty || pAge.touched)) {
+                    <div class="invalid-feedback">
+                      @if (pAge.errors?.['required']) { <span>Age is required.</span> }
+                      @if (pAge.errors?.['min'] || pAge.errors?.['max']) { <span>Age must be between 1 and 120.</span> }
+                    </div>
+                  }
                 </div>
 
                 <div class="mb-3">
@@ -109,28 +125,38 @@
                     <div class="col-12 col-md-4">
                       <label class="gender-option d-block border rounded p-2 text-center" [class.border-rb-primary]="passenger.gender === 'MALE'" [class.text-rb-primary]="passenger.gender === 'MALE'" style="cursor:pointer">
                         <span>Male</span>
-                        <input type="radio" class="d-none" [name]="'gender' + i" value="MALE" [checked]="passenger.gender === 'MALE'" (change)="updatePassenger(i, 'gender', 'MALE')">
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="MALE" [ngModel]="passenger.gender" (ngModelChange)="updatePassenger(i, 'gender', 'MALE')" required #pGender="ngModel">
                       </label>
                     </div>
                     <div class="col-12 col-md-4">
                       <label class="gender-option d-block border rounded p-2 text-center" [class.border-rb-primary]="passenger.gender === 'FEMALE'" [class.text-rb-primary]="passenger.gender === 'FEMALE'" style="cursor:pointer">
                         <span>Female</span>
-                        <input type="radio" class="d-none" [name]="'gender' + i" value="FEMALE" [checked]="passenger.gender === 'FEMALE'" (change)="updatePassenger(i, 'gender', 'FEMALE')">
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="FEMALE" [ngModel]="passenger.gender" (ngModelChange)="updatePassenger(i, 'gender', 'FEMALE')" required>
                       </label>
                     </div>
                     <div class="col-12 col-md-4">
                       <label class="gender-option d-block border rounded p-2 text-center" [class.border-rb-primary]="passenger.gender === 'OTHER'" [class.text-rb-primary]="passenger.gender === 'OTHER'" style="cursor:pointer">
                         <span>Other</span>
-                        <input type="radio" class="d-none" [name]="'gender' + i" value="OTHER" [checked]="passenger.gender === 'OTHER'" (change)="updatePassenger(i, 'gender', 'OTHER')">
+                        <input type="radio" class="d-none" [name]="'gender' + i" value="OTHER" [ngModel]="passenger.gender" (ngModelChange)="updatePassenger(i, 'gender', 'OTHER')" required>
                       </label>
                     </div>
                   </div>
+                  <!-- Need to conditionally show the error since it's a radio group, checking pGender isn't easy to bind the class.is-invalid to labels, but we can just show the message -->
+                  @if (pGender.invalid && (pGender.dirty || pGender.touched)) {
+                    <div class="text-danger small mt-1">Gender is required.</div>
+                  }
                 </div>
 
                 @if (passenger.isPrimary) {
                   <div class="mb-2">
                     <label [for]="'phone' + i" class="form-label">Phone Number <span class="text-rb-primary">*</span></label>
-                    <input type="tel" [id]="'phone' + i" class="form-control" placeholder="Enter 10-digit phone number" maxlength="10" [value]="passenger.contactNumber" (input)="updatePassenger(i, 'contactNumber', $any($event.target).value)">
+                    <input type="tel" [id]="'phone' + i" class="form-control" placeholder="Enter 10-digit phone number" maxlength="10" [ngModel]="passenger.contactNumber" (ngModelChange)="updatePassenger(i, 'contactNumber', $event)" [name]="'contactNumber' + i" required pattern="^[6-9]\d{9}$" #pPhone="ngModel" [class.is-invalid]="pPhone.invalid && (pPhone.dirty || pPhone.touched)">
+                    @if (pPhone.invalid && (pPhone.dirty || pPhone.touched)) {
+                      <div class="invalid-feedback">
+                        @if (pPhone.errors?.['required']) { <span>Phone number is required.</span> }
+                        @if (pPhone.errors?.['pattern']) { <span>Enter a valid 10-digit phone number.</span> }
+                      </div>
+                    }
                   </div>
                 }
 
@@ -145,13 +171,15 @@
               <button
                 type="button"
                 class="btn btn-rb-primary w-100 py-3 fw-semibold"
-                (click)="continueBooking()">
+                (click)="continueBooking()" [disabled]="bookingForm.invalid">
 
                 Continue
 
               </button>
 
             }
+
+            </form>
 
           </div>
 

@@ -29,9 +29,12 @@
           @if (activeTab === 'action') {
             <form (ngSubmit)="searchByAction()" class="row g-3 align-items-end">
               <div class="col-md-6">
-                <label class="form-label text-muted small fw-semibold">Action Name</label>
+                <label class="form-label text-muted small fw-semibold">Action Name <span class="text-rb-primary">*</span></label>
                 <input type="text" class="form-control" name="searchAction" [(ngModel)]="searchAction" 
-                       placeholder="e.g. CREATE_BOOKING, CANCEL_BOOKING" required>
+                       placeholder="e.g. CREATE_BOOKING, CANCEL_BOOKING" required #actName="ngModel" [class.is-invalid]="actName.invalid && (actName.dirty || actName.touched)">
+                @if (actName.invalid && (actName.dirty || actName.touched)) {
+                  <div class="invalid-feedback">Action Name is required.</div>
+                }
               </div>
               <div class="col-md-2">
                 <button type="submit" class="btn btn-rb-primary w-100" [disabled]="!searchAction.trim() || isLoading">
@@ -45,14 +48,20 @@
           @if (activeTab === 'entity') {
             <form (ngSubmit)="searchByEntity()" class="row g-3 align-items-end">
               <div class="col-md-4">
-                <label class="form-label text-muted small fw-semibold">Entity Name</label>
+                <label class="form-label text-muted small fw-semibold">Entity Name <span class="text-rb-primary">*</span></label>
                 <input type="text" class="form-control" name="searchEntityName" [(ngModel)]="searchEntityName" 
-                       placeholder="e.g. Booking, User, Bus" required>
+                       placeholder="e.g. Booking, User, Bus" required #entName="ngModel" [class.is-invalid]="entName.invalid && (entName.dirty || entName.touched)">
+                @if (entName.invalid && (entName.dirty || entName.touched)) {
+                  <div class="invalid-feedback">Entity Name is required.</div>
+                }
               </div>
               <div class="col-md-4">
-                <label class="form-label text-muted small fw-semibold">Entity Reference</label>
+                <label class="form-label text-muted small fw-semibold">Entity Reference <span class="text-rb-primary">*</span></label>
                 <input type="text" class="form-control" name="searchEntityReference" [(ngModel)]="searchEntityReference" 
-                       placeholder="e.g. BKG-12345" required>
+                       placeholder="e.g. BKG-12345" required #entRef="ngModel" [class.is-invalid]="entRef.invalid && (entRef.dirty || entRef.touched)">
+                @if (entRef.invalid && (entRef.dirty || entRef.touched)) {
+                  <div class="invalid-feedback">Entity Reference is required.</div>
+                }
               </div>
               <div class="col-md-2">
                 <button type="submit" class="btn btn-rb-primary w-100" [disabled]="!searchEntityName.trim() || !searchEntityReference.trim() || isLoading">

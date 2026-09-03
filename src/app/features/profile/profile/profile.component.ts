@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BookingService } from '../../../core/services/booking.service';
 import { TripService } from '../../../core/services/trip.service';
 import { CancellationService } from '../../../core/services/cancellation.service';
@@ -89,6 +89,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private bookingService: BookingService,
     private tripService: TripService,
     private cancellationService: CancellationService,
@@ -98,6 +99,12 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'settings') {
+        this.activeTab = 'SETTINGS';
+      }
+    });
+
     this.fetchMyProfile();
     this.fetchMyReviews();
     this.fetchMyBookings();

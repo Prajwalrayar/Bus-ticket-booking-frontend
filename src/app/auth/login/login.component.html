@@ -32,7 +32,7 @@
             }
 
 
-            <form (ngSubmit)="login()">
+            <form #loginForm="ngForm" (ngSubmit)="login()">
 
               <!-- Email -->
 
@@ -45,7 +45,19 @@
                 </label>
 
                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
-                  [(ngModel)]="loginData.email">
+                  [(ngModel)]="loginData.email" #email="ngModel" required email
+                  [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+                  
+                @if (email.invalid && (email.dirty || email.touched)) {
+                  <div class="invalid-feedback">
+                    @if (email.errors?.['required']) {
+                      <span>Email is required.</span>
+                    }
+                    @if (email.errors?.['email']) {
+                      <span>Enter a valid email address.</span>
+                    }
+                  </div>
+                }
 
               </div>
 
@@ -61,14 +73,23 @@
                 </label>
 
                 <input type="password" id="password" name="password" class="form-control"
-                  placeholder="Enter your password" [(ngModel)]="loginData.password">
+                  placeholder="Enter your password" [(ngModel)]="loginData.password" #password="ngModel" required
+                  [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+                  
+                @if (password.invalid && (password.dirty || password.touched)) {
+                  <div class="invalid-feedback">
+                    @if (password.errors?.['required']) {
+                      <span>Password is required.</span>
+                    }
+                  </div>
+                }
 
               </div>
 
 
               <!-- Login -->
 
-              <button type="submit" class="btn btn-rb-primary w-100 py-2" [disabled]="loading()">
+              <button type="submit" class="btn btn-rb-primary w-100 py-2" [disabled]="loading() || loginForm.invalid">
 
                 @if (loading()) {
 

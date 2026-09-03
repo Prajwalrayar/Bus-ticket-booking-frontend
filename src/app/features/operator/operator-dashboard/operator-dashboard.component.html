@@ -286,18 +286,24 @@
           <form (ngSubmit)="saveBus()" #busFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Registration Number <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus">
+              <input type="text" class="form-control" name="registrationNumber" [(ngModel)]="busForm.registrationNumber" required [disabled]="isEditingBus" #bReg="ngModel" [class.is-invalid]="bReg.invalid && (bReg.dirty || bReg.touched)">
+              @if (bReg.invalid && (bReg.dirty || bReg.touched)) {
+                <div class="invalid-feedback">Registration Number is required.</div>
+              }
             </div>
             
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Bus Type <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required>
+              <select class="form-select" name="busType" [(ngModel)]="busForm.busType" required #bType="ngModel" [class.is-invalid]="bType.invalid && (bType.dirty || bType.touched)">
                 <option value="SEATER">Seater</option>
                 <option value="SLEEPER">Sleeper</option>
                 <option value="SEMI_SLEEPER">Semi-Sleeper</option>
                 <option value="AC_SEATER">AC Seater</option>
                 <option value="AC_SLEEPER">AC Sleeper</option>
               </select>
+              @if (bType.invalid && (bType.dirty || bType.touched)) {
+                <div class="invalid-feedback">Bus Type is required.</div>
+              }
             </div>
 
             <div class="mb-4">
@@ -335,16 +341,22 @@
           <form (ngSubmit)="saveSeat()" #seatFormCtrl="ngForm">
             <div class="mb-3">
               <label class="form-label text-muted small fw-semibold">Seat Number <span class="text-rb-primary">*</span></label>
-              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required [disabled]="isEditingSeat">
+              <input type="text" class="form-control" name="seatNumber" [(ngModel)]="seatForm.seatNumber" required [disabled]="isEditingSeat" #sNum="ngModel" [class.is-invalid]="sNum.invalid && (sNum.dirty || sNum.touched)">
+              @if (sNum.invalid && (sNum.dirty || sNum.touched)) {
+                <div class="invalid-feedback">Seat Number is required.</div>
+              }
             </div>
             
             <div class="mb-4">
               <label class="form-label text-muted small fw-semibold">Seat Position <span class="text-rb-primary">*</span></label>
-              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required>
+              <select class="form-select" name="seatPosition" [(ngModel)]="seatForm.seatPosition" required #sPos="ngModel" [class.is-invalid]="sPos.invalid && (sPos.dirty || sPos.touched)">
                 <option value="WINDOW">Window</option>
                 <option value="AISLE">Aisle</option>
                 <option value="MIDDLE">Middle</option>
               </select>
+              @if (sPos.invalid && (sPos.dirty || sPos.touched)) {
+                <div class="invalid-feedback">Seat Position is required.</div>
+              }
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
