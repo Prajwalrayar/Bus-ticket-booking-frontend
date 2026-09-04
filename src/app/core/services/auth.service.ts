@@ -20,8 +20,8 @@ export class AuthService {
       .pipe(map(res => res.data));
   }
 
-  register(registerData: RegisterRequest): Observable<LoginResponse> {
-    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/register`, registerData)
-      .pipe(map(res => res.data));
+  register(registerData: RegisterRequest): Observable<void> {
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/register`, registerData)
+      .pipe(map(res => res.data as void));
   }
 }

@@ -81,31 +81,16 @@ export class RegisterComponent implements OnInit {
       .register(registerData)
       .subscribe({
 
-        next: (response: LoginResponse) => {
+        next: () => {
           this.loading.set(false);
 
-          if (response && response.token) {
-            this.tokenService.setToken(response.token);
-
-            const user: User = {
-              userId: response.userId,
-              name: registerData.fullName,
-              email: registerData.email,
-              phone: registerData.mobileNumber,
-              password: '',
-              roles: response.roles,
-            };
-
-            this.authStateService.setUser(user);
-          }
-
           this.successMessage.set(
-            'Registration successful. Redirecting to home...'
+            'Registration successful. Redirecting to login...'
           );
 
           setTimeout(() => {
-            this.router.navigate(['/']);
-          }, 1000);
+            this.router.navigate(['/login']);
+          }, 1500);
         },
 
         error: (err) => {
