@@ -6,7 +6,7 @@
 
       <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-        <div class="card border-0 shadow-sm">
+        <div class="card auth-card border-0">
 
           <div class="card-body p-4 p-md-5">
 
@@ -47,16 +47,16 @@
                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
                   [(ngModel)]="loginData.email" #email="ngModel" required email
                   [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
-                  
+
                 @if (email.invalid && (email.dirty || email.touched)) {
-                  <div class="invalid-feedback">
-                    @if (email.errors?.['required']) {
-                      <span>Email is required.</span>
-                    }
-                    @if (email.errors?.['email']) {
-                      <span>Enter a valid email address.</span>
-                    }
-                  </div>
+                <div class="invalid-feedback">
+                  @if (email.errors?.['required']) {
+                  <span>Email is required.</span>
+                  }
+                  @if (email.errors?.['email']) {
+                  <span>Enter a valid email address.</span>
+                  }
+                </div>
                 }
 
               </div>
@@ -75,13 +75,13 @@
                 <input type="password" id="password" name="password" class="form-control"
                   placeholder="Enter your password" [(ngModel)]="loginData.password" #password="ngModel" required
                   [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
-                  
+
                 @if (password.invalid && (password.dirty || password.touched)) {
-                  <div class="invalid-feedback">
-                    @if (password.errors?.['required']) {
-                      <span>Password is required.</span>
-                    }
-                  </div>
+                <div class="invalid-feedback">
+                  @if (password.errors?.['required']) {
+                  <span>Password is required.</span>
+                  }
+                </div>
                 }
 
               </div>

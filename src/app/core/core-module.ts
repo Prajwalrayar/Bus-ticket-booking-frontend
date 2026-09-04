@@ -10,6 +10,7 @@ import { BusService } from './services/bus.service';
 import { OfferService } from './services/offer.service';
 import { TokenService } from './services/token-service';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AuthGuard } from './guards/auth-guard';
 import { GuestGuard } from './guards/guest-guard';
 import { RoleGuard } from './guards/role-guard';
@@ -27,6 +28,11 @@ import { RoleGuard } from './guards/role-guard';
     AuthGuard,
     GuestGuard,
     RoleGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

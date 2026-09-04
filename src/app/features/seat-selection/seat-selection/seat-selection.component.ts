@@ -5,6 +5,17 @@ import { TripSeatDTO } from '../../../core/models/seat';
 import { TripService } from '../../../core/services/trip.service';
 import { SeatService } from '../../../core/services/seat.service';
 
+export interface SeatRow {
+  rowId: string;
+  leftSeats: TripSeatDTO[];
+  rightSeats: TripSeatDTO[];
+}
+
+export interface DeckLayout {
+  deckName: string;
+  rows: SeatRow[];
+}
+
 @Component({
   selector: 'app-seat-selection',
   standalone: false,
@@ -14,6 +25,8 @@ import { SeatService } from '../../../core/services/seat.service';
 export class SeatSelectionComponent implements OnInit {
   bus = signal<TripDTO | null>(null);
   seats = signal<TripSeatDTO[]>([]);
+  lowerDeckLayout = signal<DeckLayout | null>(null);
+  upperDeckLayout = signal<DeckLayout | null>(null);
   selectedSeats = signal<TripSeatDTO[]>([]);
 
   loading = signal(false);
@@ -67,13 +80,60 @@ export class SeatSelectionComponent implements OnInit {
   loadSeats(tripId: string): void {
     this.seatService.getTripSeats(tripId).subscribe({
       next: (response) => {
-        this.seats.set(response.data || []);
+        const loadedSeats = response.data || [];
+        this.seats.set(loadedSeats);
+        
+        if (this.bus()) {
+          this.processSeatLayout(loadedSeats, this.bus()!.busType);
+        }
       },
       error: (error) => {
         console.error('Unable to load seats:', error);
         this.errorMessage.set('Unable to load seats.');
       }
     });
+  }
+
+  processSeatLayout(seats: TripSeatDTO[], busType: string): void {
+    const upperSeats = seats.filter(s => String(s.seatPosition).includes('UPPER'));
+    const lowerSeats = seats.filter(s => !String(s.seatPosition).includes('UPPER'));
+
+    this.lowerDeckLayout.set(this.buildDeckLayout('Lower Deck', lowerSeats, busType));
+    
+    if (upperSeats.length > 0) {
+      this.upperDeckLayout.set(this.buildDeckLayout('Upper Deck', upperSeats, busType));
+    } else {
+      this.upperDeckLayout.set(null);
+    }
+  }
+
+  buildDeckLayout(deckName: string, seats: TripSeatDTO[], busType: string): DeckLayout {
+    const sortedSeats = [...seats].sort((a, b) => {
+      return a.seatNumber.localeCompare(b.seatNumber, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    const isSleeper = busType.toUpperCase().includes('SLEEPER') || deckName.includes('Upper');
+    const seatsPerRow = isSleeper ? 3 : 4;
+    const leftSize = isSleeper ? 1 : 2;
+
+    const rows: SeatRow[] = [];
+    let currentRowSeats: TripSeatDTO[] = [];
+    let rowNum = 1;
+
+    for (let i = 0; i < sortedSeats.length; i++) {
+      currentRowSeats.push(sortedSeats[i]);
+      if (currentRowSeats.length === seatsPerRow || i === sortedSeats.length - 1) {
+        rows.push({
+          rowId: `Row-${rowNum}`,
+          leftSeats: currentRowSeats.slice(0, leftSize),
+          rightSeats: currentRowSeats.slice(leftSize)
+        });
+        currentRowSeats = [];
+        rowNum++;
+      }
+    }
+
+    return { deckName, rows };
   }
 
   selectSeat(seat: TripSeatDTO): void {

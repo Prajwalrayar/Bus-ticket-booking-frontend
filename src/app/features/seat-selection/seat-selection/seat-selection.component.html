@@ -151,32 +151,101 @@
                         </div>
 
 
-                        <!-- SEATS -->
+                        <!-- BUS INTERIOR SHELL -->
+                        <div class="bus-interior-shell mx-auto">
+                            
+                            <!-- DRIVER CABIN -->
+                            <div class="driver-cabin mb-4 text-end px-4 py-3 border-bottom">
+                                <div class="driver-steering d-inline-block text-secondary">
+                                    <i class="bi bi-vinyl fs-3"></i>
+                                    <div class="small fw-semibold mt-1">DRIVER</div>
+                                </div>
+                            </div>
 
-                        <div class="seat-layout">
+                            <!-- DECKS -->
+                            <div class="decks-container px-3 pb-4">
+                                @if (lowerDeckLayout(); as lower) {
+                                    <div class="deck mb-5">
+                                        <h5 class="deck-title text-center mb-4 text-secondary">{{ lower.deckName }}</h5>
+                                        
+                                        @for (row of lower.rows; track row.rowId) {
+                                            <div class="bus-row d-flex justify-content-between align-items-center mb-3">
+                                                <!-- LEFT SEATS -->
+                                                <div class="seats-left d-flex gap-2">
+                                                    @for (seat of row.leftSeats; track seat.tripSeatId) {
+                                                        <ng-container *ngTemplateOutlet="seatBtn; context: { $implicit: seat }"></ng-container>
+                                                    }
+                                                </div>
+                                                
+                                                <!-- AISLE -->
+                                                <div class="aisle text-center flex-grow-1">
+                                                    <!-- Visual gap -->
+                                                </div>
 
-                            @for (
-                            seat of seats();
-                            track seat.tripSeatId
-                            ) {
+                                                <!-- RIGHT SEATS -->
+                                                <div class="seats-right d-flex gap-2">
+                                                    @for (seat of row.rightSeats; track seat.tripSeatId) {
+                                                        <ng-container *ngTemplateOutlet="seatBtn; context: { $implicit: seat }"></ng-container>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
 
-                            <button type="button" class="seat" [class.available]="
-                      seat.seatStatus === 'AVAILABLE' && !isSelected(seat)
-                    " [class.occupied]="
-                      seat.seatStatus === 'TEMPORARILY_LOCKED' || seat.seatStatus === 'BOOKED'
-                    " [class.selected]="
-                      isSelected(seat)
-                    " [disabled]="
-                      seat.seatStatus === 'BOOKED' || seat.seatStatus === 'TEMPORARILY_LOCKED'
-                    " (click)="selectSeat(seat)">
+                                @if (upperDeckLayout(); as upper) {
+                                    <div class="deck mt-5 pt-3 border-top">
+                                        <h5 class="deck-title text-center mb-4 text-secondary">{{ upper.deckName }}</h5>
+                                        
+                                        @for (row of upper.rows; track row.rowId) {
+                                            <div class="bus-row d-flex justify-content-between align-items-center mb-3">
+                                                <!-- LEFT SEATS -->
+                                                <div class="seats-left d-flex gap-2">
+                                                    @for (seat of row.leftSeats; track seat.tripSeatId) {
+                                                        <ng-container *ngTemplateOutlet="seatBtn; context: { $implicit: seat }"></ng-container>
+                                                    }
+                                                </div>
+                                                
+                                                <!-- AISLE -->
+                                                <div class="aisle text-center flex-grow-1"></div>
 
-                                {{ seat.seatNumber }}
-
-                            </button>
-
-                            }
-
+                                                <!-- RIGHT SEATS -->
+                                                <div class="seats-right d-flex gap-2">
+                                                    @for (seat of row.rightSeats; track seat.tripSeatId) {
+                                                        <ng-container *ngTemplateOutlet="seatBtn; context: { $implicit: seat }"></ng-container>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
                         </div>
+
+                        <!-- REUSABLE SEAT BUTTON TEMPLATE -->
+                        <ng-template #seatBtn let-seat>
+                            <button type="button" 
+                                class="seat-btn shadow-sm"
+                                [class.is-sleeper]="bus()!.busType.toUpperCase().includes('SLEEPER') || seat.seatPosition.toString().includes('UPPER')"
+                                [class.available]="seat.seatStatus === 'AVAILABLE' && !isSelected(seat)"
+                                [class.occupied]="seat.seatStatus === 'TEMPORARILY_LOCKED' || seat.seatStatus === 'BOOKED'"
+                                [class.locked]="seat.seatStatus === 'TEMPORARILY_LOCKED'"
+                                [class.selected]="isSelected(seat)"
+                                [disabled]="seat.seatStatus === 'BOOKED' || seat.seatStatus === 'TEMPORARILY_LOCKED'"
+                                (click)="selectSeat(seat)"
+                                [attr.aria-label]="'Seat ' + seat.seatNumber + ', ' + seat.seatStatus">
+                                <span class="seat-number fw-bold">{{ seat.seatNumber }}</span>
+                                @if (seat.seatStatus === 'TEMPORARILY_LOCKED') {
+                                    <span class="seat-sub small"><i class="bi bi-lock-fill"></i></span>
+                                }
+                                @if (seat.seatStatus === 'BOOKED') {
+                                    <span class="seat-sub small"><i class="bi bi-person-fill"></i></span>
+                                }
+                                @if (isSelected(seat)) {
+                                    <span class="seat-sub small"><i class="bi bi-check-lg"></i></span>
+                                }
+                            </button>
+                        </ng-template>
 
 
                     </div>
